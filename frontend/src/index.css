@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+/* === PREMIUM DESIGN SYSTEM === */
+:root {
+  --bg: #08080D;
+  --surface: #111118;
+  --surface-2: #1A1A24;
+  --border: #222233;
+  --border-hover: #333355;
+  --accent: #6366F1;
+  --accent-light: #818CF8;
+  --text: #E2E2EE;
+  --text-muted: #8888AA;
+  --text-dim: #555566;
+  --success: #34D399;
+  --warning: #FBBF24;
+  --danger: #F87171;
+}
+
+body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+
+/* Animations */
+@keyframes enter { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fade { from { opacity:0; } to { opacity:1; } }
+@keyframes pulse-soft { 0%,100% { opacity:1; } 50% { opacity:0.6; } }
+@keyframes float { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-8px); } }
+@keyframes shimmer { 0% { background-position:-200% 0; } 100% { background-position:200% 0; } }
+@keyframes confetti { 0%{transform:translateY(-10px) rotate(0);opacity:1;} 100%{transform:translateY(100vh) rotate(720deg);opacity:0;} }
+@keyframes progress { from { width:0; } }
+
+.animate-enter { animation: enter 0.5s ease-out forwards; }
+.animate-fade { animation: fade 0.4s ease-out; }
+.animate-pulse-soft { animation: pulse-soft 2s ease-in-out infinite; }
+.animate-float { animation: float 4s ease-in-out infinite; }
+.animate-confetti { animation: confetti 3s ease-in-out forwards; }
+.animate-progress { animation: progress 1s ease-out; }
+
+/* Shimmer loading */
+.shimmer { background: linear-gradient(90deg, var(--surface) 25%, var(--surface-2) 50%, var(--surface) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+::-webkit-scrollbar-thumb:hover { background:var(--border-hover); }
+
+/* Focus ring */
+input:focus, select:focus, textarea:focus { outline:none; box-shadow: 0 0 0 2px rgba(99,102,241,0.3); }
+
+/* Smooth transitions on everything */
+* { transition-property: background-color, border-color, color, opacity, transform; transition-duration: 150ms; }
