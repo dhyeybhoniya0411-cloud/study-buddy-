@@ -578,3 +578,650 @@ export function getChapters(classNum, subject) {
 export function getDeletedTopics(classNum, subject) {
   return CBSE_CURRICULUM[classNum]?.[subject]?.deleted_topics || [];
 }
+
+// ═══════════════════════════════════════════════════════════
+// NTA JEE / NEET & CBSE CHAPTER WEIGHTAGE & PYQ ANALYSIS
+// ═══════════════════════════════════════════════════════════
+export const NTA_WEIGHTAGE_DATA = {
+  "JEE": {
+    "Physics": [
+      {
+        chapter: "Modern Physics (Dual Nature, Atoms, Nuclei)",
+        weightage: "Very High 🔥",
+        avgQuestions: "3 - 4 Qs (12-16 Marks)",
+        priority: "Category A (Must Do)",
+        trend: "High scoring, direct formula-based on de-Broglie wavelength & Bohr radius.",
+        topTopics: ["Photoelectric equation & stopping potential", "Bohr energy levels & spectral series", "Nuclear binding energy & radioactive decay"]
+      },
+      {
+        chapter: "Current Electricity",
+        weightage: "Very High 🔥",
+        avgQuestions: "2 - 3 Qs (8-12 Marks)",
+        priority: "Category A (Must Do)",
+        trend: "Repeated questions on meter bridge, potentiometer, and color coding.",
+        topTopics: ["Kirchhoff's Laws & circuit reduction", "Drift velocity & temperature dependence", "Internal resistance of cells in parallel/series"]
+      },
+      {
+        chapter: "Semiconductors & Logic Devices",
+        weightage: "High 🔥",
+        avgQuestions: "1 - 2 Qs (4-8 Marks)",
+        priority: "Category A (High ROI)",
+        trend: "100% predictable 4-8 marks every year on Zener diode and truth tables.",
+        topTopics: ["Zener diode as voltage regulator", "NAND / NOR gate universal synthesis", "p-n junction biasing & energy band diagrams"]
+      },
+      {
+        chapter: "Thermodynamics & Kinetic Theory (KTG)",
+        weightage: "High 🔥",
+        avgQuestions: "2 Qs (8 Marks)",
+        priority: "Category A (Must Do)",
+        trend: "Indicator diagrams (P-V curves), Carnot engine efficiency, and degrees of freedom.",
+        topTopics: ["First law of thermodynamics & work in adiabatic/isothermal", "Root mean square (RMS) velocity", "Carnot cycle efficiency calculations"]
+      },
+      {
+        chapter: "Electrostatics & Capacitance",
+        weightage: "High ⚖️",
+        avgQuestions: "2 Qs (8 Marks)",
+        priority: "Category B",
+        trend: "Dielectric slabs inside capacitors and Gauss's law flux questions.",
+        topTopics: ["Electric field & potential due to dipole", "Dielectric slab insertion work", "Gauss law for symmetrical charge distributions"]
+      },
+      {
+        chapter: "Rotational Motion",
+        weightage: "High ⚖️",
+        avgQuestions: "1 - 2 Qs (4-8 Marks)",
+        priority: "Category B (Conceptual)",
+        trend: "Conservation of angular momentum and rolling without slipping.",
+        topTopics: ["Moment of inertia of composite bodies", "Rolling on inclined planes", "Angular momentum conservation during collisions"]
+      },
+      {
+        chapter: "Optics (Ray & Wave Optics)",
+        weightage: "High ⚖️",
+        avgQuestions: "2 - 3 Qs (8-12 Marks)",
+        priority: "Category B",
+        trend: "YDSE fringe width changes and lens combination formulas.",
+        topTopics: ["Young's Double Slit Experiment (YDSE)", "Lens maker formula & prism minimum deviation", "Diffraction central maxima width"]
+      }
+    ],
+    "Chemistry": [
+      {
+        chapter: "Coordination Compounds",
+        weightage: "Very High 🔥",
+        avgQuestions: "2 - 3 Qs (8-12 Marks)",
+        priority: "Category A (Must Do)",
+        trend: "Crystal Field Splitting Theory (CFST), magnetic moment, and isomerism.",
+        topTopics: ["CFT magnetic moments (spin only)", "Geometrical & optical isomerism in complexes", "IUPAC naming of coordination entities"]
+      },
+      {
+        chapter: "Electrochemistry & Solutions",
+        weightage: "Very High 🔥",
+        avgQuestions: "2 - 3 Qs (8-12 Marks)",
+        priority: "Category A (Must Do)",
+        trend: "Nernst equation numericals, Kohlrausch law, and colligative properties.",
+        topTopics: ["Nernst equation cell EMF", "Kohlrausch law of independent migration", "Van't Hoff factor (i) & elevation in boiling point"]
+      },
+      {
+        chapter: "Chemical Bonding & Molecular Structure",
+        weightage: "High 🔥",
+        avgQuestions: "2 Qs (8 Marks)",
+        priority: "Category A",
+        trend: "Molecular Orbital Theory (MOT) bond order and dipole moments.",
+        topTopics: ["MOT bond order and magnetic behavior of O2, N2, CO", "VSEPR shapes & hybridisation", "Hydrogen bonding strength"]
+      },
+      {
+        chapter: "Aldehydes, Ketones & Carboxylic Acids",
+        weightage: "Very High 🔥",
+        avgQuestions: "2 - 3 Qs (8-12 Marks)",
+        priority: "Category A",
+        trend: "Aldol condensation, Cannizzaro, and nucleophilic addition mechanism.",
+        topTopics: ["Aldol & Cross-Aldol condensation", "Cannizzaro reaction & Tollens/Fehling tests", "Hell-Volhard-Zelinsky (HVZ) reaction"]
+      },
+      {
+        chapter: "General Organic Chemistry (GOC)",
+        weightage: "High 🔥",
+        avgQuestions: "2 Qs (8 Marks)",
+        priority: "Category A (Foundation)",
+        trend: "Acidic/basic strength order and stability of carbocations/free radicals.",
+        topTopics: ["Carbocation & carbanion stability orders", "Resonance, hyperconjugation & inductive effects", "Aromaticity (Huckel's 4n+2 rule)"]
+      },
+      {
+        chapter: "Chemical Kinetics",
+        weightage: "Medium ⚖️",
+        avgQuestions: "1 - 2 Qs (4-8 Marks)",
+        priority: "Category B",
+        trend: "First-order kinetics half-life & Arrhenius activation energy equation.",
+        topTopics: ["Integrated rate law for first order", "Arrhenius equation ln(k2/k1)", "Order & molecularity determination"]
+      }
+    ],
+    "Mathematics": [
+      {
+        chapter: "Vector & 3D Geometry",
+        weightage: "Very High 🔥",
+        avgQuestions: "3 - 4 Qs (12-16 Marks)",
+        priority: "Category A (Highest ROI)",
+        trend: "Shortest distance between skew lines and scalar/vector triple products.",
+        topTopics: ["Shortest distance between two skew lines", "Vector triple product & projection", "Coplanarity of lines"]
+      },
+      {
+        chapter: "Matrices & Determinants",
+        weightage: "Very High 🔥",
+        avgQuestions: "2 Qs (8 Marks)",
+        priority: "Category A (Easiest Marks)",
+        trend: "Cramer's rule for consistency of equations and properties of adjoint.",
+        topTopics: ["System of linear equations (Cramer's rule)", "Properties of adj(A) and |adj(A)|", "Matrix polynomial equations & Cayley-Hamilton"]
+      },
+      {
+        chapter: "Definite Integration & Area Under Curves",
+        weightage: "High 🔥",
+        avgQuestions: "2 - 3 Qs (8-12 Marks)",
+        priority: "Category A",
+        trend: "King's property (x -> a+b-x) and area enclosed between parabola and lines.",
+        topTopics: ["King's property of definite integrals", "Leibnitz rule for differentiation under integral", "Area bounded by standard conics"]
+      },
+      {
+        chapter: "Sequence and Series",
+        weightage: "High 🔥",
+        avgQuestions: "1 - 2 Qs (4-8 Marks)",
+        priority: "Category A",
+        trend: "Sum of n terms of AGP and telescoping series summation.",
+        topTopics: ["Arithmetico-Geometric Progression (AGP)", "Telescoping series (method of differences)", "AM-GM inequality for min/max"]
+      },
+      {
+        chapter: "Differential Equations",
+        weightage: "High ⚖️",
+        avgQuestions: "1 - 2 Qs (4-8 Marks)",
+        priority: "Category B",
+        trend: "Linear differential equations (dy/dx + Py = Q) and homogeneous equations.",
+        topTopics: ["Linear DE with integrating factor", "Exact differential forms", "Orthogonal trajectories & growth/decay models"]
+      },
+      {
+        chapter: "Binomial Theorem",
+        weightage: "Medium ⚖️",
+        avgQuestions: "1 - 2 Qs (4-8 Marks)",
+        priority: "Category B",
+        trend: "Remainder problems, largest term, and fractional part questions.",
+        topTopics: ["Finding remainder using binomial expansion", "General term & independent of x term", "Multinomial theorem coefficients"]
+      }
+    ]
+  },
+  "NEET": {
+    "Biology": [
+      {
+        chapter: "Genetics and Evolution",
+        weightage: "Critical 🔥🔥🔥",
+        avgQuestions: "15 - 18 Qs (60-72 Marks)",
+        priority: "Category A (Highest Priority)",
+        trend: "DNA replication, lac operon, Mendelian crosses & pedigree analysis.",
+        topTopics: ["Molecular Basis of Inheritance (Lac operon & transcription)", "Mendelian inheritance & chromosomal disorders", "DNA replication enzymes & Hershey-Chase experiment"]
+      },
+      {
+        chapter: "Human Physiology",
+        weightage: "Critical 🔥🔥🔥",
+        avgQuestions: "12 - 15 Qs (48-60 Marks)",
+        priority: "Category A",
+        trend: "ECG, nephron counter-current mechanism, sliding filament theory.",
+        topTopics: ["Counter-current mechanism in Henle's loop", "Cardiac cycle & ECG waves (P, QRS, T)", "Sliding filament muscle contraction mechanism"]
+      },
+      {
+        chapter: "Ecology and Environment",
+        weightage: "Very High 🔥",
+        avgQuestions: "10 - 12 Qs (40-48 Marks)",
+        priority: "Category A (100% NCERT)",
+        trend: "Population interactions, ecological pyramids, biodiversity hotspots.",
+        topTopics: ["Population interactions (mutualism, commensalism)", "Biomagnification & ozone depletion", "Species-Area relationship (Alexander von Humboldt)"]
+      },
+      {
+        chapter: "Cell: Structure & Cell Cycle",
+        weightage: "Very High 🔥",
+        avgQuestions: "8 - 10 Qs (32-40 Marks)",
+        priority: "Category A",
+        trend: "Stages of meiosis (Pachytene crossing over) and endomembrane system.",
+        topTopics: ["Prophase I stages (Leptotene to Diakinesis)", "Mitochondria & chloroplast semi-autonomous nature", "Cell cycle checkpoints & spindle assembly"]
+      },
+      {
+        chapter: "Biotechnology (Principles & Applications)",
+        weightage: "High 🔥",
+        avgQuestions: "6 - 8 Qs (24-32 Marks)",
+        priority: "Category A",
+        trend: "Restriction enzymes, gel electrophoresis, PCR steps & Bt-cotton.",
+        topTopics: ["PCR steps (denaturation, annealing, extension)", "pBR322 plasmid cloning site identification", "RNA interference (RNAi) mechanism in tobacco"]
+      }
+    ],
+    "Physics": [
+      {
+        chapter: "Current Electricity & Circuits",
+        weightage: "Very High 🔥",
+        avgQuestions: "3 - 4 Qs (12-16 Marks)",
+        priority: "Category A",
+        trend: "Direct formula questions on Ohm's law, Wheatstone bridge, and power consumption.",
+        topTopics: ["Power dissipation in resistor network", "Equivalent resistance circuits", "Internal resistance and cell combinations"]
+      },
+      {
+        chapter: "Modern Physics (Dual Nature, Atoms, Nuclei)",
+        weightage: "Very High 🔥",
+        avgQuestions: "4 - 5 Qs (16-20 Marks)",
+        priority: "Category A",
+        trend: "de-Broglie wavelength of electron/alpha particle, Lyman/Balmer series.",
+        topTopics: ["de Broglie wavelength ratios", "Rydberg formula for hydrogen emissions", "Mass defect and binding energy per nucleon"]
+      },
+      {
+        chapter: "Optics (Ray & Wave)",
+        weightage: "High 🔥",
+        avgQuestions: "3 - 4 Qs (12-16 Marks)",
+        priority: "Category A",
+        trend: "Total internal reflection (optical fiber), microscope & telescope magnification.",
+        topTopics: ["Critical angle & TIR conditions", "Lens and mirror combination focal length", "Compound microscope magnifying power"]
+      }
+    ],
+    "Chemistry": [
+      {
+        chapter: "Coordination Compounds",
+        weightage: "Very High 🔥",
+        avgQuestions: "3 Qs (12 Marks)",
+        priority: "Category A",
+        trend: "Werner's theory, oxidation numbers, CFSE values.",
+        topTopics: ["Hybridisation and geometry of [Co(NH3)6]3+ vs [Ni(CN)4]2-", "Primary and secondary valency (Werner's)", "Spectrochemical series order"]
+      },
+      {
+        chapter: "Biomolecules & Polymers",
+        weightage: "High 🔥",
+        avgQuestions: "2 - 3 Qs (8-12 Marks)",
+        priority: "Category A (NCERT lines)",
+        trend: "Vitamins deficiencies, reducing sugars, glycosidic & peptide bonds.",
+        topTopics: ["Reducing vs non-reducing sugars (Sucrose vs Maltose)", "Primary/secondary structures of proteins (alpha helix)", "DNA/RNA purines and pyrimidines"]
+      },
+      {
+        chapter: "Hydrocarbons & Organic Reaction Mechanisms",
+        weightage: "Very High 🔥",
+        avgQuestions: "4 Qs (16 Marks)",
+        priority: "Category A",
+        trend: "Markovnikov addition, ozonolysis of alkenes, Friedel-Crafts reaction.",
+        topTopics: ["Ozonolysis products identification", "Markovnikov vs Anti-Markovnikov addition", "Acidic nature of terminal alkynes"]
+      }
+    ]
+  },
+  "CBSE": {
+    "Class 10": [
+      { chapter: "Triangles & Coordinate Geometry", weightage: "14 Marks 🔥", priority: "Category A", trend: "BPT theorem proof and section formula questions." },
+      { chapter: "Trigonometry & Applications (Heights & Distances)", weightage: "12 Marks 🔥", priority: "Category A", trend: "Double angle elevation/depression and identity proofs." },
+      { chapter: "Light - Reflection and Refraction", weightage: "10 Marks 🔥", priority: "Category A", trend: "Mirror/lens ray diagrams & numericals with sign convention." },
+      { chapter: "Life Processes", weightage: "10 Marks 🔥", priority: "Category A", trend: "Human nephron structure, double circulation, nutrition steps." },
+      { chapter: "Carbon and its Compounds", weightage: "8 Marks 🔥", priority: "Category A", trend: "Covalent bonding, homologous series, and soap micelle formation." }
+    ],
+    "Class 12": [
+      { chapter: "Calculus (Integrals, Continuity, DE, AOD)", weightage: "35 Marks 🔥", priority: "Category A", trend: "Over 44% of total CBSE Mathematics paper." },
+      { chapter: "Electrostatics & Current Electricity", weightage: "16 Marks 🔥", priority: "Category A", trend: "Gauss theorem proof, electric dipole, and Kirchhoff laws." },
+      { chapter: "Organic Compounds with Oxygen (Alcohols, Aldehydes)", weightage: "24 Marks 🔥", priority: "Category A", trend: "Chemical tests to distinguish pairs, named reactions." },
+      { chapter: "Genetics & Molecular Biology", weightage: "20 Marks 🔥", priority: "Category A", trend: "Lac operon, Meselson-Stahl experiment, monohybrid/dihybrid ratio." }
+    ]
+  }
+};
+
+// ═══════════════════════════════════════════════════════════
+// AUTHENTIC MOCK TESTS (ALLEN & MATHONGO STYLE)
+// ═══════════════════════════════════════════════════════════
+export const MOCK_TESTS_CATALOG = [
+  {
+    id: "jee_main_full_1",
+    title: "JEE Main 2026 NTA All-India CBT Mock Test #1",
+    exam: "JEE Main",
+    durationMinutes: 180,
+    totalMarks: 300,
+    questionsCount: 9,
+    markingScheme: "+4 for correct, -1 for incorrect",
+    isSuperBatchOnly: true,
+    sections: ["Physics", "Chemistry", "Mathematics"],
+    questions: [
+      {
+        id: 1,
+        section: "Physics",
+        type: "MCQ",
+        q: "A particle of mass m is moving with velocity v. The de-Broglie wavelength associated with the particle is λ. If the kinetic energy of the particle is doubled, its new de-Broglie wavelength will be:",
+        options: [
+          "A) λ / √2",
+          "B) √2 λ",
+          "C) 2λ",
+          "D) λ / 2"
+        ],
+        ans: "A",
+        explanation: "de-Broglie wavelength λ = h / √(2mE). If kinetic energy E becomes 2E, the new wavelength λ' = h / √(2m·2E) = λ / √2.",
+        concept: "Modern Physics • Dual Nature",
+        difficulty: "Moderate",
+        idealTimeSec: 60
+      },
+      {
+        id: 2,
+        section: "Physics",
+        type: "MCQ",
+        q: "In a potentiometer experiment, a wire of length 10 m has a resistance of 20 Ω. It is connected in series with a battery of 6 V (internal resistance 4 Ω). What is the potential gradient along the wire?",
+        options: [
+          "A) 0.5 V/m",
+          "B) 0.8 V/m",
+          "C) 0.25 V/m",
+          "D) 0.4 V/m"
+        ],
+        ans: "A",
+        explanation: "Current in the circuit I = V / (R_wire + r) = 6 / (20 + 4) = 6/24 = 0.25 A. Potential drop across wire V_wire = I · R_wire = 0.25 × 20 = 5 V. Potential gradient k = V_wire / L = 5 V / 10 m = 0.5 V/m.",
+        concept: "Current Electricity • Potentiometer",
+        difficulty: "Easy",
+        idealTimeSec: 75
+      },
+      {
+        id: 3,
+        section: "Physics",
+        type: "NUMERICAL",
+        q: "A Zener diode having breakdown voltage of 10 V is connected in reverse bias across a 15 V unregulated DC supply with a series resistor of 200 Ω. What is the current (in mA) flowing through the series resistor?",
+        options: [],
+        ans: "25",
+        explanation: "Voltage across series resistor = V_in - V_zener = 15 - 10 = 5 V. Series current I = 5 V / 200 Ω = 0.025 A = 25 mA.",
+        concept: "Semiconductors • Zener Diode",
+        difficulty: "Easy",
+        idealTimeSec: 50
+      },
+      {
+        id: 4,
+        section: "Chemistry",
+        type: "MCQ",
+        q: "Which of the following complex ions has the highest spin-only magnetic moment value in Bohr Magnetons (BM)?",
+        options: [
+          "A) [Fe(H2O)6]2+",
+          "B) [Fe(CN)6]4-",
+          "C) [Ni(CO)4]",
+          "D) [Co(NH3)6]3+"
+        ],
+        ans: "A",
+        explanation: "[Fe(H2O)6]2+ has Fe2+ (d6 configuration). Water is a weak field ligand, so high spin with 4 unpaired electrons. Magnetic moment μ = √(4(4+2)) = √24 ≈ 4.90 BM. Others are low spin with 0 unpaired electrons.",
+        concept: "Coordination Compounds • CFT",
+        difficulty: "Moderate",
+        idealTimeSec: 60
+      },
+      {
+        id: 5,
+        section: "Chemistry",
+        type: "MCQ",
+        q: "What is the major product obtained when Benzaldehyde is reacted with concentrated NaOH solution (Cannizzaro Reaction)?",
+        options: [
+          "A) Benzyl alcohol and Sodium benzoate",
+          "B) Benzoic acid and Benzophenone",
+          "C) Benzyl chloride and Benzoic acid",
+          "D) Cinnamic acid and Sodium acetate"
+        ],
+        ans: "A",
+        explanation: "Benzaldehyde lacks alpha-hydrogens. On heating with 50% conc. NaOH, it undergoes self-oxidation and reduction (disproportionation) to give Benzyl alcohol (reduced) and Sodium benzoate (oxidized).",
+        concept: "Organic Chemistry • Carbonyl Compounds",
+        difficulty: "Easy",
+        idealTimeSec: 45
+      },
+      {
+        id: 6,
+        section: "Chemistry",
+        type: "NUMERICAL",
+        q: "For a first order reaction, the rate constant k is 6.93 × 10^-3 s^-1. What is the half-life t_1/2 of the reaction in seconds? (Take ln 2 = 0.693)",
+        options: [],
+        ans: "100",
+        explanation: "t_1/2 = 0.693 / k = 0.693 / (6.93 × 10^-3) = 100 seconds.",
+        concept: "Chemical Kinetics • Rate Laws",
+        difficulty: "Easy",
+        idealTimeSec: 40
+      },
+      {
+        id: 7,
+        section: "Mathematics",
+        type: "MCQ",
+        q: "The shortest distance between the two skew lines (x-1)/2 = (y-2)/3 = (z-3)/4 and (x-2)/3 = (y-4)/4 = (z-5)/5 is:",
+        options: [
+          "A) 1 / √6",
+          "B) 2 / √3",
+          "C) 0 (Intersecting)",
+          "D) 1 / 6"
+        ],
+        ans: "A",
+        explanation: "Distance d = |(a2 - a1) · (b1 × b2)| / |b1 × b2|. Here a2 - a1 = (1, 2, 2). b1 × b2 = (2, 3, 4) × (3, 4, 5) = (-1, 2, -1). |b1 × b2| = √(1 + 4 + 1) = √6. Dot product = -1(1) + 2(2) - 1(2) = 1. Hence d = 1 / √6.",
+        concept: "Vectors & 3D Geometry",
+        difficulty: "Moderate",
+        idealTimeSec: 90
+      },
+      {
+        id: 8,
+        section: "Mathematics",
+        type: "MCQ",
+        q: "If A is a 3 × 3 non-singular matrix such that |A| = 4, then the determinant of the adjoint matrix |adj(adj(A))| is equal to:",
+        options: [
+          "A) 256",
+          "B) 64",
+          "C) 16",
+          "D) 1024"
+        ],
+        ans: "A",
+        explanation: "Formula: |adj(adj(A))| = |A|^{(n-1)^2}. For n = 3, (n-1)^2 = (3-1)^2 = 4. Therefore |adj(adj(A))| = 4^4 = 256.",
+        concept: "Matrices & Determinants",
+        difficulty: "Moderate",
+        idealTimeSec: 50
+      },
+      {
+        id: 9,
+        section: "Mathematics",
+        type: "NUMERICAL",
+        q: "Evaluate the definite integral I = ∫[0 to π/2] (sin^3 x) / (sin^3 x + cos^3 x) dx. What is the value of 4I / π?",
+        options: [],
+        ans: "1",
+        explanation: "Using King's property: I = ∫[0 to π/2] (cos^3 x) / (cos^3 x + sin^3 x) dx. Adding both: 2I = ∫[0 to π/2] 1 dx = π/2 => I = π/4. Therefore 4I / π = 1.",
+        concept: "Definite Integrals • King's Property",
+        difficulty: "Easy",
+        idealTimeSec: 45
+      }
+    ]
+  },
+  {
+    id: "neet_ug_full_1",
+    title: "NEET UG 2026 NTA Full Biology & Science Rank Booster Mock",
+    exam: "NEET UG",
+    durationMinutes: 180,
+    totalMarks: 720,
+    questionsCount: 6,
+    markingScheme: "+4 for correct, -1 for incorrect",
+    isSuperBatchOnly: true,
+    sections: ["Biology", "Physics", "Chemistry"],
+    questions: [
+      {
+        id: 1,
+        section: "Biology",
+        type: "MCQ",
+        q: "During which stage of meiosis does crossing over between non-sister chromatids of homologous chromosomes take place?",
+        options: [
+          "A) Pachytene",
+          "B) Diplotene",
+          "C) Leptotene",
+          "D) Zygotene"
+        ],
+        ans: "A",
+        explanation: "Crossing over occurs at the Pachytene stage of Prophase I, mediated by the enzyme recombinase.",
+        concept: "Cell Cycle & Meiosis",
+        difficulty: "Easy",
+        idealTimeSec: 30
+      },
+      {
+        id: 2,
+        section: "Biology",
+        type: "MCQ",
+        q: "In the Lac Operon model of E. coli, which gene synthesizes the repressor protein?",
+        options: [
+          "A) i-gene (inhibitor gene)",
+          "B) z-gene (beta-galactosidase)",
+          "C) y-gene (permease)",
+          "D) a-gene (transacetylase)"
+        ],
+        ans: "A",
+        explanation: "The regulatory i-gene codes for the repressor of the lac operon. It is constitutively transcribed.",
+        concept: "Genetics • Molecular Basis of Inheritance",
+        difficulty: "Easy",
+        idealTimeSec: 30
+      },
+      {
+        id: 3,
+        section: "Biology",
+        type: "MCQ",
+        q: "Which hormone is primarily responsible for the concentration of urine through the counter-current mechanism in Henle's loop?",
+        options: [
+          "A) Antidiuretic Hormone (ADH / Vasopressin)",
+          "B) Oxytocin",
+          "C) Prolactin",
+          "D) Glucagon"
+        ],
+        ans: "A",
+        explanation: "ADH (Vasopressin) increases water permeability of the late distal tubule and collecting duct, leading to concentrated urine.",
+        concept: "Human Physiology • Excretory Products",
+        difficulty: "Easy",
+        idealTimeSec: 30
+      },
+      {
+        id: 4,
+        section: "Physics",
+        type: "MCQ",
+        q: "A body of mass 2 kg moving with velocity 3 m/s collides with a spring of spring constant k = 18 N/m. What is the maximum compression in the spring?",
+        options: [
+          "A) 1.0 m",
+          "B) 0.5 m",
+          "C) 2.0 m",
+          "D) 1.5 m"
+        ],
+        ans: "A",
+        explanation: "1/2 m v^2 = 1/2 k x^2 => 2 × 3^2 = 18 × x^2 => 18 = 18 x^2 => x = 1.0 m.",
+        concept: "Work, Energy & Power",
+        difficulty: "Easy",
+        idealTimeSec: 40
+      },
+      {
+        id: 5,
+        section: "Chemistry",
+        type: "MCQ",
+        q: "Which of the following compounds is non-reducing sugar?",
+        options: [
+          "A) Sucrose",
+          "B) Maltose",
+          "C) Lactose",
+          "D) Glucose"
+        ],
+        ans: "A",
+        explanation: "In sucrose, both reducing groups of glucose and fructose are involved in glycosidic linkage (C1-C2), hence it is a non-reducing sugar.",
+        concept: "Biomolecules • Carbohydrates",
+        difficulty: "Easy",
+        idealTimeSec: 25
+      },
+      {
+        id: 6,
+        section: "Chemistry",
+        type: "MCQ",
+        q: "What is the primary valency of Cobalt in [Co(NH3)5Cl]Cl2?",
+        options: [
+          "A) 3",
+          "B) 2",
+          "C) 6",
+          "D) 5"
+        ],
+        ans: "A",
+        explanation: "Primary valency corresponds to the oxidation state of the central metal atom. Here x + 5(0) + (-1) = +2 => x = +3.",
+        concept: "Coordination Compounds • Werner Theory",
+        difficulty: "Easy",
+        idealTimeSec: 30
+      }
+    ]
+  },
+  {
+    id: "cbse_board_rank_1",
+    title: "CBSE Class 10 & 12 Board Exam 95%+ High-Scoring Simulator",
+    exam: "CBSE Board",
+    durationMinutes: 90,
+    totalMarks: 80,
+    questionsCount: 5,
+    markingScheme: "+3 for correct, 0 for incorrect (Step Marking)",
+    isSuperBatchOnly: false, // Sample test available for normal users!
+    sections: ["Mathematics", "Science"],
+    questions: [
+      {
+        id: 1,
+        section: "Mathematics",
+        type: "MCQ",
+        q: "If the points A(6, 1), B(8, 2), C(9, 4) and D(p, 3) are the vertices of a parallelogram taken in order, then the value of p is:",
+        options: [
+          "A) 7",
+          "B) 8",
+          "C) 6",
+          "D) 5"
+        ],
+        ans: "A",
+        explanation: "Diagonals of a parallelogram bisect each other. Midpoint of AC = Midpoint of BD. (6 + 9)/2 = (8 + p)/2 => 15 = 8 + p => p = 7.",
+        concept: "Class 10 Coordinate Geometry",
+        difficulty: "Easy",
+        idealTimeSec: 60
+      },
+      {
+        id: 2,
+        section: "Mathematics",
+        type: "MCQ",
+        q: "If sin θ + cos θ = √2 cos θ, then the value of (cos θ - sin θ) is:",
+        options: [
+          "A) √2 sin θ",
+          "B) √2 cos θ",
+          "C) 2 sin θ",
+          "D) 1"
+        ],
+        ans: "A",
+        explanation: "cos θ - sin θ = √2 sin θ by standard trigonometric squaring or rationalization.",
+        concept: "Class 10 Trigonometry",
+        difficulty: "Moderate",
+        idealTimeSec: 60
+      },
+      {
+        id: 3,
+        section: "Science",
+        type: "MCQ",
+        q: "A student traces the path of a ray of light through a glass slab. What is the relation between the angle of incidence (i) and angle of emergence (e)?",
+        options: [
+          "A) Angle i = Angle e",
+          "B) Angle i > Angle e",
+          "C) Angle i < Angle e",
+          "D) Angle i + Angle e = 90°"
+        ],
+        ans: "A",
+        explanation: "For a parallel-faced rectangular glass slab, the emergent ray is parallel to the incident ray, so angle of incidence i equals angle of emergence e.",
+        concept: "Class 10 Light Refraction",
+        difficulty: "Easy",
+        idealTimeSec: 45
+      },
+      {
+        id: 4,
+        section: "Science",
+        type: "MCQ",
+        q: "Which part of the human nephron is primarily responsible for the reabsorption of glucose and amino acids?",
+        options: [
+          "A) Proximal Convoluted Tubule (PCT)",
+          "B) Henle's Loop",
+          "C) Distal Convoluted Tubule (DCT)",
+          "D) Collecting Duct"
+        ],
+        ans: "A",
+        explanation: "Nearly all of the essential nutrients (glucose, amino acids) and 70-80% of electrolytes and water are reabsorbed by PCT.",
+        concept: "Class 10 Life Processes",
+        difficulty: "Easy",
+        idealTimeSec: 35
+      },
+      {
+        id: 5,
+        section: "Science",
+        type: "MCQ",
+        q: "Why does detergent form lather easily even in hard water compared to soap?",
+        options: [
+          "A) Charged ends of detergents do not form insoluble precipitate with calcium/magnesium ions",
+          "B) Detergents are completely non-polar",
+          "C) Detergents precipitate calcium faster",
+          "D) Detergents have smaller carbon chains"
+        ],
+        ans: "A",
+        explanation: "Detergents are generally ammonium or sulphonate salts of long chain carboxylic acids. Their charged ends do not form insoluble precipitates with the calcium and magnesium ions present in hard water.",
+        concept: "Class 10 Carbon & Its Compounds",
+        difficulty: "Moderate",
+        idealTimeSec: 45
+      }
+    ]
+  }
+];

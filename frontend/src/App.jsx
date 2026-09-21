@@ -5,6 +5,7 @@ import rehypeKatex from 'rehype-katex'
 import remarkGfm from 'remark-gfm'
 import 'katex/dist/katex.min.css'
 import { getClasses, getSubjects, getChapters, getDeletedTopics, apiAsk, apiChat, apiCheckAnswer, apiScan, apiGenerateLesson, apiGeneratePlan } from './api'
+import { NTA_WEIGHTAGE_DATA, MOCK_TESTS_CATALOG } from './cbse_data'
 
 // ── Markdown Formatter ──
 function Md({ text }) {
@@ -200,14 +201,14 @@ function SubscriptionModal({
   const plans = [
     {
       id: 'monthly',
-      name: 'Monthly Pro',
+      name: 'Monthly Pro (CBSE)',
       price: 149,
       origPrice: 399,
       duration: '1 Month',
       perDay: '₹4.9/day',
-      tag: 'Flexible',
+      tag: 'Basic',
       popular: false,
-      desc: 'Ideal for monthly unit tests & doubt clearing.'
+      desc: 'Unlimited 24/7 AI Doubt solving & 45-min daily study plan.'
     },
     {
       id: 'quarterly',
@@ -218,18 +219,18 @@ function SubscriptionModal({
       perDay: '₹4.4/day (₹133/mo)',
       tag: '🔥 84% Choose This',
       popular: true,
-      desc: 'Complete coverage for CBSE Board revision & Term exams.'
+      desc: 'Complete CBSE Board revision, Examiner answer keys & Chapter Weightage.'
     },
     {
-      id: 'annual',
-      name: 'Annual Topper Pass',
+      id: 'super_batch',
+      name: 'JEE / NEET Super Batch + CBT Test Series',
       price: 999,
-      origPrice: 3999,
-      duration: '1 Year',
+      origPrice: 4999,
+      duration: 'Full Year',
       perDay: '₹2.7/day (₹83/mo)',
-      tag: 'Save 75%',
+      tag: '🏆 NTA CBT TEST SERIES • 80% OFF',
       popular: false,
-      desc: 'Full academic year syllabus, question bank & parent reports.'
+      desc: 'Full NTA JEE/NEET CBT Mock Tests, MathonGo Analytics & 10-Yr PYQ Weightage.'
     }
   ]
 
@@ -322,6 +323,9 @@ function SubscriptionModal({
                   </div>
                   <div className="flex items-center gap-1.5">
                     <span className="text-blue-600 font-bold">✓</span> WhatsApp Parent Report
+                  </div>
+                  <div className="flex items-center gap-1.5 text-amber-950 font-bold col-span-2 bg-amber-100/70 px-2 py-1 rounded-lg border border-amber-200">
+                    <span className="text-amber-600 font-black">★</span> NTA JEE / NEET CBT Mock Tests (Super Batch)
                   </div>
                 </div>
               </div>
@@ -560,24 +564,30 @@ function SubscriptionModal({
         {/* Demo Simulation Bar for Hackathon / Judges / Testing */}
         <div className="bg-slate-100 border-t border-slate-200 p-2.5 flex items-center justify-between text-[10px]">
           <span className="font-extrabold text-slate-500">🧪 Demo Tester:</span>
-          <div className="flex gap-1.5">
+          <div className="flex gap-1">
             <button
               onClick={() => onSimulateState('trial_active')}
-              className="px-2 py-1 rounded bg-white border border-slate-300 font-bold text-slate-700 hover:bg-slate-50"
+              className="px-1.5 py-1 rounded bg-white border border-slate-300 font-bold text-slate-700 hover:bg-slate-50"
             >
-              Day 2/5 (Trial)
+              Day 2/5
             </button>
             <button
               onClick={() => onSimulateState('trial_expired')}
-              className="px-2 py-1 rounded bg-rose-50 border border-rose-300 font-bold text-rose-700 hover:bg-rose-100"
+              className="px-1.5 py-1 rounded bg-rose-50 border border-rose-300 font-bold text-rose-700 hover:bg-rose-100"
             >
-              Day 5 Expired 🔒
+              Expired 🔒
             </button>
             <button
               onClick={() => onSimulateState('pro_active')}
-              className="px-2 py-1 rounded bg-amber-50 border border-amber-300 font-bold text-amber-800 hover:bg-amber-100"
+              className="px-1.5 py-1 rounded bg-blue-50 border border-blue-300 font-bold text-blue-800 hover:bg-blue-100"
             >
-              Pro Active 👑
+              Pro 👑
+            </button>
+            <button
+              onClick={() => onSimulateState('super_batch')}
+              className="px-1.5 py-1 rounded bg-amber-100 border border-amber-400 font-black text-amber-950 hover:bg-amber-200 shadow-xs"
+            >
+              Super Batch 🏆
             </button>
           </div>
         </div>
@@ -742,7 +752,135 @@ export default function App() {
         price: 399,
         proExpires: Date.now() + 90 * 86400000
       })
+    } else if (mode === 'super_batch') {
+      setSubscription({
+        startDate: Date.now() - 2 * 86400000,
+        trialDays: 5,
+        isPro: true,
+        plan: 'super_batch',
+        planName: 'JEE / NEET Super Batch + CBT Test Series',
+        price: 999,
+        proExpires: Date.now() + 365 * 86400000
+      })
     }
+  }
+
+  const isSuperBatchActive = subscription?.isPro && (subscription?.plan === 'super_batch' || subscription?.plan === 'annual')
+
+  // ── Exam Goal, NTA Weightage & CBT Mock Test Series State ──
+  const [examTrack, setExamTrack] = useState('JEE') // 'JEE' | 'NEET' | 'CBSE'
+  const [weightageSub, setWeightageSub] = useState('Physics')
+  const [practiceSubTab, setPracticeSubTab] = useState('tests') // 'tests' | 'weightage' | 'battle'
+  
+  // CBT Mock Test Simulator State
+  const [activeMockTest, setActiveMockTest] = useState(null)
+  const [testQIdx, setTestQIdx] = useState(0)
+  const [testAnswers, setTestAnswers] = useState({})
+  const [testReviews, setTestReviews] = useState({})
+  const [testTimer, setTestTimer] = useState(180 * 60)
+  const [testSubmitted, setTestSubmitted] = useState(false)
+  const [testAnalytics, setTestAnalytics] = useState(null)
+
+  // Test countdown timer
+  useEffect(() => {
+    if (!activeMockTest || testSubmitted) return
+    if (testTimer <= 0) {
+      handleSubmitTest()
+      return
+    }
+    const t = setInterval(() => setTestTimer(p => p - 1), 1000)
+    return () => clearInterval(t)
+  }, [activeMockTest, testTimer, testSubmitted])
+
+  const handleStartMockTest = (test) => {
+    if (test.isSuperBatchOnly && !isSuperBatchActive && isTrialExpired) {
+      setSubReason('🔒 Full NTA CBT Mock Test Series & MathonGo Analytics is an exclusive feature of the JEE / NEET Super Batch. Upgrade to access all All-India CBT tests!')
+      setShowSubModal(true)
+      return
+    }
+    setActiveMockTest(test)
+    setTestQIdx(0)
+    setTestAnswers({})
+    setTestReviews({})
+    setTestTimer(test.durationMinutes * 60)
+    setTestSubmitted(false)
+    setTestAnalytics(null)
+  }
+
+  const handleSubmitTest = () => {
+    if (!activeMockTest) return
+    setTestSubmitted(true)
+    const qs = activeMockTest.questions
+    let score = 0
+    let correct = 0
+    let wrong = 0
+    let unattempted = 0
+    let silly = 0
+    let conceptual = 0
+
+    const breakdown = qs.map((q, idx) => {
+      const userAns = testAnswers[q.id]
+      const isAnswered = userAns !== undefined && userAns !== ''
+      const isCorrect = isAnswered && String(userAns).trim().toUpperCase() === String(q.ans).trim().toUpperCase()
+      
+      let markDelta = 0
+      if (!isAnswered) {
+        unattempted++
+        markDelta = 0
+      } else if (isCorrect) {
+        correct++
+        markDelta = 4
+        score += 4
+      } else {
+        wrong++
+        markDelta = -1
+        score -= 1
+        if (q.type === 'NUMERICAL' || q.difficulty === 'Easy') {
+          silly++
+        } else {
+          conceptual++
+        }
+      }
+
+      return {
+        ...q,
+        idx: idx + 1,
+        userAns: isAnswered ? userAns : 'Unattempted',
+        isCorrect,
+        isAnswered,
+        markDelta,
+        status: isCorrect ? 'correct' : !isAnswered ? 'unattempted' : 'incorrect'
+      }
+    })
+
+    const totalPossibleMarks = qs.length * 4
+    const accuracy = correct + wrong > 0 ? Math.round((correct / (correct + wrong)) * 100) : 0
+    
+    // NTA Normalization Model for Predicted AIR & Percentile
+    const pctScore = Math.max(0, (score / totalPossibleMarks) * 100)
+    let predictedPercentile = (82 + (pctScore * 0.178)).toFixed(2)
+    if (pctScore > 85) predictedPercentile = "99.45"
+    if (pctScore < 30) predictedPercentile = (55 + pctScore * 0.7).toFixed(2)
+    
+    const predictedRank = Math.max(340, Math.round((100 - parseFloat(predictedPercentile)) * 11500))
+
+    const analytics = {
+      score,
+      totalPossibleMarks,
+      correct,
+      wrong,
+      unattempted,
+      accuracy,
+      silly,
+      conceptual,
+      predictedPercentile,
+      predictedRank,
+      timeSpentSeconds: (activeMockTest.durationMinutes * 60) - testTimer,
+      breakdown
+    }
+
+    setTestAnalytics(analytics)
+    addXP(Math.max(30, score * 5))
   }
 
   const guardPro = (fn, reason) => {
@@ -1567,119 +1705,587 @@ Report verified by Study Buddy AI.`
             </div>
           )}
 
-          {/* ════ TAB 4: ⚔️ BATTLE & VIDEO LESSONS ════ */}
+          {/* ════ TAB 4: ⚔️ NTA MOCK TESTS & PRACTICE (ALLEN & MATHONGO STYLE) ════ */}
           {activeTab === 'battle' && (
             <div className="space-y-3.5 animate-slide-up">
-              {/* Top Sub-switcher */}
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setBtActive(false)}
-                  className="flex-1 py-2 rounded-xl bg-blue-600 text-white font-bold text-xs shadow-xs"
-                >
-                  ⚔️ 60s Quiz Battle
-                </button>
-                <button
-                  onClick={() => handleGenLesson()}
-                  className="flex-1 py-2 rounded-xl bg-white text-slate-700 font-bold text-xs border border-slate-200"
-                >
-                  🎬 AI Video Lesson
-                </button>
-              </div>
 
-              {/* Quiz Battle Arena */}
-              {!btActive ? (
-                <div className="allen-card p-5 text-center">
-                  <div className="w-14 h-14 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center text-3xl mx-auto mb-2.5">⚔️</div>
-                  <h3 className="text-base font-extrabold text-slate-900 mb-1">60-Second Speed Battle</h3>
-                  <p className="text-xs text-slate-500 mb-4">Topic: <b>{chapter}</b>. 5 MCQs against the clock. Boost your accuracy under pressure!</p>
-                  <button
-                    onClick={handleStartBattle}
-                    disabled={btLoad}
-                    className="w-full py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-extrabold shadow-md shadow-orange-500/25 btn-press"
-                  >
-                    {btLoad ? 'Preparing Questions...' : '🚀 Start Battle (+30 XP)'}
-                  </button>
-                </div>
-              ) : btDone ? (
-                <div className="allen-card p-5 text-center animate-slide-up">
-                  <p className="text-3xl mb-1">{btScore >= 4 ? '🏆' : btScore >= 2 ? '⭐' : '📝'}</p>
-                  <h4 className="text-base font-extrabold text-slate-900">Battle Complete!</h4>
-                  <p className="text-2xl font-black text-blue-600 my-1">{btScore} / {btQs.length}</p>
-                  <p className="text-xs text-slate-500 mb-4">{btScore === btQs.length ? 'Outstanding! 100% Accuracy.' : 'Great effort! Review missed questions.'}</p>
-                  <button
-                    onClick={() => { setBtActive(false); setBtDone(false) }}
-                    className="w-full py-2.5 rounded-xl bg-blue-600 text-white text-xs font-bold btn-press shadow-xs"
-                  >
-                    Play Again
-                  </button>
-                </div>
-              ) : (
-                <div className="allen-card p-4 animate-slide-up">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-xs font-bold text-slate-500">Q {btIdx + 1} / {btQs.length}</span>
-                    <span className={`text-xs font-extrabold px-2.5 py-1 rounded-full ${btTimer <= 15 ? 'bg-rose-100 text-rose-700 animate-pulse' : 'bg-amber-100 text-amber-800'}`}>
-                      ⏱️ {btTimer}s
-                    </span>
-                    <span className="text-xs font-bold text-blue-600">Score: {btScore}</span>
-                  </div>
-                  <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden mb-3">
-                    <div className="bg-blue-600 h-full transition-all" style={{ width: `${((btIdx + 1) / btQs.length) * 100}%` }} />
-                  </div>
-                  <p className="text-xs font-bold text-slate-900 mb-3">{btQs[btIdx]?.q}</p>
-                  <div className="space-y-1.5">
-                    {btQs[btIdx]?.opts.map((o, i) => {
-                      const letter = o.match(/^([A-D])\)/)?.[1] || ''
-                      return (
-                        <button
-                          key={i}
-                          onClick={() => handleAnswerBattle(letter)}
-                          className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-xs font-medium text-left hover:border-blue-500 btn-press"
-                        >
-                          {o}
-                        </button>
-                      )
-                    })}
-                  </div>
-                </div>
-              )}
-
-              {/* Video Lesson Generator Component */}
-              {lsSlides.length > 0 && (
-                <div className="allen-card overflow-hidden shadow-md animate-slide-up">
-                  <div className="h-1 bg-slate-100">
-                    <div className="h-full bg-blue-600 transition-all" style={{ width: `${((lsIdx + 1) / lsSlides.length) * 100}%` }} />
-                  </div>
-                  <div className="p-6 bg-gradient-to-br from-blue-900 to-indigo-950 text-white min-h-[220px] flex flex-col justify-center text-center">
-                    {(() => {
-                      const s = lsSlides[lsIdx] || {}
-                      return (
-                        <div>
-                          <p className="text-3xl mb-2">{s.emoji || '📖'}</p>
-                          <h4 className="text-sm font-black mb-1 text-blue-200">{s.title}</h4>
-                          {s.content && <p className="text-xs text-slate-200 leading-relaxed">{s.content}</p>}
-                          {s.explanation && <p className="text-[11px] text-blue-300 mt-1">{s.explanation}</p>}
-                          {s.steps && (
-                            <div className="text-left text-xs space-y-1 mt-2">
-                              {s.steps.map((st, i) => <p key={i} className="text-slate-200">• {st}</p>)}
-                            </div>
-                          )}
-                        </div>
-                      )
-                    })()}
-                  </div>
-                  <div className="p-3 bg-white border-t border-slate-200 flex items-center justify-between">
-                    <div className="flex items-center gap-1">
-                      <button onClick={() => { setLsIdx(p => Math.max(0, p - 1)); setLsPlay(false); window?.speechSynthesis?.cancel?.() }} disabled={lsIdx === 0} className="p-1.5 rounded-lg bg-slate-100 text-xs disabled:opacity-30">⏮</button>
-                      <button onClick={() => { if (lsPlay) { setLsPlay(false); window?.speechSynthesis?.cancel?.() } else setLsPlay(true) }} className="px-3 py-1 rounded-lg bg-blue-600 text-white text-xs font-bold shadow-xs">
-                        {lsPlay ? 'Pause' : '▶ Play'}
-                      </button>
-                      <button onClick={() => { setLsIdx(p => Math.min(lsSlides.length - 1, p + 1)); setLsPlay(false); window?.speechSynthesis?.cancel?.() }} disabled={lsIdx >= lsSlides.length - 1} className="p-1.5 rounded-lg bg-slate-100 text-xs disabled:opacity-30">⏭</button>
+              {/* ── 1. ACTIVE CBT TEST SIMULATOR ── */}
+              {activeMockTest && !testSubmitted && (
+                <div className="space-y-3 animate-slide-up">
+                  {/* CBT Exam Header */}
+                  <div className="allen-card p-3.5 bg-gradient-to-r from-slate-900 via-blue-950 to-indigo-950 text-white shadow-md">
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-[10px] font-black uppercase tracking-wider bg-blue-500/20 text-blue-300 border border-blue-400/30 px-2 py-0.5 rounded-full">
+                        {activeMockTest.exam} CBT SIMULATOR
+                      </span>
+                      <span className="text-xs font-black bg-rose-500/20 text-rose-300 border border-rose-400/30 px-2 py-0.5 rounded-full animate-pulse">
+                        ⏱️ {Math.floor(testTimer / 60)}m {testTimer % 60 < 10 ? '0' : ''}{testTimer % 60}s
+                      </span>
                     </div>
-                    <span className="text-[11px] font-bold text-slate-500">{lsIdx + 1} / {lsSlides.length}</span>
-                    <button onClick={() => { setLsSlides([]); window?.speechSynthesis?.cancel?.() }} className="text-xs text-slate-400 font-bold hover:text-slate-600">Close</button>
+                    <h3 className="text-xs font-bold text-white truncate">{activeMockTest.title}</h3>
+                    <p className="text-[10px] text-slate-300 mt-0.5">Marking: {activeMockTest.markingScheme}</p>
+                  </div>
+
+                  {/* Section Switcher */}
+                  <div className="flex gap-1.5 overflow-x-auto no-scrollbar">
+                    {activeMockTest.sections.map(sec => (
+                      <span key={sec} className="px-3 py-1 rounded-xl text-xs font-bold bg-white border border-slate-200 text-slate-700 shadow-xs">
+                        {sec}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Question Box */}
+                  {(() => {
+                    const q = activeMockTest.questions[testQIdx] || activeMockTest.questions[0]
+                    const currentAns = testAnswers[q.id]
+                    const isMarkedReview = testReviews[q.id]
+
+                    return (
+                      <div className="allen-card p-4 border-slate-200 shadow-sm space-y-3">
+                        <div className="flex justify-between items-center border-b border-slate-100 pb-2">
+                          <div>
+                            <span className="text-xs font-black text-blue-700">Question {testQIdx + 1} of {activeMockTest.questions.length}</span>
+                            <span className="text-[10px] text-slate-500 ml-2 font-medium">({q.section})</span>
+                          </div>
+                          <span className="text-[10px] font-extrabold bg-blue-50 text-blue-700 px-2 py-0.5 rounded-md">
+                            {q.type} • +4 / -1
+                          </span>
+                        </div>
+
+                        <p className="text-xs font-bold text-slate-900 leading-relaxed">{q.q}</p>
+
+                        {/* Options / Input */}
+                        {q.type === 'MCQ' ? (
+                          <div className="space-y-2 pt-1">
+                            {q.options.map((opt, i) => {
+                              const letter = opt.match(/^([A-D])\)/)?.[1] || ''
+                              const isSelected = currentAns === letter
+                              return (
+                                <button
+                                  key={i}
+                                  onClick={() => setTestAnswers(p => ({ ...p, [q.id]: letter }))}
+                                  className={`w-full p-3 rounded-xl border text-xs font-medium text-left transition-all btn-press flex items-center justify-between ${
+                                    isSelected 
+                                      ? 'border-blue-600 bg-blue-50/80 text-blue-900 font-bold shadow-xs' 
+                                      : 'border-slate-200 bg-slate-50/60 text-slate-800 hover:border-slate-300'
+                                  }`}
+                                >
+                                  <span>{opt}</span>
+                                  <span className={`w-4 h-4 rounded-full border flex items-center justify-center text-[10px] ${
+                                    isSelected ? 'border-blue-600 bg-blue-600 text-white' : 'border-slate-300'
+                                  }`}>
+                                    {isSelected ? '✓' : ''}
+                                  </span>
+                                </button>
+                              )
+                            })}
+                          </div>
+                        ) : (
+                          <div className="pt-2">
+                            <label className="text-[11px] font-bold text-slate-600 mb-1 block">Enter Numerical Value (Integer / Decimals):</label>
+                            <input
+                              type="text"
+                              value={currentAns || ''}
+                              onChange={e => setTestAnswers(p => ({ ...p, [q.id]: e.target.value }))}
+                              placeholder="e.g. 25"
+                              className="w-full p-3 rounded-xl border border-slate-200 bg-slate-50 text-sm font-bold text-slate-900 outline-none focus:border-blue-600 focus:bg-white"
+                            />
+                          </div>
+                        )}
+
+                        {/* Question Action Buttons */}
+                        <div className="flex gap-2 pt-2 border-t border-slate-100">
+                          <button
+                            onClick={() => setTestReviews(p => ({ ...p, [q.id]: !p[q.id] }))}
+                            className={`flex-1 py-2 rounded-xl text-xs font-bold border transition-all ${
+                              isMarkedReview ? 'bg-purple-100 border-purple-300 text-purple-800' : 'bg-slate-50 border-slate-200 text-slate-700'
+                            }`}
+                          >
+                            {isMarkedReview ? '★ Marked' : '☆ Mark Review'}
+                          </button>
+                          <button
+                            onClick={() => setTestAnswers(p => { const copy = { ...p }; delete copy[q.id]; return copy })}
+                            className="px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-500 text-xs font-bold"
+                          >
+                            Clear
+                          </button>
+                        </div>
+
+                        {/* Question Navigation */}
+                        <div className="flex justify-between items-center pt-2">
+                          <button
+                            onClick={() => setTestQIdx(p => Math.max(0, p - 1))}
+                            disabled={testQIdx === 0}
+                            className="px-3.5 py-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold disabled:opacity-30"
+                          >
+                            ← Previous
+                          </button>
+                          <button
+                            onClick={() => {
+                              if (testQIdx + 1 < activeMockTest.questions.length) {
+                                setTestQIdx(p => p + 1)
+                              } else {
+                                if (confirm('Submit this test and generate your MathonGo All-India Scorecard?')) {
+                                  handleSubmitTest()
+                                }
+                              }
+                            }}
+                            className="px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-black shadow-xs btn-press"
+                          >
+                            {testQIdx + 1 < activeMockTest.questions.length ? 'Save & Next →' : 'Submit Test 🚀'}
+                          </button>
+                        </div>
+                      </div>
+                    )
+                  })()}
+
+                  {/* Question Palette (like NTA / Allen CBT) */}
+                  <div className="allen-card p-3.5 bg-slate-50 border-slate-200">
+                    <p className="text-[11px] font-extrabold text-slate-600 uppercase tracking-wider mb-2">Question Palette</p>
+                    <div className="grid grid-cols-5 gap-2">
+                      {activeMockTest.questions.map((q, idx) => {
+                        const isAns = testAnswers[q.id] !== undefined && testAnswers[q.id] !== ''
+                        const isRev = testReviews[q.id]
+                        const isCur = testQIdx === idx
+
+                        let badgeColor = 'bg-white text-slate-700 border-slate-300'
+                        if (isRev) badgeColor = 'bg-purple-600 text-white border-purple-600 font-bold'
+                        else if (isAns) badgeColor = 'bg-emerald-600 text-white border-emerald-600 font-bold'
+                        else if (testQIdx > idx) badgeColor = 'bg-rose-100 text-rose-700 border-rose-300'
+
+                        return (
+                          <button
+                            key={q.id}
+                            onClick={() => setTestQIdx(idx)}
+                            className={`py-2 rounded-xl text-xs font-bold border transition-all ${badgeColor} ${isCur ? 'ring-2 ring-blue-600 ring-offset-1' : ''}`}
+                          >
+                            {idx + 1}
+                          </button>
+                        )
+                      })}
+                    </div>
+
+                    <button
+                      onClick={() => {
+                        if (confirm('Are you ready to submit your exam?')) handleSubmitTest()
+                      }}
+                      className="mt-3 w-full py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-black shadow-sm btn-press"
+                    >
+                      Submit Exam Now 📊
+                    </button>
                   </div>
                 </div>
               )}
+
+              {/* ── 2. MATHONGO / ALLEN POST-TEST PERFORMANCE SCORECARD ── */}
+              {activeMockTest && testSubmitted && testAnalytics && (
+                <div className="space-y-3.5 animate-slide-up">
+                  {/* Executive Score & AIR Banner */}
+                  <div className="allen-card-gradient p-4 relative overflow-hidden shadow-lg">
+                    <div className="relative z-10">
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-[10px] font-black uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded-full">
+                          {activeMockTest.exam} OFFICIAL SCORECARD
+                        </span>
+                        <span className="text-xs font-extrabold bg-amber-400 text-slate-900 px-2.5 py-0.5 rounded-full">
+                          🎯 {testAnalytics.predictedPercentile} %ile
+                        </span>
+                      </div>
+
+                      <div className="my-2">
+                        <p className="text-xs opacity-80">Predicted All-India Rank (AIR)</p>
+                        <h2 className="text-2xl font-black text-white">AIR {testAnalytics.predictedRank.toLocaleString()}</h2>
+                      </div>
+
+                      <div className="grid grid-cols-3 gap-2 bg-black/20 p-2.5 rounded-xl text-center text-xs mt-2">
+                        <div>
+                          <p className="text-[10px] opacity-75">Score</p>
+                          <p className="font-black text-base">{testAnalytics.score} / {testAnalytics.totalPossibleMarks}</p>
+                        </div>
+                        <div>
+                          <p className="text-[10px] opacity-75">Accuracy</p>
+                          <p className="font-black text-base text-emerald-300">{testAnalytics.accuracy}%</p>
+                        </div>
+                        <div>
+                          <p className="text-[10px] opacity-75">Avg Time</p>
+                          <p className="font-black text-base text-amber-300">
+                            {Math.round(testAnalytics.timeSpentSeconds / (activeMockTest.questions.length || 1))}s / Q
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* MathonGo Mistake Classifier */}
+                  <div className="allen-card p-4 border-slate-200">
+                    <h4 className="text-xs font-black text-slate-900 uppercase tracking-wider mb-2.5">
+                      MathonGo Error Breakdown
+                    </h4>
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl">
+                        <p className="text-emerald-800 font-extrabold">🟢 Correct (+4)</p>
+                        <p className="text-lg font-black text-emerald-700 mt-1">{testAnalytics.correct} Qs</p>
+                        <p className="text-[10px] text-emerald-600">+{testAnalytics.correct * 4} Marks gained</p>
+                      </div>
+                      <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl">
+                        <p className="text-amber-800 font-extrabold">🟡 Silly Mistakes (-1)</p>
+                        <p className="text-lg font-black text-amber-700 mt-1">{testAnalytics.silly} Qs</p>
+                        <p className="text-[10px] text-amber-600">Calculation errors</p>
+                      </div>
+                      <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl">
+                        <p className="text-rose-800 font-extrabold">🔴 Conceptual Gaps (-1)</p>
+                        <p className="text-lg font-black text-rose-700 mt-1">{testAnalytics.conceptual} Qs</p>
+                        <p className="text-[10px] text-rose-600">Re-read NCERT theory</p>
+                      </div>
+                      <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                        <p className="text-slate-700 font-extrabold">⚪ Unattempted</p>
+                        <p className="text-lg font-black text-slate-800 mt-1">{testAnalytics.unattempted} Qs</p>
+                        <p className="text-[10px] text-slate-500">Zero penalty (0)</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Question-by-Question Solution Review */}
+                  <div className="space-y-2">
+                    <p className="text-xs font-black text-slate-600 uppercase tracking-wider">Detailed Solutions & Lost Marks</p>
+                    {testAnalytics.breakdown.map((item, idx) => (
+                      <div key={item.id} className="allen-card p-3.5 border-slate-200 space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className={`text-[10px] font-black px-2 py-0.5 rounded-md ${
+                            item.status === 'correct' 
+                              ? 'bg-emerald-100 text-emerald-800' 
+                              : item.status === 'incorrect' 
+                              ? 'bg-rose-100 text-rose-800' 
+                              : 'bg-slate-100 text-slate-600'
+                          }`}>
+                            Q{idx + 1} • {item.status.toUpperCase()} ({item.markDelta > 0 ? `+${item.markDelta}` : item.markDelta})
+                          </span>
+                          <span className="text-[10px] text-slate-500 font-semibold">{item.concept}</span>
+                        </div>
+
+                        <p className="text-xs font-bold text-slate-900">{item.q}</p>
+
+                        <div className="p-2.5 bg-slate-50 rounded-xl text-xs space-y-1">
+                          <div className="flex justify-between">
+                            <span className="text-slate-500">Your Answer:</span>
+                            <span className={`font-bold ${item.isCorrect ? 'text-emerald-700' : 'text-rose-700'}`}>{item.userAns}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-slate-500">Official Correct Answer:</span>
+                            <span className="font-bold text-emerald-700">{item.ans}</span>
+                          </div>
+                        </div>
+
+                        <details className="text-xs text-slate-600">
+                          <summary className="cursor-pointer font-bold text-blue-600">View Step-by-Step Explanation</summary>
+                          <div className="mt-1.5 p-2 bg-blue-50/60 rounded-xl text-slate-800 leading-relaxed">
+                            <p>{item.explanation}</p>
+                          </div>
+                        </details>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Exit to Test Catalog */}
+                  <button
+                    onClick={() => { setActiveMockTest(null); setTestSubmitted(false); setTestAnalytics(null) }}
+                    className="w-full py-3 rounded-2xl bg-blue-600 text-white text-xs font-black shadow-md btn-press"
+                  >
+                    ← Return to Test Series Catalog
+                  </button>
+                </div>
+              )}
+
+              {/* ── 3. TEST CATALOG, WEIGHTAGE & SPEED BATTLE (When No Test Active) ── */}
+              {!activeMockTest && (
+                <>
+                  {/* Top 3-Way Navigation */}
+                  <div className="grid grid-cols-3 gap-1.5 bg-slate-200/80 p-1 rounded-2xl">
+                    <button
+                      onClick={() => setPracticeSubTab('tests')}
+                      className={`py-2 rounded-xl text-xs font-extrabold transition-all btn-press ${
+                        practiceSubTab === 'tests' ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600'
+                      }`}
+                    >
+                      📝 NTA Tests
+                    </button>
+                    <button
+                      onClick={() => setPracticeSubTab('weightage')}
+                      className={`py-2 rounded-xl text-xs font-extrabold transition-all btn-press ${
+                        practiceSubTab === 'weightage' ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600'
+                      }`}
+                    >
+                      🎯 Weightage
+                    </button>
+                    <button
+                      onClick={() => setPracticeSubTab('battle')}
+                      className={`py-2 rounded-xl text-xs font-extrabold transition-all btn-press ${
+                        practiceSubTab === 'battle' ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600'
+                      }`}
+                    >
+                      ⚔️ Quiz Battle
+                    </button>
+                  </div>
+
+                  {/* SUB-VIEW A: 📝 NTA CBT MOCK TESTS */}
+                  {practiceSubTab === 'tests' && (
+                    <div className="space-y-3 animate-slide-up">
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <h3 className="text-sm font-black text-slate-900">All-India CBT Mock Test Series</h3>
+                          <p className="text-[11px] text-slate-500">Exact NTA Exam Pattern • MathonGo Analytics</p>
+                        </div>
+                        <span className="text-[10px] font-black bg-amber-100 text-amber-800 border border-amber-300 px-2 py-0.5 rounded-full">
+                          ALLEN Grade
+                        </span>
+                      </div>
+
+                      {/* Test Series Cards */}
+                      <div className="space-y-2.5">
+                        {MOCK_TESTS_CATALOG.map(t => (
+                          <div key={t.id} className="allen-card p-3.5 border-slate-200 hover:border-blue-400 transition-all shadow-xs">
+                            <div className="flex justify-between items-start mb-1.5">
+                              <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+                                {t.exam}
+                              </span>
+                              {t.isSuperBatchOnly ? (
+                                <span className="text-[10px] font-black bg-amber-500 text-white px-2 py-0.5 rounded-full shadow-xs">
+                                  👑 SUPER BATCH
+                                </span>
+                              ) : (
+                                <span className="text-[10px] font-black bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
+                                  FREE SAMPLE
+                                </span>
+                              )}
+                            </div>
+
+                            <h4 className="text-xs font-black text-slate-900 leading-snug">{t.title}</h4>
+                            
+                            <div className="flex items-center gap-3 text-[10px] text-slate-500 my-2">
+                              <span>⏱️ {t.durationMinutes} Mins</span>
+                              <span>•</span>
+                              <span>📊 {t.totalMarks} Marks</span>
+                              <span>•</span>
+                              <span>{t.questionsCount} Qs</span>
+                            </div>
+
+                            <button
+                              onClick={() => handleStartMockTest(t)}
+                              className={`w-full py-2.5 rounded-xl text-xs font-black btn-press flex items-center justify-center gap-1.5 ${
+                                t.isSuperBatchOnly && !isSuperBatchActive && isTrialExpired
+                                  ? 'bg-slate-100 text-slate-700 border border-slate-300'
+                                  : 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/20'
+                              }`}
+                            >
+                              <span>{t.isSuperBatchOnly && !isSuperBatchActive && isTrialExpired ? '🔒 Unlock with Super Batch' : 'Start CBT Mock Test'}</span>
+                              <span>→</span>
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* SUB-VIEW B: 🎯 NTA CHAPTER WEIGHTAGE & 10-YEAR PYQ TRENDS */}
+                  {practiceSubTab === 'weightage' && (
+                    <div className="space-y-3 animate-slide-up">
+                      {/* Exam Goal Selector */}
+                      <div className="flex gap-1 bg-slate-100 p-1 rounded-xl">
+                        {['JEE', 'NEET', 'CBSE'].map(ex => (
+                          <button
+                            key={ex}
+                            onClick={() => {
+                              setExamTrack(ex)
+                              setWeightageSub(ex === 'NEET' ? 'Biology' : ex === 'CBSE' ? 'Class 10' : 'Physics')
+                            }}
+                            className={`flex-1 py-1.5 rounded-lg text-xs font-extrabold transition-all ${
+                              examTrack === ex ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600'
+                            }`}
+                          >
+                            {ex === 'CBSE' ? 'CBSE Boards' : `${ex} 2026`}
+                          </button>
+                        ))}
+                      </div>
+
+                      {/* Subject Filter */}
+                      <div className="flex gap-1.5 overflow-x-auto no-scrollbar">
+                        {Object.keys(NTA_WEIGHTAGE_DATA[examTrack] || {}).map(subName => (
+                          <button
+                            key={subName}
+                            onClick={() => setWeightageSub(subName)}
+                            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 ${
+                              weightageSub === subName ? 'bg-slate-900 text-white' : 'bg-white border border-slate-200 text-slate-700'
+                            }`}
+                          >
+                            {subName}
+                          </button>
+                        ))}
+                      </div>
+
+                      {/* Weightage Chapters List */}
+                      <div className="space-y-2.5">
+                        {(NTA_WEIGHTAGE_DATA[examTrack]?.[weightageSub] || []).map((ch, idx) => (
+                          <div key={idx} className="allen-card p-3.5 border-slate-200 space-y-2">
+                            <div className="flex justify-between items-start">
+                              <span className="text-[10px] font-black bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-md">
+                                {ch.priority}
+                              </span>
+                              <span className="text-xs font-black text-rose-700">{ch.weightage}</span>
+                            </div>
+
+                            <h4 className="text-xs font-black text-slate-900 leading-snug">{ch.chapter}</h4>
+                            
+                            {ch.avgQuestions && (
+                              <p className="text-[11px] font-bold text-blue-700">
+                                📊 NTA Frequency: {ch.avgQuestions}
+                              </p>
+                            )}
+
+                            <p className="text-[11px] text-slate-600 leading-relaxed bg-slate-50 p-2 rounded-xl">
+                              <b>10-Yr Trend:</b> {ch.trend}
+                            </p>
+
+                            {ch.topTopics && (
+                              <div className="pt-1">
+                                <p className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-1">Top Recurring PYQ Topics:</p>
+                                <div className="space-y-1">
+                                  {ch.topTopics.map((top, i) => (
+                                    <p key={i} className="text-[11px] text-slate-700 flex items-center gap-1.5">
+                                      <span className="text-blue-600 font-bold">•</span> {top}
+                                    </p>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            <button
+                              onClick={() => {
+                                setQ(`Explain the most asked NTA PYQ concept of ${ch.chapter} with formula and shortcuts`)
+                                setActiveTab('doubt')
+                              }}
+                              className="w-full py-1.5 rounded-xl bg-blue-50 text-blue-700 font-bold text-xs btn-press"
+                            >
+                              💡 Ask AI Doubt on this Chapter
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* SUB-VIEW C: ⚔️ SPEED QUIZ BATTLE & VIDEO LESSONS */}
+                  {practiceSubTab === 'battle' && (
+                    <div className="space-y-3.5 animate-slide-up">
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => setBtActive(false)}
+                          className="flex-1 py-2 rounded-xl bg-blue-600 text-white font-bold text-xs shadow-xs"
+                        >
+                          ⚔️ 60s Quiz Battle
+                        </button>
+                        <button
+                          onClick={() => handleGenLesson()}
+                          className="flex-1 py-2 rounded-xl bg-white text-slate-700 font-bold text-xs border border-slate-200"
+                        >
+                          🎬 AI Video Lesson
+                        </button>
+                      </div>
+
+                      {/* Quiz Battle Arena */}
+                      {!btActive ? (
+                        <div className="allen-card p-5 text-center">
+                          <div className="w-14 h-14 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center text-3xl mx-auto mb-2.5">⚔️</div>
+                          <h3 className="text-base font-extrabold text-slate-900 mb-1">60-Second Speed Battle</h3>
+                          <p className="text-xs text-slate-500 mb-4">Topic: <b>{chapter}</b>. 5 MCQs against the clock. Boost your accuracy under pressure!</p>
+                          <button
+                            onClick={handleStartBattle}
+                            disabled={btLoad}
+                            className="w-full py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-extrabold shadow-md shadow-orange-500/25 btn-press"
+                          >
+                            {btLoad ? 'Preparing Questions...' : '🚀 Start Battle (+30 XP)'}
+                          </button>
+                        </div>
+                      ) : btDone ? (
+                        <div className="allen-card p-5 text-center animate-slide-up">
+                          <p className="text-3xl mb-1">{btScore >= 4 ? '🏆' : btScore >= 2 ? '⭐' : '📝'}</p>
+                          <h4 className="text-base font-extrabold text-slate-900">Battle Complete!</h4>
+                          <p className="text-2xl font-black text-blue-600 my-1">{btScore} / {btQs.length}</p>
+                          <p className="text-xs text-slate-500 mb-4">{btScore === btQs.length ? 'Outstanding! 100% Accuracy.' : 'Great effort! Review missed questions.'}</p>
+                          <button
+                            onClick={() => { setBtActive(false); setBtDone(false) }}
+                            className="w-full py-2.5 rounded-xl bg-blue-600 text-white text-xs font-bold btn-press shadow-xs"
+                          >
+                            Play Again
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="allen-card p-4 animate-slide-up">
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="text-xs font-bold text-slate-500">Q {btIdx + 1} / {btQs.length}</span>
+                            <span className={`text-xs font-extrabold px-2.5 py-1 rounded-full ${btTimer <= 15 ? 'bg-rose-100 text-rose-700 animate-pulse' : 'bg-amber-100 text-amber-800'}`}>
+                              ⏱️ {btTimer}s
+                            </span>
+                            <span className="text-xs font-bold text-blue-600">Score: {btScore}</span>
+                          </div>
+                          <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden mb-3">
+                            <div className="bg-blue-600 h-full transition-all" style={{ width: `${((btIdx + 1) / btQs.length) * 100}%` }} />
+                          </div>
+                          <p className="text-xs font-bold text-slate-900 mb-3">{btQs[btIdx]?.q}</p>
+                          <div className="space-y-1.5">
+                            {btQs[btIdx]?.opts.map((o, i) => {
+                              const letter = o.match(/^([A-D])\)/)?.[1] || ''
+                              return (
+                                <button
+                                  key={i}
+                                  onClick={() => handleAnswerBattle(letter)}
+                                  className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-xs font-medium text-left hover:border-blue-500 btn-press"
+                                >
+                                  {o}
+                                </button>
+                              )
+                            })}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Video Lesson */}
+                      {lsSlides.length > 0 && (
+                        <div className="allen-card overflow-hidden shadow-md animate-slide-up">
+                          <div className="h-1 bg-slate-100">
+                            <div className="h-full bg-blue-600 transition-all" style={{ width: `${((lsIdx + 1) / lsSlides.length) * 100}%` }} />
+                          </div>
+                          <div className="p-6 bg-gradient-to-br from-blue-900 to-indigo-950 text-white min-h-[220px] flex flex-col justify-center text-center">
+                            {(() => {
+                              const s = lsSlides[lsIdx] || {}
+                              return (
+                                <div>
+                                  <p className="text-3xl mb-2">{s.emoji || '📖'}</p>
+                                  <h4 className="text-sm font-black mb-1 text-blue-200">{s.title}</h4>
+                                  {s.content && <p className="text-xs text-slate-200 leading-relaxed">{s.content}</p>}
+                                  {s.explanation && <p className="text-[11px] text-blue-300 mt-1">{s.explanation}</p>}
+                                </div>
+                              )
+                            })()}
+                          </div>
+                          <div className="p-3 bg-white border-t border-slate-200 flex items-center justify-between">
+                            <div className="flex items-center gap-1">
+                              <button onClick={() => { setLsIdx(p => Math.max(0, p - 1)); setLsPlay(false); window?.speechSynthesis?.cancel?.() }} disabled={lsIdx === 0} className="p-1.5 rounded-lg bg-slate-100 text-xs disabled:opacity-30">⏮</button>
+                              <button onClick={() => { if (lsPlay) { setLsPlay(false); window?.speechSynthesis?.cancel?.() } else setLsPlay(true) }} className="px-3 py-1 rounded-lg bg-blue-600 text-white text-xs font-bold shadow-xs">
+                                {lsPlay ? 'Pause' : '▶ Play'}
+                              </button>
+                              <button onClick={() => { setLsIdx(p => Math.min(lsSlides.length - 1, p + 1)); setLsPlay(false); window?.speechSynthesis?.cancel?.() }} disabled={lsIdx >= lsSlides.length - 1} className="p-1.5 rounded-lg bg-slate-100 text-xs disabled:opacity-30">⏭</button>
+                            </div>
+                            <span className="text-[11px] font-bold text-slate-500">{lsIdx + 1} / {lsSlides.length}</span>
+                            <button onClick={() => { setLsSlides([]); window?.speechSynthesis?.cancel?.() }} className="text-xs text-slate-400 font-bold hover:text-slate-600">Close</button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </>
+              )}
+
             </div>
           )}
 
