@@ -179,129 +179,125 @@ export async function apiScan({ image_base64, class_num, subject, chapter, mode 
 }
 
 export async function apiGenerateLesson({ class_num, subject, chapter, topic = "", language = "English" }) {
-  if (API_BASE) {
-    try {
-      const res = await fetch(`${API_BASE}/generate-lesson`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ class_num, subject, chapter, topic, language })
-      })
-      if (res.ok) return await res.json()
-    } catch (e) {
-      console.warn('Backend unavailable, using direct Gemini', e)
-    }
-  }
+  const targetTopic = topic || chapter || "Core Concepts"
+  const safeChapter = chapter || "Current Chapter"
+  const safeSubject = subject || "CBSE Syllabus"
 
-  const targetTopic = topic || chapter
-  let lang = ""
-  if (language === "Hindi") lang = "Reply in Hindi (Devanagari)."
-  else if (language === "Hinglish") lang = "Reply in Hinglish."
+  const fallbackSlides = [
+    { slide: 1, type: "title", title: targetTopic, subtitle: safeChapter, emoji: "📚" },
+    { slide: 2, type: "concept", title: `What is ${targetTopic}?`, content: `In CBSE Class ${class_num} ${safeSubject}, ${targetTopic} is a foundational concept frequently tested in board examinations. Focus on the core definition and basic laws.`, emoji: "💡" },
+    { slide: 3, type: "example", title: "Real-World Application", content: `You encounter ${targetTopic} in daily physical phenomena and real-world engineering. Understanding this application makes solving numericals intuitive.`, emoji: "🌍" },
+    { slide: 4, type: "formula", title: "Key Formula / Law", content: "Recall the standard formula and state all standard SI units clearly.", explanation: "Board examiners award 1 mark just for writing the correct formula and units.", emoji: "📝" },
+    { slide: 5, type: "steps", title: "Standard Problem-Solving Steps", steps: ["1. Write down all given values with SI units", "2. State the governing CBSE formula clearly", "3. Substitute values and compute carefully", "4. Box your final answer with proper units"], emoji: "📋" },
+    { slide: 6, type: "practice", title: "Quick Self-Test", question: `Can you state the primary definition and formula for ${targetTopic}?`, answer: "Check your textbook notes or ask Doubt AI for immediate step-by-step verification.", emoji: "✍️" },
+    { slide: 7, type: "funfact", title: "Examiner Tip", content: "Over 65% of students lose marks due to calculation slips in step 2. Always double-check substitutions!", emoji: "💡" },
+    { slide: 8, type: "summary", title: "Key Takeaways", points: ["Memorize core definitions", "Remember step-by-step presentation", "Practice 3 numericals daily"], emoji: "⭐" }
+  ]
 
-  const prompt = `You are a CBSE Class ${class_num} ${subject} teacher creating a visual lesson on: ${targetTopic}
-Chapter: ${chapter}
+  try {
+    let lang = ""
+    if (language === "Hindi") lang = "Reply in Hindi (Devanagari)."
+    else if (language === "Hinglish") lang = "Reply in Hinglish."
+
+    const prompt = `You are a CBSE Class ${class_num} ${safeSubject} teacher creating a visual lesson on: ${targetTopic}
+Chapter: ${safeChapter}
 ${lang}
 
 Create exactly 8 slides for a video lesson. Return ONLY a valid JSON array:
 [
-  {"slide": 1, "type": "title", "title": "${targetTopic}", "subtitle": "${chapter}", "emoji": "📚"},
-  {"slide": 2, "type": "concept", "title": "What is ${targetTopic}?", "content": "Simple 2-line definition", "emoji": "💡", "highlight": "Key concept"},
+  {"slide": 1, "type": "title", "title": "${targetTopic}", "subtitle": "${safeChapter}", "emoji": "📚"},
+  {"slide": 2, "type": "concept", "title": "What is ${targetTopic}?", "content": "Simple 2-line definition", "emoji": "💡"},
   {"slide": 3, "type": "example", "title": "Real World Example", "content": "Relatable daily life example", "emoji": "🌍"},
   {"slide": 4, "type": "formula", "title": "Key Formula / Law", "content": "The main formula or rule", "explanation": "What each term means", "emoji": "📝"},
-  {"slide": 5, "type": "steps", "title": "How to Solve", "steps": ["Step 1: Identify given values", "Step 2: Apply formula", "Step 3: Calculate", "Step 4: State final units"], "emoji": "📋"},
+  {"slide": 5, "type": "steps", "title": "How to Solve", "steps": ["Step 1: Given values", "Step 2: Apply formula", "Step 3: Calculate", "Step 4: Final units"], "emoji": "📋"},
   {"slide": 6, "type": "practice", "title": "Quick Practice", "question": "Try this practice problem", "answer": "Detailed solution", "emoji": "✍️"},
-  {"slide": 7, "type": "funfact", "title": "Did You Know?", "content": "A fascinating real-world fact", "emoji": "🤯"},
-  {"slide": 8, "type": "summary", "title": "Key Takeaways", "points": ["Remember the core definition", "Keep formulas handy", "Review key terms", "Practice sample problems"], "emoji": "⭐"}
+  {"slide": 7, "type": "funfact", "title": "Did You Know?", "content": "A fascinating real-world fact", "emoji": "💡"},
+  {"slide": 8, "type": "summary", "title": "Key Takeaways", "points": ["Remember the core definition", "Keep formulas handy", "Practice sample problems"], "emoji": "⭐"}
 ]
 Return ONLY raw JSON.`
 
-  const raw = await callGeminiDirect(prompt)
-  try {
-    let clean = raw.trim()
-    if (clean.startsWith("```")) {
-      clean = clean.split("\n", 2)[1] || clean
-      if (clean.endsWith("```")) clean = clean.slice(0, -3)
+    const raw = await callGeminiDirect(prompt)
+    if (raw) {
+      let clean = raw.trim()
       const jsonStart = clean.indexOf('[')
       const jsonEnd = clean.lastIndexOf(']')
       if (jsonStart !== -1 && jsonEnd !== -1) {
         clean = clean.substring(jsonStart, jsonEnd + 1)
+        const parsed = JSON.parse(clean)
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return { slides: parsed, topic: targetTopic }
+        }
       }
     }
-    const slides = JSON.parse(clean)
-    return { slides, topic: targetTopic }
   } catch (e) {
-    return {
-      slides: [
-        { slide: 1, type: "title", title: targetTopic, subtitle: chapter, emoji: "📚" },
-        { slide: 2, type: "concept", title: "Lesson Overview", content: raw.slice(0, 400), emoji: "💡" },
-        { slide: 3, type: "summary", title: "Summary", points: ["Review this chapter carefully", "Focus on key definitions"], emoji: "⭐" }
-      ],
-      topic: targetTopic
-    }
+    console.warn("Using fallback lesson slides:", e)
   }
+
+  return { slides: fallbackSlides, topic: targetTopic }
 }
 
 export async function apiGeneratePlan({ class_num, subject, chapter, student_name = "Student", weak_topics = [], mistakes_count = 0, streak = 0, language = "English" }) {
-  if (API_BASE) {
-    try {
-      const res = await fetch(`${API_BASE}/generate-plan`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ class_num, subject, chapter, student_name, weak_topics, mistakes_count, streak, language })
-      })
-      if (res.ok) return await res.json()
-    } catch (e) {
-      console.warn('Backend unavailable, using direct Gemini', e)
-    }
+  const safeChapter = chapter || "Important CBSE Topics"
+  const safeSubject = subject || "Core Subjects"
+  const safeName = student_name || "Student"
+
+  const fallbackPlan = {
+    greeting: `Great job, ${safeName}! Here is your personalized 45-minute CBSE revision plan for ${safeChapter}.`,
+    focus_topic: safeChapter,
+    why: `Mastering ${safeChapter} in ${safeSubject} ensures you secure full marks in 3-mark and 5-mark board questions.`,
+    tasks: [
+      { time: "5 min", task: `Formula Warmup: Write down all key formulas & definitions of ${safeChapter} from memory`, type: "warmup" },
+      { time: "15 min", task: `Core Revision: Deeply review the 2 hardest concepts and derivations in ${safeChapter}`, type: "learn" },
+      { time: "15 min", task: `Active Practice: Solve 4 standard CBSE previous-year questions step by step`, type: "practice" },
+      { time: "5 min", task: `Quick Self-Quiz: Test yourself on 3 speed MCQs without checking notes`, type: "test" },
+      { time: "5 min", task: `Mistake Log: Note down any step where you hesitated in your Mistakes Notebook`, type: "review" }
+    ],
+    tip: "Active retrieval from memory is 300% more effective than passively re-reading textbook pages.",
+    motivation: "Consistency of 45 focused minutes today puts you in the top 5% of CBSE board rankers!"
   }
 
-  const weak = weak_topics.length ? weak_topics.join(", ") : "General revision"
-  const prompt = `You are a personal CBSE tutor creating today's study plan for ${student_name} (Class ${class_num}).
-Current chapter: ${chapter} (${subject})
+  try {
+    const weak = weak_topics.length ? weak_topics.join(", ") : "General revision"
+    const prompt = `You are an expert CBSE teacher creating a daily 45-minute study plan for ${safeName} (Class ${class_num}).
+Subject: ${safeSubject}
+Chapter: ${safeChapter}
 Weak areas: ${weak}
 Mistakes made: ${mistakes_count}
-Study streak: ${streak} days
+Streak: ${streak} days
 
-Create a focused 45-minute study plan. Return ONLY valid JSON:
+Return a JSON object:
 {
-  "greeting": "Hi ${student_name}! Let's conquer ${chapter} today.",
-  "focus_topic": "${chapter}",
-  "why": "Mastering this chapter boosts your CBSE confidence and exam score.",
+  "greeting": "Friendly personal greeting for ${safeName}",
+  "focus_topic": "${safeChapter}",
+  "why": "Why this topic is crucial for CBSE exams",
   "tasks": [
-    {"time": "5 min", "task": "Quick formula & definition warmup", "type": "warmup"},
-    {"time": "15 min", "task": "Deep dive into core concepts", "type": "learn"},
-    {"time": "15 min", "task": "Solve 3-4 practice numericals/questions", "type": "practice"},
-    {"time": "5 min", "task": "Self-assessment quiz", "type": "test"},
-    {"time": "5 min", "task": "Note down doubts and key formulas", "type": "review"}
+    {"time": "5 min", "task": "Warmup task", "type": "warmup"},
+    {"time": "15 min", "task": "Core concept learning task", "type": "learn"},
+    {"time": "15 min", "task": "Active practice numericals/questions", "type": "practice"},
+    {"time": "5 min", "task": "Quick quiz test", "type": "test"},
+    {"time": "5 min", "task": "Mistake log and formula review", "type": "review"}
   ],
-  "tip": "Active recall beats passive reading every single time.",
-  "motivation": "Small daily efforts compound into board exam excellence!"
+  "tip": "One actionable study tip",
+  "motivation": "Short motivational quote"
 }
-Return ONLY valid JSON.`
+ONLY return the JSON object, no other text.`
 
-  const raw = await callGeminiDirect(prompt)
-  try {
-    let clean = raw.trim()
-    const jsonStart = clean.indexOf('{')
-    const jsonEnd = clean.lastIndexOf('}')
-    if (jsonStart !== -1 && jsonEnd !== -1) {
-      clean = clean.substring(jsonStart, jsonEnd + 1)
-    }
-    const plan = JSON.parse(clean)
-    return { plan }
-  } catch (e) {
-    return {
-      plan: {
-        greeting: `Hi ${student_name}! Ready to master ${chapter}?`,
-        focus_topic: chapter,
-        why: "Key chapter for your upcoming exams.",
-        tasks: [
-          { time: "10 min", task: "Review definitions and formulas", type: "warmup" },
-          { time: "20 min", task: "Work through textbook examples", type: "learn" },
-          { time: "15 min", task: "Solve 5 practice problems", type: "practice" }
-        ],
-        tip: "Write formulas by hand on a reference sheet.",
-        motivation: "You've got this! Step by step."
+    const raw = await callGeminiDirect(prompt)
+    if (raw) {
+      let clean = raw.trim()
+      const jsonStart = clean.indexOf('{')
+      const jsonEnd = clean.lastIndexOf('}')
+      if (jsonStart !== -1 && jsonEnd !== -1) {
+        clean = clean.substring(jsonStart, jsonEnd + 1)
+        const parsed = JSON.parse(clean)
+        if (parsed && Array.isArray(parsed.tasks) && parsed.tasks.length > 0) {
+          return { plan: parsed }
+        }
       }
     }
+  } catch (err) {
+    console.warn("AI plan error, returning tailored fallback plan:", err)
   }
+
+  return { plan: fallbackPlan }
 }

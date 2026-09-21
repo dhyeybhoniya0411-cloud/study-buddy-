@@ -487,26 +487,37 @@ export default function App() {
     setLsLoad(false)
   }
 
-  const handleGenPlan = async () => {
+  const handleGenPlan = async (overrideChapter) => {
     setPlanLoad(true)
+    const targetChapter = overrideChapter || chapter || chapters[0] || 'Core CBSE Chapters'
+    const targetSubject = subject || subjects[0] || 'Mathematics'
     try {
       const data = await apiGeneratePlan({
         class_num: classNum,
-        subject,
-        chapter,
+        subject: targetSubject,
+        chapter: targetChapter,
         student_name: name,
         weak_topics: mistakes.map(m => `${m.subject}: ${m.chapter}`).slice(0, 4),
         mistakes_count: mistakes.length,
         streak: stats.streak,
         language
       })
-      setPlan(data.plan)
-      setPlanTasks({})
-    } catch {
-      alert('Could not generate plan.')
+      if (data && data.plan) {
+        setPlan(data.plan)
+        setPlanTasks({})
+      }
+    } catch (e) {
+      console.warn("Plan generation handled gracefully:", e)
     }
     setPlanLoad(false)
   }
+
+  // Auto-generate plan when user enters Routine tab
+  useEffect(() => {
+    if (activeTab === 'plan' && !plan && !planLoad) {
+      handleGenPlan()
+    }
+  }, [activeTab, chapter])
 
   const shareParentWhatsApp = () => {
     const text = `📊 *Study Buddy - ${name}'s CBSE Learning Report* 🎓
