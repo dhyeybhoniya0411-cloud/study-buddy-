@@ -157,10 +157,9 @@ export default function App() {
   },[classNum,subject])
 
   useEffect(()=>{btmRef.current?.scrollIntoView({behavior:'smooth'})},[history])
-  useEffect(()=>{chatRef.current?.scrollIntoView({behavior:'smooth'})},[chatMsgs])
-  useEffect(()=>{localStorage.setItem('sb_m',JSON.stringify(mistakes))},[mistakes])
-  useEffect(()=>{localStorage.setItem('sb_s',JSON.stringify(stats))},[stats])
-  useEffect(()=>{if(profile)localStorage.setItem('sb_profile',JSON.stringify(profile))},[profile])
+  useEffect(()=>{try{localStorage.setItem('sb_m',JSON.stringify(mistakes))}catch(e){}},[mistakes])
+  useEffect(()=>{try{localStorage.setItem('sb_s',JSON.stringify(stats))}catch(e){}},[stats])
+  useEffect(()=>{try{if(profile)localStorage.setItem('sb_profile',JSON.stringify(profile))}catch(e){}},[profile])
 
   // Timers
   useEffect(()=>{if(!btActive||btDone)return;if(btTimer<=0){setBtDone(true);return};const t=setTimeout(()=>setBtTimer(p=>p-1),1000);return()=>clearTimeout(t)},[btActive,btTimer,btDone])
@@ -185,8 +184,8 @@ export default function App() {
     setTimeout(()=>{for(const b of BADGES){if(!u.earnedBadges.includes(b.id)&&b.check(u)){u.earnedBadges=[...u.earnedBadges,b.id];setNewBadge(b);setTimeout(()=>setNewBadge(null),3000);break}}setStats(x=>({...x,earnedBadges:u.earnedBadges}))},200);return u})
   }
 
-  const speak=t=>{window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.rate=0.9;u.lang=language==='Hindi'?'hi-IN':'en-US';window.speechSynthesis.speak(u)}
-  const listen=set=>{const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return;const r=new SR();r.lang=language==='Hindi'?'hi-IN':'en-US';r.onstart=()=>setListening(true);r.onresult=e=>set(e.results[0][0].transcript);r.onend=()=>setListening(false);r.start()}
+  const speak=t=>{if(typeof window==='undefined'||!('speechSynthesis' in window))return;try{window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.rate=0.9;u.lang=language==='Hindi'?'hi-IN':'en-US';window.speechSynthesis.speak(u)}catch(e){}}
+  const listen=set=>{const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return;try{const r=new SR();r.lang=language==='Hindi'?'hi-IN':'en-US';r.onstart=()=>setListening(true);r.onresult=e=>set(e.results[0][0].transcript);r.onend=()=>setListening(false);r.start()}catch(e){}}
 
   const handleCam=async b64=>{setShowCam(false);if(camTarget==='learn'){setLoading(true);addXP('scan');try{const data=await apiScan({image_base64:b64,class_num:classNum,subject,chapter,mode,language,scan_type:'question'});setHistory(p=>[...p,{q:'📸 Scanned',a:data.answer,mode,yt:data.youtube_query}])}catch{setHistory(p=>[...p,{q:'📸',a:'Error processing image.',mode,yt:''}])};setLoading(false)}else{try{const data=await apiScan({image_base64:b64,class_num:classNum,subject,chapter,scan_type:'answer'});camTarget==='ckQ'?setCkQ(data.answer):setCkA(data.answer)}catch{}}}
 
@@ -299,9 +298,9 @@ export default function App() {
           {(()=>{const s=lsSlides[lsIdx]||{};return<div className="animate-enter"><p className="text-3xl mb-3">{s.emoji||'📖'}</p><h3 className="text-lg font-semibold text-white mb-2">{s.title}</h3>{s.content&&<p className="text-sm text-gray-400 max-w-md leading-relaxed">{s.content}</p>}{s.explanation&&<p className="text-xs text-gray-500 mt-2">{s.explanation}</p>}{s.steps&&<div className="text-left max-w-sm mx-auto mt-3">{s.steps.map((st,i)=><p key={i} className="text-sm text-gray-400 mb-1">{i+1}. {st.replace(/^Step \d+:\s*/i,'')}</p>)}</div>}{s.points&&<div className="text-left max-w-sm mx-auto mt-3">{s.points.map((p,i)=><p key={i} className="text-sm text-gray-400 mb-1">✓ {p}</p>)}</div>}{s.question&&<div className="mt-3"><p className="text-sm text-gray-300 mb-2">{s.question}</p><details><summary className="text-xs text-indigo-400 cursor-pointer">Show answer</summary><p className="text-sm text-gray-400 mt-1">{s.answer}</p></details></div>}</div>})()}
           </div>
           <div className="px-4 py-2.5 flex items-center justify-between bg-[#0D0D14] border-t border-[#1A1A24]">
-            <div className="flex items-center gap-1"><button onClick={()=>{setLsIdx(p=>Math.max(0,p-1));setLsPlay(false);window.speechSynthesis.cancel()}} disabled={lsIdx===0} className="p-1.5 rounded text-sm disabled:opacity-20 hover:bg-[#1A1A24]">⏮</button><button onClick={()=>{if(lsPlay){setLsPlay(false);window.speechSynthesis.cancel()}else setLsPlay(true)}} className="px-3 py-1 rounded-lg bg-indigo-600 text-white text-xs font-medium">{lsPlay?'Pause':'Play'}</button><button onClick={()=>{setLsIdx(p=>Math.min(lsSlides.length-1,p+1));setLsPlay(false);window.speechSynthesis.cancel()}} disabled={lsIdx>=lsSlides.length-1} className="p-1.5 rounded text-sm disabled:opacity-20 hover:bg-[#1A1A24]">⏭</button></div>
+            <div className="flex items-center gap-1"><button onClick={()=>{setLsIdx(p=>Math.max(0,p-1));setLsPlay(false);window?.speechSynthesis?.cancel?.()}} disabled={lsIdx===0} className="p-1.5 rounded text-sm disabled:opacity-20 hover:bg-[#1A1A24]">⏮</button><button onClick={()=>{if(lsPlay){setLsPlay(false);window?.speechSynthesis?.cancel?.()}else setLsPlay(true)}} className="px-3 py-1 rounded-lg bg-indigo-600 text-white text-xs font-medium">{lsPlay?'Pause':'Play'}</button><button onClick={()=>{setLsIdx(p=>Math.min(lsSlides.length-1,p+1));setLsPlay(false);window?.speechSynthesis?.cancel?.()}} disabled={lsIdx>=lsSlides.length-1} className="p-1.5 rounded text-sm disabled:opacity-20 hover:bg-[#1A1A24]">⏭</button></div>
             <span className="text-[10px] text-gray-600">{lsIdx+1}/{lsSlides.length}</span>
-            <button onClick={()=>{setLsSlides([]);setLsIdx(0);setLsPlay(false);window.speechSynthesis.cancel()}} className="text-xs text-gray-600 hover:text-gray-400">Close</button>
+            <button onClick={()=>{setLsSlides([]);setLsIdx(0);setLsPlay(false);window?.speechSynthesis?.cancel?.()}} className="text-xs text-gray-600 hover:text-gray-400">Close</button>
           </div></div>
           <div className="flex gap-1">{lsSlides.map((s,i)=><button key={i} onClick={()=>{setLsIdx(i);setLsPlay(false)}} className={`w-8 h-6 rounded text-xs flex items-center justify-center ${i===lsIdx?'bg-indigo-600':'bg-[#1A1A24] opacity-40 hover:opacity-100'}`}>{s.emoji||'·'}</button>)}</div>
         </div>}

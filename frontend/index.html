@@ -5,6 +5,11 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Study Buddy — AI Personal Tutor</title>
+    <script>
+      if (window.location.pathname === '/study-buddy-') {
+        window.location.replace('/study-buddy-/' + window.location.search + window.location.hash);
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
