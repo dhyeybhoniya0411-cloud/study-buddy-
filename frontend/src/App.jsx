@@ -1,12 +1,10 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
-import axios from 'axios'
 import ReactMarkdown from 'react-markdown'
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import remarkGfm from 'remark-gfm'
 import 'katex/dist/katex.min.css'
-
-const API = import.meta.env.VITE_API_URL || ''
+import { getClasses, getSubjects, getChapters, getDeletedTopics, apiAsk, apiChat, apiCheckAnswer, apiScan, apiGenerateLesson, apiGeneratePlan } from './api'
 
 // ── Markdown ──
 function Md({text}) {
@@ -144,8 +142,20 @@ export default function App() {
   const btmRef=useRef(null),chatRef=useRef(null)
   const name=profile?.name||'Student'
 
-  useEffect(()=>{axios.get(`${API}/curriculum/subjects/${classNum}`).then(r=>{setSubjects(r.data.subjects);setSubject(r.data.subjects[0]||'')}).catch(()=>{})},[classNum])
-  useEffect(()=>{if(!subject)return;axios.get(`${API}/curriculum/chapters/${classNum}/${subject}`).then(r=>{setChapters(r.data.chapters);setChapter(r.data.chapters[0]||'');setDeletedTopics(r.data.deleted_topics||[])}).catch(()=>{})},[classNum,subject])
+  useEffect(()=>{
+    const subs = getSubjects(classNum)
+    setSubjects(subs)
+    setSubject(subs[0]||'')
+  },[classNum])
+
+  useEffect(()=>{
+    if(!subject) return
+    const chaps = getChapters(classNum, subject)
+    setChapters(chaps)
+    setChapter(chaps[0]||'')
+    setDeletedTopics(getDeletedTopics(classNum, subject))
+  },[classNum,subject])
+
   useEffect(()=>{btmRef.current?.scrollIntoView({behavior:'smooth'})},[history])
   useEffect(()=>{chatRef.current?.scrollIntoView({behavior:'smooth'})},[chatMsgs])
   useEffect(()=>{localStorage.setItem('sb_m',JSON.stringify(mistakes))},[mistakes])
@@ -178,17 +188,17 @@ export default function App() {
   const speak=t=>{window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.rate=0.9;u.lang=language==='Hindi'?'hi-IN':'en-US';window.speechSynthesis.speak(u)}
   const listen=set=>{const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return;const r=new SR();r.lang=language==='Hindi'?'hi-IN':'en-US';r.onstart=()=>setListening(true);r.onresult=e=>set(e.results[0][0].transcript);r.onend=()=>setListening(false);r.start()}
 
-  const handleCam=async b64=>{setShowCam(false);if(camTarget==='learn'){setLoading(true);addXP('scan');try{const r=await axios.post(`${API}/scan`,{image_base64:b64,class_num:classNum,subject,chapter,mode,language,scan_type:'question'});setHistory(p=>[...p,{q:'📸 Scanned',a:r.data.answer,mode,yt:r.data.youtube_query}])}catch{setHistory(p=>[...p,{q:'📸',a:'Error processing',mode,yt:''}])};setLoading(false)}else{try{const r=await axios.post(`${API}/scan`,{image_base64:b64,class_num:classNum,subject,chapter,scan_type:'answer'});camTarget==='ckQ'?setCkQ(r.data.answer):setCkA(r.data.answer)}catch{}}}
+  const handleCam=async b64=>{setShowCam(false);if(camTarget==='learn'){setLoading(true);addXP('scan');try{const data=await apiScan({image_base64:b64,class_num:classNum,subject,chapter,mode,language,scan_type:'question'});setHistory(p=>[...p,{q:'📸 Scanned',a:data.answer,mode,yt:data.youtube_query}])}catch{setHistory(p=>[...p,{q:'📸',a:'Error processing image.',mode,yt:''}])};setLoading(false)}else{try{const data=await apiScan({image_base64:b64,class_num:classNum,subject,chapter,scan_type:'answer'});camTarget==='ckQ'?setCkQ(data.answer):setCkA(data.answer)}catch{}}}
 
-  const askLearn=async()=>{if(!q.trim())return;const qq=q;setLoading(true);setQ('');addXP(mode==='quiz'?'quiz':'question');try{const r=await axios.post(`${API}/ask`,{question:qq,class_num:classNum,subject,chapter,mode,language});setHistory(p=>[...p,{q:qq,a:r.data.answer,mode,yt:r.data.youtube_query}])}catch{setHistory(p=>[...p,{q:qq,a:'Connection error.',mode,yt:''}])};setLoading(false)}
-  const sendChat=async()=>{if(!chatIn.trim())return;const msg=chatIn;setChatIn('');setChatLoad(true);addXP('chat');const n=[...chatMsgs,{role:'user',text:msg}];setChatMsgs(n);try{const r=await axios.post(`${API}/chat`,{messages:n,class_num:classNum,subject,chapter,language});setChatMsgs([...n,{role:'ai',text:r.data.answer}])}catch{setChatMsgs([...n,{role:'ai',text:'Error'}])};setChatLoad(false)}
-  const submitCheck=async()=>{if(!ckQ.trim()||!ckA.trim())return;setCkLoad(true);setCkRes(null);addXP('check');try{const r=await axios.post(`${API}/check-answer`,{question:ckQ,student_answer:ckA,class_num:classNum,subject,chapter,language});setCkRes(r.data);const m=r.data.analysis.match(/Score:\s*(\d+)/i);if(m&&parseInt(m[1])<7)setMistakes(p=>[{id:Date.now(),question:ckQ,studentAnswer:ckA,analysis:r.data.analysis,subject,chapter,classNum,date:new Date().toLocaleDateString(),practiced:false},...p])}catch{setCkRes({analysis:'Error'})};setCkLoad(false)}
+  const askLearn=async()=>{if(!q.trim())return;const qq=q;setLoading(true);setQ('');addXP(mode==='quiz'?'quiz':'question');try{const data=await apiAsk({question:qq,class_num:classNum,subject,chapter,mode,language});setHistory(p=>[...p,{q:qq,a:data.answer,mode,yt:data.youtube_query}])}catch{setHistory(p=>[...p,{q:qq,a:'Connection error. Try again.',mode,yt:''}])};setLoading(false)}
+  const sendChat=async()=>{if(!chatIn.trim())return;const msg=chatIn;setChatIn('');setChatLoad(true);addXP('chat');const n=[...chatMsgs,{role:'user',text:msg}];setChatMsgs(n);try{const data=await apiChat({messages:n,class_num:classNum,subject,chapter,language});setChatMsgs([...n,{role:'ai',text:data.answer}])}catch{setChatMsgs([...n,{role:'ai',text:'Error getting response.'}])};setChatLoad(false)}
+  const submitCheck=async()=>{if(!ckQ.trim()||!ckA.trim())return;setCkLoad(true);setCkRes(null);addXP('check');try{const data=await apiCheckAnswer({question:ckQ,student_answer:ckA,class_num:classNum,subject,chapter,language});setCkRes(data);const m=data.analysis.match(/Score:\s*(\d+)/i);if(m&&parseInt(m[1])<7)setMistakes(p=>[{id:Date.now(),question:ckQ,studentAnswer:ckA,analysis:data.analysis,subject,chapter,classNum,date:new Date().toLocaleDateString(),practiced:false},...p])}catch{setCkRes({analysis:'Error evaluating answer.'})};setCkLoad(false)}
 
-  const startBattle=async()=>{setBtLoad(true);setBtDone(false);setBtScore(0);setBtIdx(0);setBtTimer(60);setBtQs([]);try{const r=await axios.post(`${API}/ask`,{question:`Generate 5 quick quiz questions on ${chapter}`,class_num:classNum,subject,chapter,mode:'quiz',language});const lines=r.data.answer.split('\n').filter(l=>l.trim());const qs=[];let cur=null;for(const l of lines){if(l.match(/^Q\d?[:.]/i)){cur={q:l.replace(/^Q\d?[:.]\s*/i,''),opts:[],ans:''};qs.push(cur)}else if(cur&&l.match(/^[A-D]\)/)){cur.opts.push(l)}else if(cur&&l.match(/^Answer/i)){cur.ans=l.match(/[A-D]/)?.[0]||'A'}};if(qs.length>=3){setBtQs(qs);setBtActive(true)}else alert('Try again')}catch{alert('Error')};setBtLoad(false)}
+  const startBattle=async()=>{setBtLoad(true);setBtDone(false);setBtScore(0);setBtIdx(0);setBtTimer(60);setBtQs([]);try{const data=await apiAsk({question:`Generate 5 quick quiz questions on ${chapter}`,class_num:classNum,subject,chapter,mode:'quiz',language});const lines=data.answer.split('\n').filter(l=>l.trim());const qs=[];let cur=null;for(const l of lines){if(l.match(/^Q\d?[:.]/i)){cur={q:l.replace(/^Q\d?[:.]\s*/i,''),opts:[],ans:''};qs.push(cur)}else if(cur&&l.match(/^[A-D]\)/)){cur.opts.push(l)}else if(cur&&l.match(/^Answer/i)){cur.ans=l.match(/[A-D]/)?.[0]||'A'}};if(qs.length>=3){setBtQs(qs);setBtActive(true)}else alert('Try again')}catch{alert('Error')};setBtLoad(false)}
   const answerBt=l=>{const correct=btQs[btIdx]?.ans===l;if(correct)setBtScore(p=>p+1);if(btIdx+1>=btQs.length){setBtDone(true);addXP('battle',btScore*5)}else setBtIdx(p=>p+1)}
 
-  const genLesson=async()=>{setLsLoad(true);setLsSlides([]);setLsIdx(0);setLsPlay(false);try{const r=await axios.post(`${API}/generate-lesson`,{class_num:classNum,subject,chapter,topic:lsTopic||chapter,language});if(r.data.slides?.length>0){setLsSlides(r.data.slides);addXP('question')}else alert('Try again')}catch{alert('Error')};setLsLoad(false)}
-  const genPlan=async()=>{setPlanLoad(true);try{const r=await axios.post(`${API}/generate-plan`,{class_num:classNum,subject,chapter,student_name:name,weak_topics:mistakes.map(m=>m.subject).slice(0,5),mistakes_count:mistakes.length,streak:stats.streak,language});setPlan(r.data.plan);setPlanTasks({})}catch{alert('Error')};setPlanLoad(false)}
+  const genLesson=async()=>{setLsLoad(true);setLsSlides([]);setLsIdx(0);setLsPlay(false);try{const data=await apiGenerateLesson({class_num:classNum,subject,chapter,topic:lsTopic||chapter,language});if(data.slides?.length>0){setLsSlides(data.slides);addXP('question')}else alert('Try again')}catch{alert('Error')};setLsLoad(false)}
+  const genPlan=async()=>{setPlanLoad(true);try{const data=await apiGeneratePlan({class_num:classNum,subject,chapter,student_name:name,weak_topics:mistakes.map(m=>m.subject).slice(0,5),mistakes_count:mistakes.length,streak:stats.streak,language});setPlan(data.plan);setPlanTasks({})}catch{alert('Error')};setPlanLoad(false)}
 
   const handleOnboard=p=>{setProfile(p);setClassNum(p.classNum);setPage('app')}
 
