@@ -1,51 +1,88 @@
 @import "tailwindcss";
 
-/* === PREMIUM DESIGN SYSTEM === */
+/* === ALLEN EDTECH DESIGN SYSTEM === */
 :root {
-  --bg: #08080D;
-  --surface: #111118;
-  --surface-2: #1A1A24;
-  --border: #222233;
-  --border-hover: #333355;
-  --accent: #6366F1;
-  --accent-light: #818CF8;
-  --text: #E2E2EE;
-  --text-muted: #8888AA;
-  --text-dim: #555566;
-  --success: #34D399;
-  --warning: #FBBF24;
-  --danger: #F87171;
+  --bg-app: #F8FAFC;
+  --surface: #FFFFFF;
+  --border: #E2E8F0;
+  --navy: #0F172A;
+  --allen-blue: #1E40AF;
+  --allen-blue-light: #3B82F6;
+  --emerald: #10B981;
+  --amber: #F59E0B;
+  --rose: #EF4444;
 }
 
-body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+body {
+  background-color: #F1F5F9;
+  color: #0F172A;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+input, textarea {
+  user-select: auto;
+}
+
+/* Touch active micro-animations */
+.btn-press {
+  transition: transform 0.1s ease, filter 0.1s ease;
+}
+.btn-press:active {
+  transform: scale(0.97);
+  filter: brightness(0.95);
+}
+
+/* Custom card styling like Allen Digital */
+.allen-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04);
+}
+
+.allen-card-gradient {
+  background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%);
+  color: #FFFFFF;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px -2px rgba(30, 64, 175, 0.25);
+}
 
 /* Animations */
-@keyframes enter { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
-@keyframes fade { from { opacity:0; } to { opacity:1; } }
-@keyframes pulse-soft { 0%,100% { opacity:1; } 50% { opacity:0.6; } }
-@keyframes float { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-8px); } }
-@keyframes shimmer { 0% { background-position:-200% 0; } 100% { background-position:200% 0; } }
-@keyframes confetti { 0%{transform:translateY(-10px) rotate(0);opacity:1;} 100%{transform:translateY(100vh) rotate(720deg);opacity:0;} }
-@keyframes progress { from { width:0; } }
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-.animate-enter { animation: enter 0.5s ease-out forwards; }
-.animate-fade { animation: fade 0.4s ease-out; }
-.animate-pulse-soft { animation: pulse-soft 2s ease-in-out infinite; }
-.animate-float { animation: float 4s ease-in-out infinite; }
-.animate-confetti { animation: confetti 3s ease-in-out forwards; }
-.animate-progress { animation: progress 1s ease-out; }
+@keyframes pulseGlow {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.03); }
+}
 
-/* Shimmer loading */
-.shimmer { background: linear-gradient(90deg, var(--surface) 25%, var(--surface-2) 50%, var(--surface) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+.animate-slide-up {
+  animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
 
-/* Scrollbar */
-::-webkit-scrollbar { width:5px; }
-::-webkit-scrollbar-track { background:transparent; }
-::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
-::-webkit-scrollbar-thumb:hover { background:var(--border-hover); }
+.animate-pulse-glow {
+  animation: pulseGlow 2.5s infinite ease-in-out;
+}
 
-/* Focus ring */
-input:focus, select:focus, textarea:focus { outline:none; box-shadow: 0 0 0 2px rgba(99,102,241,0.3); }
+/* Custom mobile bottom bar safe area */
+.bottom-nav-safe {
+  padding-bottom: calc(0.5rem + env(safe-area-inset-bottom, 0px));
+}
 
-/* Smooth transitions on everything */
-* { transition-property: background-color, border-color, color, opacity, transform; transition-duration: 150ms; }
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
