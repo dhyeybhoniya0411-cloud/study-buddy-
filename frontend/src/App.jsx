@@ -179,6 +179,414 @@ function Onboarding({ onComplete }) {
   )
 }
 
+// ── Subscription & Paywall Modal (5-Day Trial Funnel) ──
+function SubscriptionModal({
+  isOpen,
+  onClose,
+  subscription,
+  daysRemaining,
+  isTrialExpired,
+  reason,
+  onSubscribe,
+  onSimulateState
+}) {
+  const [selectedPlan, setSelectedPlan] = useState('quarterly')
+  const [payMethod, setPayMethod] = useState('upi') // 'upi' | 'qr' | 'card'
+  const [payStep, setPayStep] = useState('select') // 'select' | 'processing' | 'success'
+  const [processMsg, setProcessMsg] = useState('')
+  const [upiId, setUpiId] = useState('')
+  const [qrTimer, setQrTimer] = useState(300)
+
+  const plans = [
+    {
+      id: 'monthly',
+      name: 'Monthly Pro',
+      price: 149,
+      origPrice: 399,
+      duration: '1 Month',
+      perDay: '₹4.9/day',
+      tag: 'Flexible',
+      popular: false,
+      desc: 'Ideal for monthly unit tests & doubt clearing.'
+    },
+    {
+      id: 'quarterly',
+      name: 'Quarterly Board Pass',
+      price: 399,
+      origPrice: 1299,
+      duration: '3 Months',
+      perDay: '₹4.4/day (₹133/mo)',
+      tag: '🔥 84% Choose This',
+      popular: true,
+      desc: 'Complete coverage for CBSE Board revision & Term exams.'
+    },
+    {
+      id: 'annual',
+      name: 'Annual Topper Pass',
+      price: 999,
+      origPrice: 3999,
+      duration: '1 Year',
+      perDay: '₹2.7/day (₹83/mo)',
+      tag: 'Save 75%',
+      popular: false,
+      desc: 'Full academic year syllabus, question bank & parent reports.'
+    }
+  ]
+
+  const currentPlanObj = plans.find(p => p.id === selectedPlan) || plans[1]
+
+  useEffect(() => {
+    if (!isOpen || payMethod !== 'qr') return
+    const t = setInterval(() => {
+      setQrTimer(prev => (prev > 0 ? prev - 1 : 300))
+    }, 1000)
+    return () => clearInterval(t)
+  }, [isOpen, payMethod])
+
+  if (!isOpen) return null
+
+  const handlePay = () => {
+    setPayStep('processing')
+    setProcessMsg('Initiating secure UPI transaction...')
+    
+    setTimeout(() => {
+      setProcessMsg('Verifying with NPCI & Banking Gateway...')
+    }, 900)
+
+    setTimeout(() => {
+      setProcessMsg('Confirming Study Buddy Pro Access...')
+    }, 1800)
+
+    setTimeout(() => {
+      setPayStep('success')
+      onSubscribe(currentPlanObj)
+    }, 2600)
+  }
+
+  const formatTimer = (s) => {
+    const m = Math.floor(s / 60)
+    const sec = s % 60
+    return `${m}:${sec < 10 ? '0' : ''}${sec}`
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <div className="w-full max-w-md bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[92vh] animate-slide-up">
+        
+        {/* Modal Header */}
+        <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-blue-800 text-white p-4 relative">
+          <button
+            onClick={onClose}
+            className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center font-bold text-sm transition-all"
+          >
+            ✕
+          </button>
+          
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-xl">👑</span>
+            <span className="text-xs font-black tracking-wider uppercase bg-amber-400/20 text-amber-300 border border-amber-400/40 px-2 py-0.5 rounded-full">
+              STUDY BUDDY PRO
+            </span>
+          </div>
+
+          <h2 className="text-lg font-black text-white leading-tight">
+            {isTrialExpired ? '5-Day Free Trial Ended' : 'Unlock Study Buddy Pro'}
+          </h2>
+          
+          <p className="text-xs text-blue-200 mt-1">
+            {reason ? reason : (isTrialExpired 
+              ? 'Keep your 5-day habit alive & save your streak. Less than ₹5/day!'
+              : `🎁 Free Trial: ${daysRemaining} day(s) left. Lock in 70% Early Bird Discount now!`)}
+          </p>
+        </div>
+
+        {/* Modal Body */}
+        <div className="p-4 overflow-y-auto space-y-4 flex-1">
+          
+          {payStep === 'select' && (
+            <>
+              {/* Value Highlights */}
+              <div className="bg-blue-50/80 border border-blue-100 rounded-2xl p-3">
+                <p className="text-[11px] font-extrabold text-blue-950 uppercase tracking-wide mb-2">
+                  What You Get with Pro:
+                </p>
+                <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-700 font-medium">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-blue-600 font-bold">✓</span> Unlimited 24/7 AI Doubts
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-blue-600 font-bold">✓</span> Board Answer Evaluator
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-blue-600 font-bold">✓</span> 45-Min Daily Schedules
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-blue-600 font-bold">✓</span> WhatsApp Parent Report
+                  </div>
+                </div>
+              </div>
+
+              {/* Plans Selection */}
+              <div>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+                  Choose Your Subscription Plan
+                </p>
+                <div className="space-y-2.5">
+                  {plans.map(p => {
+                    const isSel = selectedPlan === p.id
+                    return (
+                      <div
+                        key={p.id}
+                        onClick={() => setSelectedPlan(p.id)}
+                        className={`cursor-pointer rounded-2xl p-3.5 border transition-all relative ${
+                          isSel 
+                            ? 'border-blue-600 bg-blue-50/60 shadow-md ring-2 ring-blue-600/20' 
+                            : 'border-slate-200 bg-white hover:border-slate-300'
+                        }`}
+                      >
+                        {p.tag && (
+                          <span className={`absolute -top-2.5 right-3 text-[10px] font-black px-2 py-0.5 rounded-full ${
+                            p.popular ? 'bg-amber-500 text-white shadow-xs' : 'bg-blue-600 text-white'
+                          }`}>
+                            {p.tag}
+                          </span>
+                        )}
+
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <span className={`w-4 h-4 rounded-full border flex items-center justify-center ${
+                                isSel ? 'border-blue-600 bg-blue-600 text-white text-[10px]' : 'border-slate-300'
+                              }`}>
+                                {isSel ? '✓' : ''}
+                              </span>
+                              <h4 className="text-sm font-extrabold text-slate-900">{p.name}</h4>
+                            </div>
+                            <p className="text-[11px] text-slate-500 mt-1 ml-6">{p.desc}</p>
+                            <p className="text-[10px] font-semibold text-emerald-700 mt-0.5 ml-6">
+                              Only {p.perDay}
+                            </p>
+                          </div>
+
+                          <div className="text-right">
+                            <span className="text-xs text-slate-400 line-through mr-1">₹{p.origPrice}</span>
+                            <span className="text-base font-black text-slate-900">₹{p.price}</span>
+                            <p className="text-[10px] text-slate-500 font-medium">/{p.duration}</p>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+
+              {/* Payment Methods */}
+              <div>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+                  Select Payment Method
+                </p>
+                <div className="grid grid-cols-3 gap-2">
+                  <button
+                    onClick={() => setPayMethod('upi')}
+                    className={`py-2 px-1 rounded-xl text-xs font-bold border transition-all ${
+                      payMethod === 'upi' ? 'bg-blue-600 text-white border-blue-600 shadow-sm' : 'bg-slate-50 text-slate-700 border-slate-200'
+                    }`}
+                  >
+                    📱 UPI Apps
+                  </button>
+                  <button
+                    onClick={() => setPayMethod('qr')}
+                    className={`py-2 px-1 rounded-xl text-xs font-bold border transition-all ${
+                      payMethod === 'qr' ? 'bg-blue-600 text-white border-blue-600 shadow-sm' : 'bg-slate-50 text-slate-700 border-slate-200'
+                    }`}
+                  >
+                    📷 Scan QR
+                  </button>
+                  <button
+                    onClick={() => setPayMethod('card')}
+                    className={`py-2 px-1 rounded-xl text-xs font-bold border transition-all ${
+                      payMethod === 'card' ? 'bg-blue-600 text-white border-blue-600 shadow-sm' : 'bg-slate-50 text-slate-700 border-slate-200'
+                    }`}
+                  >
+                    💳 Card / Net
+                  </button>
+                </div>
+              </div>
+
+              {/* Payment Method Details */}
+              {payMethod === 'upi' && (
+                <div className="bg-slate-50 border border-slate-200 rounded-2xl p-3 space-y-2.5">
+                  <p className="text-[11px] font-bold text-slate-700">Instant UPI Checkout:</p>
+                  <div className="flex gap-2">
+                    {['Google Pay', 'PhonePe', 'Paytm', 'BHIM'].map(app => (
+                      <div key={app} className="flex-1 py-1.5 bg-white border border-slate-200 rounded-xl text-center text-[10px] font-extrabold text-slate-800 shadow-xs">
+                        {app}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={upiId}
+                      onChange={e => setUpiId(e.target.value)}
+                      placeholder="e.g. mobile@okhdfcbank"
+                      className="flex-1 bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 outline-none focus:border-blue-500"
+                    />
+                    <button
+                      onClick={() => setUpiId('student@upi')}
+                      className="text-[10px] font-bold text-blue-600 px-2 py-1 bg-blue-50 rounded-lg border border-blue-200"
+                    >
+                      Autofill
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {payMethod === 'qr' && (
+                <div className="bg-slate-50 border border-slate-200 rounded-2xl p-3 flex flex-col items-center text-center">
+                  <div className="w-36 h-36 bg-white border-2 border-slate-800 rounded-xl p-2 mb-2 relative flex items-center justify-center shadow-inner">
+                    <div className="w-full h-full bg-[radial-gradient(#1E293B_2px,transparent_2px)] [background-size:8px_8px] flex items-center justify-center relative">
+                      <div className="w-10 h-10 bg-white rounded-lg border border-slate-300 flex items-center justify-center font-black text-blue-700 text-xs shadow-md">
+                        ₹{currentPlanObj.price}
+                      </div>
+                      <div className="absolute top-1 left-1 w-5 h-5 border-2 border-slate-900 bg-white"></div>
+                      <div className="absolute top-1 right-1 w-5 h-5 border-2 border-slate-900 bg-white"></div>
+                      <div className="absolute bottom-1 left-1 w-5 h-5 border-2 border-slate-900 bg-white"></div>
+                    </div>
+                  </div>
+                  <p className="text-xs font-bold text-slate-800">Scan using any UPI App</p>
+                  <p className="text-[10px] text-slate-500">Google Pay • PhonePe • Paytm • BHIM</p>
+                  <span className="mt-1 text-[10px] font-extrabold bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">
+                    QR expires in {formatTimer(qrTimer)}
+                  </span>
+                </div>
+              )}
+
+              {payMethod === 'card' && (
+                <div className="bg-slate-50 border border-slate-200 rounded-2xl p-3 space-y-2">
+                  <input
+                    type="text"
+                    placeholder="Card Number (XXXX XXXX XXXX XXXX)"
+                    defaultValue="4532 •••• •••• 8912"
+                    className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs outline-none"
+                  />
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="MM/YY"
+                      defaultValue="08/28"
+                      className="w-1/2 bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs outline-none"
+                    />
+                    <input
+                      type="password"
+                      placeholder="CVV"
+                      defaultValue="912"
+                      className="w-1/2 bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs outline-none"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Pay Action Button */}
+              <button
+                onClick={handlePay}
+                className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-800 text-white font-black text-sm shadow-xl shadow-blue-500/25 btn-press flex items-center justify-center gap-2"
+              >
+                <span>Pay ₹{currentPlanObj.price} & Unlock Pro</span>
+                <span>→</span>
+              </button>
+
+              <p className="text-center text-[10px] text-slate-400 font-medium">
+                🔒 256-bit Encrypted Banking Gateway • Instant Unlock • Cancel Anytime
+              </p>
+            </>
+          )}
+
+          {payStep === 'processing' && (
+            <div className="py-12 flex flex-col items-center justify-center text-center space-y-4 animate-slide-up">
+              <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
+              <div>
+                <h3 className="text-base font-extrabold text-slate-900">Processing Payment</h3>
+                <p className="text-xs text-slate-500 mt-1 font-medium">{processMsg}</p>
+              </div>
+              <p className="text-[11px] text-slate-400">Please do not press back or close the app.</p>
+            </div>
+          )}
+
+          {payStep === 'success' && (
+            <div className="py-8 flex flex-col items-center justify-center text-center space-y-4 animate-slide-up">
+              <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-3xl font-bold shadow-lg shadow-emerald-500/20">
+                ✓
+              </div>
+              <div>
+                <span className="text-[10px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
+                  PAYMENT CONFIRMED
+                </span>
+                <h3 className="text-lg font-black text-slate-900 mt-2">Welcome to Study Buddy PRO!</h3>
+                <p className="text-xs text-slate-600 mt-1 max-w-xs">
+                  Your <b>{currentPlanObj.name}</b> (₹{currentPlanObj.price}) is active. Unlimited doubts & CBSE examiner checking unlocked!
+                </p>
+              </div>
+
+              <div className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3 text-left space-y-1 text-xs">
+                <div className="flex justify-between">
+                  <span className="text-slate-500">Plan:</span>
+                  <span className="font-bold text-slate-800">{currentPlanObj.name}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-500">Amount Paid:</span>
+                  <span className="font-bold text-emerald-700">₹{currentPlanObj.price}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-500">Access:</span>
+                  <span className="font-bold text-blue-700">100% Unlocked</span>
+                </div>
+              </div>
+
+              <button
+                onClick={() => {
+                  setPayStep('select')
+                  onClose()
+                }}
+                className="w-full py-3.5 rounded-2xl bg-emerald-600 text-white font-black text-sm shadow-lg shadow-emerald-500/25 btn-press"
+              >
+                Start Studying Now 🚀
+              </button>
+            </div>
+          )}
+
+        </div>
+
+        {/* Demo Simulation Bar for Hackathon / Judges / Testing */}
+        <div className="bg-slate-100 border-t border-slate-200 p-2.5 flex items-center justify-between text-[10px]">
+          <span className="font-extrabold text-slate-500">🧪 Demo Tester:</span>
+          <div className="flex gap-1.5">
+            <button
+              onClick={() => onSimulateState('trial_active')}
+              className="px-2 py-1 rounded bg-white border border-slate-300 font-bold text-slate-700 hover:bg-slate-50"
+            >
+              Day 2/5 (Trial)
+            </button>
+            <button
+              onClick={() => onSimulateState('trial_expired')}
+              className="px-2 py-1 rounded bg-rose-50 border border-rose-300 font-bold text-rose-700 hover:bg-rose-100"
+            >
+              Day 5 Expired 🔒
+            </button>
+            <button
+              onClick={() => onSimulateState('pro_active')}
+              className="px-2 py-1 rounded bg-amber-50 border border-amber-300 font-bold text-amber-800 hover:bg-amber-100"
+            >
+              Pro Active 👑
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  )
+}
+
 // ═══════════════════════════════════════
 // MAIN ALLEN-STYLE EDTECH APP
 // ═══════════════════════════════════════
@@ -257,6 +665,95 @@ export default function App() {
       return { xp: 120, totalQ: 8, quizzes: 2, checks: 1, streak: 4, subjectsList: ['Mathematics', 'Science'], todayQ: 3 }
     }
   })
+
+  // ── Subscription & 5-Day Free Trial State ──
+  const [subscription, setSubscription] = useState(() => {
+    try {
+      const s = JSON.parse(localStorage.getItem('sb_sub') || '{}')
+      if (s && s.startDate) return s
+    } catch {}
+    const init = {
+      startDate: Date.now(),
+      trialDays: 5,
+      isPro: false,
+      plan: null,
+      planName: null,
+      price: null,
+      proExpires: null
+    }
+    try { localStorage.setItem('sb_sub', JSON.stringify(init)) } catch {}
+    return init
+  })
+  const [showSubModal, setShowSubModal] = useState(false)
+  const [subReason, setSubReason] = useState('')
+
+  // Calculate 5-day trial status
+  const daysPassed = Math.floor((Date.now() - (subscription?.startDate || Date.now())) / (1000 * 60 * 60 * 24))
+  const daysRemaining = Math.max(0, 5 - daysPassed)
+  const isTrialExpired = !subscription?.isPro && daysRemaining <= 0
+
+  useEffect(() => {
+    try {
+      if (subscription) localStorage.setItem('sb_sub', JSON.stringify(subscription))
+    } catch {}
+  }, [subscription])
+
+  const handleSubscribe = (p) => {
+    const updated = {
+      startDate: subscription?.startDate || Date.now(),
+      trialDays: 5,
+      isPro: true,
+      plan: p.id,
+      planName: p.name,
+      price: p.price,
+      proExpires: Date.now() + (p.id === 'quarterly' ? 90 : p.id === 'annual' ? 365 : 30) * 86400000
+    }
+    setSubscription(updated)
+  }
+
+  const handleSimulateState = (mode) => {
+    if (mode === 'trial_active') {
+      setSubscription({
+        startDate: Date.now() - 2 * 86400000,
+        trialDays: 5,
+        isPro: false,
+        plan: null,
+        planName: null,
+        price: null,
+        proExpires: null
+      })
+    } else if (mode === 'trial_expired') {
+      setSubscription({
+        startDate: Date.now() - 6 * 86400000,
+        trialDays: 5,
+        isPro: false,
+        plan: null,
+        planName: null,
+        price: null,
+        proExpires: null
+      })
+    } else if (mode === 'pro_active') {
+      setSubscription({
+        startDate: Date.now() - 2 * 86400000,
+        trialDays: 5,
+        isPro: true,
+        plan: 'quarterly',
+        planName: 'Quarterly Board Pass',
+        price: 399,
+        proExpires: Date.now() + 90 * 86400000
+      })
+    }
+  }
+
+  const guardPro = (fn, reason) => {
+    if (isTrialExpired) {
+      setSubReason(reason || 'Your 5-Day Free Trial has ended. Subscribe to Pro to continue unlimited access.')
+      setShowSubModal(true)
+      return false
+    }
+    if (fn) fn()
+    return true
+  }
 
   const btmRef = useRef(null)
   const chatRef = useRef(null)
@@ -344,6 +841,7 @@ export default function App() {
 
   const handleCamCapture = async b64 => {
     setShowCam(false)
+    if (!guardPro(null, 'Your 5-Day Free Trial has ended. Subscribe to Pro to snap unlimited textbook questions.')) return
     if (camTarget === 'question') {
       setLoading(true)
       addXP(15)
@@ -365,6 +863,7 @@ export default function App() {
   }
 
   const handleAsk = async () => {
+    if (!guardPro(null, 'Your 5-Day Free Trial has ended. Subscribe to Pro to ask unlimited doubts 24/7.')) return
     if (!q.trim()) return
     const qq = q
     setLoading(true)
@@ -380,6 +879,7 @@ export default function App() {
   }
 
   const handleSendChat = async () => {
+    if (!guardPro(null, 'Your 5-Day Free Trial has ended. Subscribe to Pro for interactive AI tutor conversations.')) return
     if (!chatIn.trim()) return
     const msg = chatIn
     setChatIn('')
@@ -397,6 +897,7 @@ export default function App() {
   }
 
   const handleCheckAnswer = async () => {
+    if (!guardPro(null, 'Your 5-Day Free Trial has ended. Subscribe to Pro for CBSE Board Examiner Answer Evaluation.')) return
     if (!ckQ.trim() || !ckA.trim()) return
     setCkLoad(true)
     setCkRes(null)
@@ -424,6 +925,7 @@ export default function App() {
   }
 
   const handleStartBattle = async () => {
+    if (!guardPro(null, 'Your 5-Day Free Trial has ended. Subscribe to Pro to unlock unlimited speed quiz battles.')) return
     setBtLoad(true)
     setBtDone(false)
     setBtScore(0)
@@ -469,6 +971,7 @@ export default function App() {
   }
 
   const handleGenLesson = async () => {
+    if (!guardPro(null, 'Your 5-Day Free Trial has ended. Subscribe to Pro to unlock AI animated video lessons.')) return
     setLsLoad(true)
     setLsSlides([])
     setLsIdx(0)
@@ -488,6 +991,11 @@ export default function App() {
   }
 
   const handleGenPlan = async (overrideChapter) => {
+    if (isTrialExpired) {
+      setSubReason('Your 5-Day Free Trial has ended. Subscribe to Pro to generate personalized 45-min daily CBSE study routines.')
+      setShowSubModal(true)
+      return
+    }
     setPlanLoad(true)
     const targetChapter = overrideChapter || chapter || chapters[0] || 'Core CBSE Chapters'
     const targetSubject = subject || subjects[0] || 'Mathematics'
@@ -514,10 +1022,10 @@ export default function App() {
 
   // Auto-generate plan when user enters Routine tab
   useEffect(() => {
-    if (activeTab === 'plan' && !plan && !planLoad) {
+    if (activeTab === 'plan' && !plan && !planLoad && !isTrialExpired) {
       handleGenPlan()
     }
-  }, [activeTab, chapter])
+  }, [activeTab, chapter, isTrialExpired])
 
   const shareParentWhatsApp = () => {
     const text = `📊 *Study Buddy - ${name}'s CBSE Learning Report* 🎓
@@ -546,6 +1054,18 @@ Report verified by Study Buddy AI.`
   return (
     <div className="min-h-screen bg-[#F1F5F9] flex justify-center selection:bg-blue-100">
       {showCam && <CameraModal onCapture={handleCamCapture} onClose={() => setShowCam(false)} />}
+      
+      {/* ── SUBSCRIPTION / PAYWALL MODAL (5-Day Trial Funnel) ── */}
+      <SubscriptionModal
+        isOpen={showSubModal}
+        onClose={() => setShowSubModal(false)}
+        subscription={subscription}
+        daysRemaining={daysRemaining}
+        isTrialExpired={isTrialExpired}
+        reason={subReason}
+        onSubscribe={handleSubscribe}
+        onSimulateState={handleSimulateState}
+      />
 
       {/* Mobile App Device Shell (clean Allen app interface) */}
       <div className="w-full max-w-md bg-[#F8FAFC] min-h-screen flex flex-col shadow-2xl relative border-x border-slate-200">
@@ -569,8 +1089,37 @@ Report verified by Study Buddy AI.`
               </div>
             </div>
 
-            {/* Right: Streak + Language Toggle */}
-            <div className="flex items-center gap-2">
+            {/* Right: VIP Badge + Streak + Language Toggle */}
+            <div className="flex items-center gap-1.5">
+              {subscription?.isPro ? (
+                <button
+                  onClick={() => { setSubReason(''); setShowSubModal(true) }}
+                  className="flex items-center gap-1 bg-gradient-to-r from-amber-400 to-amber-500 text-slate-900 border border-amber-300 px-2 py-1 rounded-xl text-[10px] font-black shadow-xs btn-press"
+                  title="Study Buddy PRO Active"
+                >
+                  <span>👑</span>
+                  <span>PRO</span>
+                </button>
+              ) : isTrialExpired ? (
+                <button
+                  onClick={() => { setSubReason('Your 5-Day Free Trial has ended. Subscribe to Pro to continue unlimited access.'); setShowSubModal(true) }}
+                  className="flex items-center gap-1 bg-rose-600 text-white px-2 py-1 rounded-xl text-[10px] font-black animate-pulse shadow-xs btn-press"
+                  title="5-Day Trial Expired • Tap to Unlock"
+                >
+                  <span>🔒</span>
+                  <span>Expired</span>
+                </button>
+              ) : (
+                <button
+                  onClick={() => { setSubReason(''); setShowSubModal(true) }}
+                  className="flex items-center gap-1 bg-blue-50 text-blue-700 border border-blue-200 px-2 py-1 rounded-xl text-[10px] font-extrabold btn-press"
+                  title="5-Day Free Trial Active"
+                >
+                  <span>👑</span>
+                  <span>{daysRemaining}d Left</span>
+                </button>
+              )}
+
               <div className="flex items-center gap-1 bg-amber-50 text-amber-700 border border-amber-200 px-2 py-1 rounded-xl text-xs font-extrabold">
                 <span>🔥</span>
                 <span>{stats.streak}d</span>
@@ -578,7 +1127,7 @@ Report verified by Study Buddy AI.`
               <select
                 value={language}
                 onChange={e => setLanguage(e.target.value)}
-                className="text-[11px] font-bold bg-slate-100 text-slate-700 border border-slate-200 rounded-xl px-2 py-1 outline-none"
+                className="text-[11px] font-bold bg-slate-100 text-slate-700 border border-slate-200 rounded-xl px-1.5 py-1 outline-none"
               >
                 <option value="English">EN</option>
                 <option value="Hindi">हिंदी</option>
@@ -634,6 +1183,60 @@ Report verified by Study Buddy AI.`
           {activeTab === 'home' && (
             <div className="space-y-4 animate-slide-up">
               
+              {/* 5-Day Free Trial Status Banner */}
+              {isTrialExpired ? (
+                <div className="allen-card p-4 border-2 border-rose-300 bg-gradient-to-br from-rose-50 via-amber-50 to-orange-50 shadow-md">
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-2xl bg-rose-600 text-white flex items-center justify-center text-xl shrink-0 shadow-sm">
+                      🔒
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-[10px] font-black uppercase tracking-wider bg-rose-200 text-rose-800 px-2 py-0.5 rounded-full border border-rose-300">
+                          5-Day Free Trial Ended
+                        </span>
+                        <span className="text-[11px] font-black text-rose-600">Save {stats.streak}d Streak 🔥</span>
+                      </div>
+                      <h4 className="text-sm font-black text-slate-900 leading-snug">
+                        Unlock Unlimited AI Doubts & Examiner Reviews
+                      </h4>
+                      <p className="text-[11px] text-slate-600 mt-1 leading-relaxed">
+                        CBSE Board exams are nearing. Don't break your study habit. Get 24/7 AI tutor access for <b>less than ₹4.5/day (₹399 / 3 months)</b>.
+                      </p>
+                      <button
+                        onClick={() => { setSubReason('Unlock 100% features with Study Buddy Pro'); setShowSubModal(true) }}
+                        className="mt-3 w-full py-2.5 rounded-xl bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-800 text-white text-xs font-black shadow-md btn-press flex items-center justify-center gap-1.5"
+                      >
+                        <span>👑 Unlock Study Buddy Pro (70% OFF)</span>
+                        <span>→</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ) : !subscription?.isPro ? (
+                <div className="allen-card p-3 border-amber-200 bg-gradient-to-r from-amber-50/90 to-yellow-50/90 flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center text-base font-black shadow-xs">
+                      🎁
+                    </div>
+                    <div>
+                      <p className="text-xs font-black text-slate-900">
+                        5-Day Free Pass: <span className="text-amber-700 font-extrabold">{daysRemaining} Day(s) Left</span>
+                      </p>
+                      <p className="text-[10px] text-slate-600 font-medium">
+                        Lock in 70% Early Bird CBSE Board Pass (₹133/mo)
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => { setSubReason(''); setShowSubModal(true) }}
+                    className="text-[11px] font-black bg-amber-600 text-white px-2.5 py-1.5 rounded-xl shadow-xs btn-press"
+                  >
+                    Upgrade
+                  </button>
+                </div>
+              ) : null}
+
               {/* Daily Target Progress Banner */}
               <div className="allen-card-gradient p-4 relative overflow-hidden">
                 <div className="relative z-10">
@@ -648,7 +1251,7 @@ Report verified by Study Buddy AI.`
                   <div className="flex justify-between items-center">
                     <span className="text-[11px] opacity-80">⚡ {stats.xp} Total XP Earned</span>
                     <button
-                      onClick={() => setActiveTab('plan')}
+                      onClick={() => guardPro(() => setActiveTab('plan'), 'Unlock 45-Min Daily Study Schedules with Pro.')}
                       className="text-xs bg-white text-blue-700 font-bold px-3 py-1.5 rounded-xl shadow-xs btn-press"
                     >
                       Today's Routine →
@@ -662,7 +1265,7 @@ Report verified by Study Buddy AI.`
                 <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Quick AI Tools</p>
                 <div className="grid grid-cols-2 gap-2.5">
                   <button
-                    onClick={() => { setCamTarget('question'); setShowCam(true) }}
+                    onClick={() => guardPro(() => { setCamTarget('question'); setShowCam(true) }, 'Unlock Unlimited Camera Doubt Solving with Pro.')}
                     className="allen-card p-3.5 text-left border-blue-100 hover:border-blue-400 transition-all btn-press flex items-start gap-3"
                   >
                     <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl shrink-0">📸</div>
@@ -673,7 +1276,7 @@ Report verified by Study Buddy AI.`
                   </button>
 
                   <button
-                    onClick={() => setActiveTab('battle')}
+                    onClick={() => guardPro(() => setActiveTab('battle'), 'Unlock 60s Speed Quiz Battles with Pro.')}
                     className="allen-card p-3.5 text-left border-amber-100 hover:border-amber-400 transition-all btn-press flex items-start gap-3"
                   >
                     <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl shrink-0">⚔️</div>
@@ -684,7 +1287,7 @@ Report verified by Study Buddy AI.`
                   </button>
 
                   <button
-                    onClick={() => setActiveTab('doubt')}
+                    onClick={() => guardPro(() => setActiveTab('doubt'), 'Unlock CBSE Examiner Answer Evaluation with Pro.')}
                     className="allen-card p-3.5 text-left border-emerald-100 hover:border-emerald-400 transition-all btn-press flex items-start gap-3"
                   >
                     <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shrink-0">📝</div>
@@ -695,7 +1298,7 @@ Report verified by Study Buddy AI.`
                   </button>
 
                   <button
-                    onClick={() => { setActiveTab('battle'); setLsTopic(chapter) }}
+                    onClick={() => guardPro(() => { setActiveTab('battle'); setLsTopic(chapter) }, 'Unlock AI Animated Video Lessons with Pro.')}
                     className="allen-card p-3.5 text-left border-purple-100 hover:border-purple-400 transition-all btn-press flex items-start gap-3"
                   >
                     <div className="w-10 h-10 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl shrink-0">🎬</div>
@@ -760,12 +1363,28 @@ Report verified by Study Buddy AI.`
                   <h3 className="text-base font-extrabold text-slate-900">45-Minute Daily Plan</h3>
                   <p className="text-xs text-slate-500">Personalized for {name} ({chapter})</p>
                 </div>
-                <button onClick={handleGenPlan} disabled={planLoad} className="text-xs bg-blue-50 text-blue-700 font-bold px-3 py-1.5 rounded-xl border border-blue-200 btn-press">
+                <button onClick={() => isTrialExpired ? setShowSubModal(true) : handleGenPlan()} disabled={planLoad} className="text-xs bg-blue-50 text-blue-700 font-bold px-3 py-1.5 rounded-xl border border-blue-200 btn-press">
                   {planLoad ? 'Generating...' : '🔄 Refresh'}
                 </button>
               </div>
 
-              {!plan ? (
+              {isTrialExpired ? (
+                <div className="allen-card p-6 text-center border-2 border-rose-200 bg-rose-50/40 space-y-3">
+                  <div className="w-14 h-14 mx-auto rounded-3xl bg-rose-600 text-white flex items-center justify-center text-2xl shadow-md">
+                    🔒
+                  </div>
+                  <h4 className="text-sm font-black text-slate-900">45-Minute Daily Routine Locked</h4>
+                  <p className="text-xs text-slate-600 max-w-xs mx-auto">
+                    Your 5-Day Free Trial has ended. Subscribe to Study Buddy Pro to generate daily adaptive timetables and maintain your <b>{stats.streak}-day streak</b>!
+                  </p>
+                  <button
+                    onClick={() => { setSubReason('Unlock unlimited 45-min daily study plans with Pro'); setShowSubModal(true) }}
+                    className="w-full py-3 rounded-2xl bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-800 text-white text-xs font-black shadow-lg shadow-blue-500/25 btn-press"
+                  >
+                    👑 Unlock Pro Pass for ₹4.4/day (70% OFF)
+                  </button>
+                </div>
+              ) : !plan ? (
                 <div className="allen-card p-6 text-center">
                   <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl mx-auto mb-3">📅</div>
                   <h4 className="text-sm font-bold text-slate-900 mb-1">Build Today's Routine</h4>
@@ -1140,6 +1759,49 @@ Report verified by Study Buddy AI.`
                     ))}
                   </div>
                 )}
+              </div>
+
+              {/* Pro Membership & Subscription Status for Parents */}
+              <div className="allen-card p-4 border-amber-300 bg-gradient-to-br from-amber-50/60 to-yellow-50/40">
+                <div className="flex justify-between items-start mb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">👑</span>
+                    <div>
+                      <h4 className="text-xs font-black text-slate-900">
+                        {subscription?.isPro ? 'Study Buddy PRO Active' : '5-Day Free Trial Membership'}
+                      </h4>
+                      <p className="text-[10px] text-slate-500 font-medium">
+                        {subscription?.isPro ? `Plan: ${subscription.planName || 'Quarterly Board Pass'}` : `${daysRemaining} day(s) remaining in free trial`}
+                      </p>
+                    </div>
+                  </div>
+                  <span className={`text-[10px] font-black px-2 py-0.5 rounded-full ${subscription?.isPro ? 'bg-amber-500 text-white shadow-xs' : 'bg-blue-600 text-white'}`}>
+                    {subscription?.isPro ? 'PRO ACTIVE' : 'TRIAL'}
+                  </span>
+                </div>
+
+                <div className="text-[11px] text-slate-600 space-y-1 mb-3">
+                  <p className="flex items-center gap-1.5">
+                    <span className="text-emerald-600 font-bold">✓</span> 
+                    <b>24/7 AI Doubt Solving:</b> {subscription?.isPro ? 'Unlimited' : '5/day free'}
+                  </p>
+                  <p className="flex items-center gap-1.5">
+                    <span className="text-emerald-600 font-bold">✓</span> 
+                    <b>CBSE Examiner Answer Key Checking:</b> {subscription?.isPro ? 'Unlimited' : 'Trial'}
+                  </p>
+                  <p className="flex items-center gap-1.5">
+                    <span className="text-emerald-600 font-bold">✓</span> 
+                    <b>Parent WhatsApp Progress Alerts:</b> Enabled
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => setShowSubModal(true)}
+                  className="w-full py-2.5 rounded-xl bg-gradient-to-r from-blue-700 to-indigo-700 text-white text-xs font-black shadow-md shadow-blue-500/20 btn-press flex items-center justify-center gap-1.5"
+                >
+                  <span>{subscription?.isPro ? '👑 Manage Pro Pass' : '👑 Upgrade to Pro (₹4.4/day • 70% OFF)'}</span>
+                  <span>→</span>
+                </button>
               </div>
             </div>
           )}
