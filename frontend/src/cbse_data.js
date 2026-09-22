@@ -859,368 +859,3292 @@ export const NTA_WEIGHTAGE_DATA = {
 // ═══════════════════════════════════════════════════════════
 // AUTHENTIC MOCK TESTS (ALLEN & MATHONGO STYLE)
 // ═══════════════════════════════════════════════════════════
+// MOCK TESTS CATALOG
+// MOCK TESTS CATALOG
 export const MOCK_TESTS_CATALOG = [
   {
-    id: "jee_main_full_1",
-    title: "JEE Main 2026 NTA All-India CBT Mock Test #1",
-    exam: "JEE Main",
-    durationMinutes: 180,
-    totalMarks: 300,
-    questionsCount: 9,
-    markingScheme: "+4 for correct, -1 for incorrect",
-    isSuperBatchOnly: true,
-    sections: ["Physics", "Chemistry", "Mathematics"],
-    questions: [
+    "id": "jee_main_full_1",
+    "title": "JEE Main 2026 Full Mock #1 (NTA CBT Pattern)",
+    "exam": "JEE Main",
+    "durationMinutes": 180,
+    "totalMarks": 300,
+    "questionsCount": 25,
+    "markingScheme": "+4 correct, -1 wrong",
+    "isSuperBatchOnly": true,
+    "sections": [
+      "Physics",
+      "Chemistry",
+      "Mathematics"
+    ],
+    "questions": [
       {
-        id: 1,
-        section: "Physics",
-        type: "MCQ",
-        q: "A particle of mass m is moving with velocity v. The de-Broglie wavelength associated with the particle is λ. If the kinetic energy of the particle is doubled, its new de-Broglie wavelength will be:",
-        options: [
-          "A) λ / √2",
-          "B) √2 λ",
-          "C) 2λ",
-          "D) λ / 2"
+        "id": 1,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "A photon of energy 5 eV falls on a metal surface of work function 3 eV. The maximum kinetic energy of emitted photoelectrons is:",
+        "options": [
+          "A) 2 eV",
+          "B) 8 eV",
+          "C) 5 eV",
+          "D) 15 eV"
         ],
-        ans: "A",
-        explanation: "de-Broglie wavelength λ = h / √(2mE). If kinetic energy E becomes 2E, the new wavelength λ' = h / √(2m·2E) = λ / √2.",
-        concept: "Modern Physics • Dual Nature",
-        difficulty: "Moderate",
-        idealTimeSec: 60
+        "ans": "A",
+        "explanation": "K_max = E - W = 5 eV - 3 eV = 2 eV.",
+        "concept": "Modern Physics \u2022 Dual Nature",
+        "difficulty": "Easy",
+        "idealTimeSec": 45
       },
       {
-        id: 2,
-        section: "Physics",
-        type: "MCQ",
-        q: "In a potentiometer experiment, a wire of length 10 m has a resistance of 20 Ω. It is connected in series with a battery of 6 V (internal resistance 4 Ω). What is the potential gradient along the wire?",
-        options: [
+        "id": 2,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "In a potentiometer, a wire of length 10 m has resistance 20 \u03a9. With a 6 V battery (r = 4 \u03a9), what is the potential gradient?",
+        "options": [
           "A) 0.5 V/m",
           "B) 0.8 V/m",
           "C) 0.25 V/m",
           "D) 0.4 V/m"
         ],
-        ans: "A",
-        explanation: "Current in the circuit I = V / (R_wire + r) = 6 / (20 + 4) = 6/24 = 0.25 A. Potential drop across wire V_wire = I · R_wire = 0.25 × 20 = 5 V. Potential gradient k = V_wire / L = 5 V / 10 m = 0.5 V/m.",
-        concept: "Current Electricity • Potentiometer",
-        difficulty: "Easy",
-        idealTimeSec: 75
+        "ans": "A",
+        "explanation": "I = 6/(20+4) = 0.25 A. V_wire = 0.25 * 20 = 5 V. Gradient k = 5/10 = 0.5 V/m.",
+        "concept": "Current Electricity \u2022 Potentiometer",
+        "difficulty": "Easy",
+        "idealTimeSec": 60
       },
       {
-        id: 3,
-        section: "Physics",
-        type: "NUMERICAL",
-        q: "A Zener diode having breakdown voltage of 10 V is connected in reverse bias across a 15 V unregulated DC supply with a series resistor of 200 Ω. What is the current (in mA) flowing through the series resistor?",
-        options: [],
-        ans: "25",
-        explanation: "Voltage across series resistor = V_in - V_zener = 15 - 10 = 5 V. Series current I = 5 V / 200 Ω = 0.025 A = 25 mA.",
-        concept: "Semiconductors • Zener Diode",
-        difficulty: "Easy",
-        idealTimeSec: 50
-      },
-      {
-        id: 4,
-        section: "Chemistry",
-        type: "MCQ",
-        q: "Which of the following complex ions has the highest spin-only magnetic moment value in Bohr Magnetons (BM)?",
-        options: [
-          "A) [Fe(H2O)6]2+",
-          "B) [Fe(CN)6]4-",
-          "C) [Ni(CO)4]",
-          "D) [Co(NH3)6]3+"
+        "id": 3,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "In a p-n junction diode under reverse bias, the depletion region:",
+        "options": [
+          "A) Widens",
+          "B) Narrows",
+          "C) Remains unchanged",
+          "D) Disappears"
         ],
-        ans: "A",
-        explanation: "[Fe(H2O)6]2+ has Fe2+ (d6 configuration). Water is a weak field ligand, so high spin with 4 unpaired electrons. Magnetic moment μ = √(4(4+2)) = √24 ≈ 4.90 BM. Others are low spin with 0 unpaired electrons.",
-        concept: "Coordination Compounds • CFT",
-        difficulty: "Moderate",
-        idealTimeSec: 60
+        "ans": "A",
+        "explanation": "Reverse bias pulls majority carriers away from the junction, increasing depletion width.",
+        "concept": "Semiconductors \u2022 P-N Junction",
+        "difficulty": "Easy",
+        "idealTimeSec": 40
       },
       {
-        id: 5,
-        section: "Chemistry",
-        type: "MCQ",
-        q: "What is the major product obtained when Benzaldehyde is reacted with concentrated NaOH solution (Cannizzaro Reaction)?",
-        options: [
-          "A) Benzyl alcohol and Sodium benzoate",
-          "B) Benzoic acid and Benzophenone",
-          "C) Benzyl chloride and Benzoic acid",
-          "D) Cinnamic acid and Sodium acetate"
+        "id": 4,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Carnot engine operates between 300 K and 600 K. Its thermal efficiency is:",
+        "options": [
+          "A) 50%",
+          "B) 25%",
+          "C) 75%",
+          "D) 100%"
         ],
-        ans: "A",
-        explanation: "Benzaldehyde lacks alpha-hydrogens. On heating with 50% conc. NaOH, it undergoes self-oxidation and reduction (disproportionation) to give Benzyl alcohol (reduced) and Sodium benzoate (oxidized).",
-        concept: "Organic Chemistry • Carbonyl Compounds",
-        difficulty: "Easy",
-        idealTimeSec: 45
+        "ans": "A",
+        "explanation": "\u03b7 = 1 - T2/T1 = 1 - 300/600 = 0.5 = 50%.",
+        "concept": "Thermodynamics \u2022 Carnot Cycle",
+        "difficulty": "Easy",
+        "idealTimeSec": 45
       },
       {
-        id: 6,
-        section: "Chemistry",
-        type: "NUMERICAL",
-        q: "For a first order reaction, the rate constant k is 6.93 × 10^-3 s^-1. What is the half-life t_1/2 of the reaction in seconds? (Take ln 2 = 0.693)",
-        options: [],
-        ans: "100",
-        explanation: "t_1/2 = 0.693 / k = 0.693 / (6.93 × 10^-3) = 100 seconds.",
-        concept: "Chemical Kinetics • Rate Laws",
-        difficulty: "Easy",
-        idealTimeSec: 40
+        "id": 5,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "In Young's double slit experiment, if the distance between slits is halved and screen distance doubled, fringe width becomes:",
+        "options": [
+          "A) 4 times",
+          "B) 2 times",
+          "C) Halved",
+          "D) Unchanged"
+        ],
+        "ans": "A",
+        "explanation": "\u03b2 = \u03bbD/d. New \u03b2' = \u03bb(2D)/(d/2) = 4(\u03bbD/d) = 4\u03b2.",
+        "concept": "Wave Optics \u2022 Interference",
+        "difficulty": "Easy",
+        "idealTimeSec": 50
       },
       {
-        id: 7,
-        section: "Mathematics",
-        type: "MCQ",
-        q: "The shortest distance between the two skew lines (x-1)/2 = (y-2)/3 = (z-3)/4 and (x-2)/3 = (y-4)/4 = (z-5)/5 is:",
-        options: [
-          "A) 1 / √6",
-          "B) 2 / √3",
-          "C) 0 (Intersecting)",
+        "id": 6,
+        "section": "Physics",
+        "type": "NUMERICAL",
+        "q": "A 10 V Zener diode is connected across 15 V DC with a 200 \u03a9 series resistor. Current through the resistor in mA is:",
+        "options": [],
+        "ans": "25",
+        "explanation": "V_R = 15 - 10 = 5 V. I = 5/200 = 0.025 A = 25 mA.",
+        "concept": "Semiconductors \u2022 Zener Diode",
+        "difficulty": "Easy",
+        "idealTimeSec": 50
+      },
+      {
+        "id": 7,
+        "section": "Physics",
+        "type": "NUMERICAL",
+        "q": "Work done in isobaric expansion of gas at 10^5 Pa from 1 m\u00b3 to 3 m\u00b3 in units of 10^5 J is:",
+        "options": [],
+        "ans": "2",
+        "explanation": "W = P * \u0394V = 10^5 * (3 - 1) = 2 * 10^5 J.",
+        "concept": "Thermodynamics",
+        "difficulty": "Easy",
+        "idealTimeSec": 40
+      },
+      {
+        "id": 8,
+        "section": "Physics",
+        "type": "NUMERICAL",
+        "q": "de-Broglie wavelength of electron accelerated through 100 V in Angstroms is approx:",
+        "options": [],
+        "ans": "1.23",
+        "explanation": "\u03bb = 12.27 / \u221aV = 12.27 / \u221a100 = 1.227 \u2248 1.23 \u00c5.",
+        "concept": "Modern Physics \u2022 de-Broglie",
+        "difficulty": "Medium",
+        "idealTimeSec": 60
+      },
+      {
+        "id": 9,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "The spin-only magnetic moment of [Fe(H2O)6]2+ (in Bohr Magnetons) is approx:",
+        "options": [
+          "A) 4.90 BM",
+          "B) 0 BM",
+          "C) 2.83 BM",
+          "D) 5.92 BM"
+        ],
+        "ans": "A",
+        "explanation": "Fe2+ is d6. H2O is weak field, giving 4 unpaired electrons: \u03bc = \u221a(4*6) = \u221a24 \u2248 4.90 BM.",
+        "concept": "Coordination Compounds \u2022 CFT",
+        "difficulty": "Medium",
+        "idealTimeSec": 50
+      },
+      {
+        "id": 10,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Product of Cannizzaro reaction of Benzaldehyde with 50% NaOH is:",
+        "options": [
+          "A) Benzyl alcohol & Sodium benzoate",
+          "B) Benzoic acid only",
+          "C) Benzophenone",
+          "D) Cinnamic acid"
+        ],
+        "ans": "A",
+        "explanation": "Non-enolizable aldehydes disproportionate into alcohol and carboxylate salt.",
+        "concept": "Organic Chemistry \u2022 Carbonyls",
+        "difficulty": "Easy",
+        "idealTimeSec": 40
+      },
+      {
+        "id": 11,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Which carbocation is most stable due to hyperconjugation & inductive effect?",
+        "options": [
+          "A) (CH3)3C+",
+          "B) (CH3)2CH+",
+          "C) CH3CH2+",
+          "D) CH3+"
+        ],
+        "ans": "A",
+        "explanation": "Tertiary carbocation has 9 alpha-hydrogens, maximum hyperconjugation stabilization.",
+        "concept": "General Organic Chemistry (GOC)",
+        "difficulty": "Easy",
+        "idealTimeSec": 35
+      },
+      {
+        "id": 12,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Standard reduction potential of Standard Hydrogen Electrode (SHE) at 298 K is:",
+        "options": [
+          "A) 0.00 V",
+          "B) 1.00 V",
+          "C) -0.76 V",
+          "D) 0.34 V"
+        ],
+        "ans": "A",
+        "explanation": "By IUPAC convention, E\u00b0 of SHE is taken as 0.00 V.",
+        "concept": "Electrochemistry",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 13,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Unit of rate constant for a first-order chemical reaction is:",
+        "options": [
+          "A) s^-1",
+          "B) mol L^-1 s^-1",
+          "C) L mol^-1 s^-1",
+          "D) mol^-2 L^2 s^-1"
+        ],
+        "ans": "A",
+        "explanation": "For 1st order: k = rate/[A] = (mol L^-1 s^-1)/(mol L^-1) = s^-1.",
+        "concept": "Chemical Kinetics",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 14,
+        "section": "Chemistry",
+        "type": "NUMERICAL",
+        "q": "Half-life of first-order reaction with rate constant k = 6.93 * 10^-3 s^-1 in seconds is:",
+        "options": [],
+        "ans": "100",
+        "explanation": "t_1/2 = 0.693 / k = 0.693 / (6.93*10^-3) = 100 s.",
+        "concept": "Chemical Kinetics",
+        "difficulty": "Easy",
+        "idealTimeSec": 40
+      },
+      {
+        "id": 15,
+        "section": "Chemistry",
+        "type": "NUMERICAL",
+        "q": "Total number of optical plus geometrical isomers for octahedral [Co(en)2Cl2]+ is:",
+        "options": [],
+        "ans": "3",
+        "explanation": "Trans-isomer is optically inactive (1). Cis-isomer has d and l enantiomers (2). Total = 3.",
+        "concept": "Coordination Compounds",
+        "difficulty": "Medium",
+        "idealTimeSec": 60
+      },
+      {
+        "id": 16,
+        "section": "Chemistry",
+        "type": "NUMERICAL",
+        "q": "Faradays of charge required to reduce 1 mole of Al3+ ions completely to Al metal is:",
+        "options": [],
+        "ans": "3",
+        "explanation": "Al3+ + 3e- -> Al requires 3 moles of electrons = 3 Faradays.",
+        "concept": "Electrochemistry",
+        "difficulty": "Easy",
+        "idealTimeSec": 40
+      },
+      {
+        "id": 17,
+        "section": "Chemistry",
+        "type": "NUMERICAL",
+        "q": "Bond order of Oxygen molecule (O2) calculated from MOT is:",
+        "options": [],
+        "ans": "2",
+        "explanation": "Bond order = (N_b - N_a)/2 = (10 - 6)/2 = 2.",
+        "concept": "Chemical Bonding \u2022 MOT",
+        "difficulty": "Easy",
+        "idealTimeSec": 45
+      },
+      {
+        "id": 18,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "Shortest distance between skew lines (x-1)/2 = (y-2)/3 = (z-3)/4 and (x-2)/3 = (y-4)/4 = (z-5)/5 is:",
+        "options": [
+          "A) 1 / \u221a6",
+          "B) 2 / \u221a3",
+          "C) 0",
           "D) 1 / 6"
         ],
-        ans: "A",
-        explanation: "Distance d = |(a2 - a1) · (b1 × b2)| / |b1 × b2|. Here a2 - a1 = (1, 2, 2). b1 × b2 = (2, 3, 4) × (3, 4, 5) = (-1, 2, -1). |b1 × b2| = √(1 + 4 + 1) = √6. Dot product = -1(1) + 2(2) - 1(2) = 1. Hence d = 1 / √6.",
-        concept: "Vectors & 3D Geometry",
-        difficulty: "Moderate",
-        idealTimeSec: 90
+        "ans": "A",
+        "explanation": "d = |(a2-a1)\u00b7(b1\u00d7b2)| / |b1\u00d7b2| = 1 / \u221a6.",
+        "concept": "Vectors & 3D Geometry",
+        "difficulty": "Medium",
+        "idealTimeSec": 80
       },
       {
-        id: 8,
-        section: "Mathematics",
-        type: "MCQ",
-        q: "If A is a 3 × 3 non-singular matrix such that |A| = 4, then the determinant of the adjoint matrix |adj(adj(A))| is equal to:",
-        options: [
+        "id": 19,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "If A is a 3x3 matrix with |A| = 4, then |adj(adj(A))| equals:",
+        "options": [
           "A) 256",
           "B) 64",
           "C) 16",
           "D) 1024"
         ],
-        ans: "A",
-        explanation: "Formula: |adj(adj(A))| = |A|^{(n-1)^2}. For n = 3, (n-1)^2 = (3-1)^2 = 4. Therefore |adj(adj(A))| = 4^4 = 256.",
-        concept: "Matrices & Determinants",
-        difficulty: "Moderate",
-        idealTimeSec: 50
+        "ans": "A",
+        "explanation": "|adj(adj(A))| = |A|^{(n-1)^2} = 4^{(3-1)^2} = 4^4 = 256.",
+        "concept": "Matrices & Determinants",
+        "difficulty": "Medium",
+        "idealTimeSec": 50
       },
       {
-        id: 9,
-        section: "Mathematics",
-        type: "NUMERICAL",
-        q: "Evaluate the definite integral I = ∫[0 to π/2] (sin^3 x) / (sin^3 x + cos^3 x) dx. What is the value of 4I / π?",
-        options: [],
-        ans: "1",
-        explanation: "Using King's property: I = ∫[0 to π/2] (cos^3 x) / (cos^3 x + sin^3 x) dx. Adding both: 2I = ∫[0 to π/2] 1 dx = π/2 => I = π/4. Therefore 4I / π = 1.",
-        concept: "Definite Integrals • King's Property",
-        difficulty: "Easy",
-        idealTimeSec: 45
+        "id": 20,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "The sum of infinite GP 1, 1/2, 1/4, 1/8, ... is:",
+        "options": [
+          "A) 2",
+          "B) 1",
+          "C) 4",
+          "D) 3/2"
+        ],
+        "ans": "A",
+        "explanation": "S_inf = a / (1 - r) = 1 / (1 - 0.5) = 2.",
+        "concept": "Sequence & Series",
+        "difficulty": "Easy",
+        "idealTimeSec": 35
+      },
+      {
+        "id": 21,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "The integrating factor of linear DE dy/dx + (2/x)y = x\u00b2 is:",
+        "options": [
+          "A) x\u00b2",
+          "B) 2x",
+          "C) 1/x\u00b2",
+          "D) e^(2x)"
+        ],
+        "ans": "A",
+        "explanation": "IF = e^(\u222b(2/x)dx) = e^(2 ln x) = x\u00b2.",
+        "concept": "Differential Equations",
+        "difficulty": "Easy",
+        "idealTimeSec": 45
+      },
+      {
+        "id": 22,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "Value of limit as x->0 of (sin 3x) / x is:",
+        "options": [
+          "A) 3",
+          "B) 1",
+          "C) 0",
+          "D) 1/3"
+        ],
+        "ans": "A",
+        "explanation": "lim (sin 3x)/(3x) * 3 = 1 * 3 = 3.",
+        "concept": "Limits & Derivatives",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 23,
+        "section": "Mathematics",
+        "type": "NUMERICAL",
+        "q": "If I = \u222b[0 to \u03c0/2] (sin\u00b3 x)/(sin\u00b3 x + cos\u00b3 x) dx, then the value of 4I/\u03c0 is:",
+        "options": [],
+        "ans": "1",
+        "explanation": "Using King's property: 2I = \u03c0/2 => I = \u03c0/4 => 4I/\u03c0 = 1.",
+        "concept": "Definite Integrals",
+        "difficulty": "Easy",
+        "idealTimeSec": 50
+      },
+      {
+        "id": 24,
+        "section": "Mathematics",
+        "type": "NUMERICAL",
+        "q": "Magnitude of vector resultant of a = 3i + 4j is:",
+        "options": [],
+        "ans": "5",
+        "explanation": "|a| = \u221a(3\u00b2 + 4\u00b2) = \u221a25 = 5.",
+        "concept": "Vector Algebra",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 25,
+        "section": "Mathematics",
+        "type": "NUMERICAL",
+        "q": "Number of terms in the binomial expansion of (x + y)^10 is:",
+        "options": [],
+        "ans": "11",
+        "explanation": "Total terms = n + 1 = 10 + 1 = 11.",
+        "concept": "Binomial Theorem",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
       }
     ]
   },
   {
-    id: "neet_ug_full_1",
-    title: "NEET UG 2026 NTA Full Biology & Science Rank Booster Mock",
-    exam: "NEET UG",
-    durationMinutes: 180,
-    totalMarks: 720,
-    questionsCount: 6,
-    markingScheme: "+4 for correct, -1 for incorrect",
-    isSuperBatchOnly: true,
-    sections: ["Biology", "Physics", "Chemistry"],
-    questions: [
+    "id": "jee_main_full_2",
+    "title": "JEE Main 2026 Full Mock #2 (Rank Booster)",
+    "exam": "JEE Main",
+    "durationMinutes": 180,
+    "totalMarks": 300,
+    "questionsCount": 20,
+    "markingScheme": "+4 correct, -1 wrong",
+    "isSuperBatchOnly": true,
+    "sections": [
+      "Physics",
+      "Chemistry",
+      "Mathematics"
+    ],
+    "questions": [
       {
-        id: 1,
-        section: "Biology",
-        type: "MCQ",
-        q: "During which stage of meiosis does crossing over between non-sister chromatids of homologous chromosomes take place?",
-        options: [
+        "id": 1,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Electric field inside a uniformly charged conducting spherical shell is:",
+        "options": [
+          "A) Zero",
+          "B) Constant non-zero",
+          "C) Inversely proportional to r",
+          "D) Infinite"
+        ],
+        "ans": "A",
+        "explanation": "By Gauss's law, enclosed charge inside a shell is zero, so E = 0.",
+        "concept": "Electrostatics",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 2,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Moment of inertia of a solid sphere of mass M and radius R about its diameter is:",
+        "options": [
+          "A) 2/5 MR\u00b2",
+          "B) 2/3 MR\u00b2",
+          "C) 1/2 MR\u00b2",
+          "D) MR\u00b2"
+        ],
+        "ans": "A",
+        "explanation": "Standard theorem gives I = (2/5)MR\u00b2 for solid sphere.",
+        "concept": "Rotational Motion",
+        "difficulty": "Easy",
+        "idealTimeSec": 35
+      },
+      {
+        "id": 3,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Acceleration due to gravity at the center of the Earth is:",
+        "options": [
+          "A) 0 m/s\u00b2",
+          "B) 9.8 m/s\u00b2",
+          "C) 4.9 m/s\u00b2",
+          "D) Infinite"
+        ],
+        "ans": "A",
+        "explanation": "g_depth = g(1 - d/R). At center d = R, so g = 0.",
+        "concept": "Gravitation",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 4,
+        "section": "Physics",
+        "type": "NUMERICAL",
+        "q": "Escape velocity from surface of Earth in km/s (approx integer) is:",
+        "options": [],
+        "ans": "11",
+        "explanation": "v_e = \u221a(2gR) \u2248 11.2 km/s \u2248 11 km/s.",
+        "concept": "Gravitation",
+        "difficulty": "Easy",
+        "idealTimeSec": 35
+      },
+      {
+        "id": 5,
+        "section": "Physics",
+        "type": "NUMERICAL",
+        "q": "A force of 10 N moves a body by 5 m in direction of force. Work done in Joules is:",
+        "options": [],
+        "ans": "50",
+        "explanation": "W = F * d = 10 * 5 = 50 J.",
+        "concept": "Work & Energy",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 6,
+        "section": "Physics",
+        "type": "NUMERICAL",
+        "q": "Capacitance of a parallel plate capacitor with area 1 m\u00b2 and plate separation 8.85 mm in pF is (take \u03b50 = 8.85*10^-12):",
+        "options": [],
+        "ans": "1000",
+        "explanation": "C = \u03b50*A/d = (8.85*10^-12 * 1)/(8.85*10^-3) = 10^-9 F = 1000 pF.",
+        "concept": "Electrostatics \u2022 Capacitors",
+        "difficulty": "Medium",
+        "idealTimeSec": 50
+      },
+      {
+        "id": 7,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Which gas is evolved when zinc metal reacts with dilute sulphuric acid?",
+        "options": [
+          "A) Hydrogen (H2)",
+          "B) Oxygen (O2)",
+          "C) Sulphur dioxide",
+          "D) Nitrogen"
+        ],
+        "ans": "A",
+        "explanation": "Zn + H2SO4 -> ZnSO4 + H2.",
+        "concept": "Inorganic Chemistry",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 8,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Highest oxidation state exhibited by Manganese (Mn, Z=25) is:",
+        "options": [
+          "A) +7",
+          "B) +6",
+          "C) +4",
+          "D) +2"
+        ],
+        "ans": "A",
+        "explanation": "Mn configuration is [Ar] 3d5 4s2. All 7 valence electrons can participate, giving +7 (e.g., KMnO4).",
+        "concept": "d-Block Elements",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 9,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Colligative properties of a dilute solution depend solely upon:",
+        "options": [
+          "A) Number of solute particles",
+          "B) Nature of solute",
+          "C) Nature of solvent",
+          "D) Color of solution"
+        ],
+        "ans": "A",
+        "explanation": "Colligative properties depend only on solute particle count, not their chemical nature.",
+        "concept": "Solutions",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 10,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "SN2 nucleophilic substitution at an asymmetric carbon center causes:",
+        "options": [
+          "A) Inversion of configuration",
+          "B) Retention of configuration",
+          "C) Racemisation",
+          "D) No stereochemical change"
+        ],
+        "ans": "A",
+        "explanation": "SN2 occurs via backside attack with Walden inversion.",
+        "concept": "Haloalkanes",
+        "difficulty": "Easy",
+        "idealTimeSec": 35
+      },
+      {
+        "id": 11,
+        "section": "Chemistry",
+        "type": "NUMERICAL",
+        "q": "Molarity of solution formed by dissolving 40 g of NaOH (mol wt = 40) in 2 Litres of water is:",
+        "options": [],
+        "ans": "0.5",
+        "explanation": "Moles = 40/40 = 1 mol. Molarity = 1 / 2 = 0.5 M.",
+        "concept": "Solutions \u2022 Concentration",
+        "difficulty": "Easy",
+        "idealTimeSec": 40
+      },
+      {
+        "id": 12,
+        "section": "Chemistry",
+        "type": "NUMERICAL",
+        "q": "Total number of isomers possible for [Pt(NH3)2Cl2] square planar complex is:",
+        "options": [],
+        "ans": "2",
+        "explanation": "Cis and Trans geometric isomers (2).",
+        "concept": "Coordination Compounds",
+        "difficulty": "Easy",
+        "idealTimeSec": 40
+      },
+      {
+        "id": 13,
+        "section": "Chemistry",
+        "type": "NUMERICAL",
+        "q": "Molecular mass of pure water (H2O) in g/mol is:",
+        "options": [],
+        "ans": "18",
+        "explanation": "2(1) + 16 = 18 g/mol.",
+        "concept": "Mole Concept",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 14,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "Eccentricity of any circle is equal to:",
+        "options": [
+          "A) 0",
+          "B) 1",
+          "C) 1/2",
+          "D) Infinity"
+        ],
+        "ans": "A",
+        "explanation": "For a circle, the two foci coincide, so eccentricity e = 0.",
+        "concept": "Conic Sections",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 15,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "Equation of the directrix of parabola y\u00b2 = 4ax is:",
+        "options": [
+          "A) x = -a",
+          "B) x = a",
+          "C) y = -a",
+          "D) y = a"
+        ],
+        "ans": "A",
+        "explanation": "Standard parabola y\u00b2 = 4ax has focus at (a, 0) and directrix x = -a.",
+        "concept": "Conic Sections \u2022 Parabola",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 16,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "Probability of obtaining an odd number in a single throw of an unbiased die is:",
+        "options": [
+          "A) 1/2",
+          "B) 1/3",
+          "C) 1/6",
+          "D) 2/3"
+        ],
+        "ans": "A",
+        "explanation": "Odd numbers {1, 3, 5} out of 6 outcomes = 3/6 = 1/2.",
+        "concept": "Probability",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 17,
+        "section": "Mathematics",
+        "type": "NUMERICAL",
+        "q": "The derivative of f(x) = x\u00b3 - 3x at x = 2 is:",
+        "options": [],
+        "ans": "9",
+        "explanation": "f'(x) = 3x\u00b2 - 3. At x = 2: 3(4) - 3 = 9.",
+        "concept": "Calculus \u2022 Derivatives",
+        "difficulty": "Easy",
+        "idealTimeSec": 35
+      },
+      {
+        "id": 18,
+        "section": "Mathematics",
+        "type": "NUMERICAL",
+        "q": "Sum of first 10 terms of AP: 2, 4, 6, 8, ... is:",
+        "options": [],
+        "ans": "110",
+        "explanation": "S10 = (10/2)*(2*2 + 9*2) = 5*(4 + 18) = 5*22 = 110.",
+        "concept": "Arithmetic Progressions",
+        "difficulty": "Easy",
+        "idealTimeSec": 40
+      },
+      {
+        "id": 19,
+        "section": "Mathematics",
+        "type": "NUMERICAL",
+        "q": "If vector a = 2i + j - 2k, its magnitude |a| is:",
+        "options": [],
+        "ans": "3",
+        "explanation": "|a| = \u221a(2\u00b2 + 1\u00b2 + (-2)\u00b2) = \u221a(4 + 1 + 4) = \u221a9 = 3.",
+        "concept": "Vector Algebra",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 20,
+        "section": "Mathematics",
+        "type": "NUMERICAL",
+        "q": "Value of 0! (zero factorial) is:",
+        "options": [],
+        "ans": "1",
+        "explanation": "By definition, 0! = 1.",
+        "concept": "Permutations & Combinations",
+        "difficulty": "Easy",
+        "idealTimeSec": 15
+      }
+    ]
+  },
+  {
+    "id": "jee_main_pyq_2024",
+    "title": "JEE Main 2024 Official NTA PYQ Paper",
+    "exam": "JEE Main",
+    "durationMinutes": 180,
+    "totalMarks": 300,
+    "questionsCount": 15,
+    "markingScheme": "+4 correct, -1 wrong",
+    "isSuperBatchOnly": true,
+    "sections": [
+      "Physics",
+      "Chemistry",
+      "Mathematics"
+    ],
+    "questions": [
+      {
+        "id": 1,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "An electron and proton have equal kinetic energies. The ratio of de-Broglie wavelengths \u03bb_e / \u03bb_p is:",
+        "options": [
+          "A) \u221a(m_p / m_e)",
+          "B) \u221a(m_e / m_p)",
+          "C) m_p / m_e",
+          "D) 1"
+        ],
+        "ans": "A",
+        "explanation": "\u03bb = h/\u221a(2mE). Since E is equal, \u03bb \u221d 1/\u221am, so \u03bb_e/\u03bb_p = \u221a(m_p/m_e).",
+        "concept": "Dual Nature of Matter (PYQ 2024)",
+        "difficulty": "Medium",
+        "idealTimeSec": 50
+      },
+      {
+        "id": 2,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Self-inductance of a solenoid with 500 turns, length 0.5 m and area 10 cm\u00b2 in mH is (take \u03bc0 = 4\u03c0*10^-7):",
+        "options": [
+          "A) 0.63 mH",
+          "B) 1.26 mH",
+          "C) 2.50 mH",
+          "D) 5.00 mH"
+        ],
+        "ans": "A",
+        "explanation": "L = \u03bc0 * N\u00b2 * A / l = (4\u03c0*10^-7 * 250000 * 10^-3) / 0.5 \u2248 0.628 mH.",
+        "concept": "Electromagnetic Induction (PYQ 2024)",
+        "difficulty": "Medium",
+        "idealTimeSec": 60
+      },
+      {
+        "id": 3,
+        "section": "Physics",
+        "type": "NUMERICAL",
+        "q": "Two charges +4 \u03bcC and -4 \u03bcC are separated by 20 cm. Electric field at the midpoint between them in 10^6 N/C is:",
+        "options": [],
+        "ans": "7.2",
+        "explanation": "Midpoint r = 0.1 m. E = 2 * (k*q/r\u00b2) = 2 * (9*10^9 * 4*10^-6 / 0.01) = 7.2 * 10^6 N/C.",
+        "concept": "Electrostatics (PYQ 2024)",
+        "difficulty": "Medium",
+        "idealTimeSec": 60
+      },
+      {
+        "id": 4,
+        "section": "Physics",
+        "type": "NUMERICAL",
+        "q": "In a nuclear reaction, mass defect is 0.01 u. Energy released in MeV is (approx integer):",
+        "options": [],
+        "ans": "9.3",
+        "explanation": "1 u = 931.5 MeV. 0.01 * 931.5 = 9.315 MeV \u2248 9.3.",
+        "concept": "Nuclear Physics (PYQ 2024)",
+        "difficulty": "Easy",
+        "idealTimeSec": 45
+      },
+      {
+        "id": 5,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Ratio of rms speed to average speed of molecules of an ideal gas at temperature T is:",
+        "options": [
+          "A) \u221a(3\u03c0 / 8)",
+          "B) \u221a(8 / 3\u03c0)",
+          "C) 3 / 8",
+          "D) 1"
+        ],
+        "ans": "A",
+        "explanation": "v_rms = \u221a(3RT/M), v_avg = \u221a(8RT/\u03c0M). Ratio = \u221a(3\u03c0/8).",
+        "concept": "Kinetic Theory (PYQ 2024)",
+        "difficulty": "Easy",
+        "idealTimeSec": 40
+      },
+      {
+        "id": 6,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Which of the following compounds gives a positive Iodoform test?",
+        "options": [
+          "A) Acetophenone (C6H5COCH3)",
+          "B) Benzophenone (C6H5COC6H5)",
+          "C) Benzaldehyde",
+          "D) Methanol"
+        ],
+        "ans": "A",
+        "explanation": "Acetophenone has a -COCH3 group, so it reacts with I2/NaOH to give CHI3.",
+        "concept": "Aldehydes & Ketones (PYQ 2024)",
+        "difficulty": "Easy",
+        "idealTimeSec": 35
+      },
+      {
+        "id": 7,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "The IUPAC name of [Co(NH3)5(CO3)]Cl is:",
+        "options": [
+          "A) Pentaamminecarbonatocobalt(III) chloride",
+          "B) Pentaamminechlorocobalt(II) carbonate",
+          "C) Carbonatopentaamminecobalt(II) chloride",
+          "D) Pentaamminecobalt(III) chloride"
+        ],
+        "ans": "A",
+        "explanation": "Ligands in alphabetical order: pentaammine, carbonato. Co oxidation state is +3.",
+        "concept": "Coordination Compounds (PYQ 2024)",
+        "difficulty": "Medium",
+        "idealTimeSec": 45
+      },
+      {
+        "id": 8,
+        "section": "Chemistry",
+        "type": "NUMERICAL",
+        "q": "For the reaction N2(g) + 3H2(g) <=> 2NH3(g), the value of \u0394n_g is:",
+        "options": [],
+        "ans": "-2",
+        "explanation": "\u0394n_g = moles of gaseous products - reactants = 2 - (1 + 3) = -2.",
+        "concept": "Chemical Equilibrium (PYQ 2024)",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 9,
+        "section": "Chemistry",
+        "type": "NUMERICAL",
+        "q": "pH of a 0.001 M HCl solution at 25\u00b0C is:",
+        "options": [],
+        "ans": "3",
+        "explanation": "[H+] = 10^-3 M. pH = -log(10^-3) = 3.",
+        "concept": "Ionic Equilibrium (PYQ 2024)",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 10,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Among halogens, which has the highest negative electron gain enthalpy?",
+        "options": [
+          "A) Chlorine (Cl)",
+          "B) Fluorine (F)",
+          "C) Bromine (Br)",
+          "D) Iodine (I)"
+        ],
+        "ans": "A",
+        "explanation": "Cl has higher electron gain enthalpy than F due to less inter-electronic repulsion in 3p.",
+        "concept": "Periodic Table (PYQ 2024)",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 11,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "If |a + b| = |a - b| for two non-zero vectors a and b, then the angle between them is:",
+        "options": [
+          "A) 90\u00b0 (\u03c0/2)",
+          "B) 45\u00b0",
+          "C) 60\u00b0",
+          "D) 0\u00b0"
+        ],
+        "ans": "A",
+        "explanation": "|a+b|\u00b2 = |a-b|\u00b2 => 4 a\u00b7b = 0 => a\u00b7b = 0 => vectors are perpendicular (90\u00b0).",
+        "concept": "Vectors (PYQ 2024)",
+        "difficulty": "Easy",
+        "idealTimeSec": 35
+      },
+      {
+        "id": 12,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "Area bounded by the curve y = x\u00b2 and the line y = 4 is:",
+        "options": [
+          "A) 32/3",
+          "B) 16/3",
+          "C) 8",
+          "D) 64/3"
+        ],
+        "ans": "A",
+        "explanation": "Area = 2 \u222b[0 to 2] (4 - x\u00b2) dx = 2 [4x - x\u00b3/3] = 2 [8 - 8/3] = 32/3.",
+        "concept": "Area Under Curves (PYQ 2024)",
+        "difficulty": "Medium",
+        "idealTimeSec": 60
+      },
+      {
+        "id": 13,
+        "section": "Mathematics",
+        "type": "NUMERICAL",
+        "q": "Determinant of matrix [[1, 2], [3, 4]] is:",
+        "options": [],
+        "ans": "-2",
+        "explanation": "1*4 - 2*3 = 4 - 6 = -2.",
+        "concept": "Matrices & Determinants",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 14,
+        "section": "Mathematics",
+        "type": "NUMERICAL",
+        "q": "Number of ways to arrange the letters of the word 'MATH' is:",
+        "options": [],
+        "ans": "24",
+        "explanation": "4 distinct letters: 4! = 4*3*2*1 = 24.",
+        "concept": "Permutations",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 15,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "Slope of the tangent to curve y = x\u00b3 - x at x = 2 is:",
+        "options": [
+          "A) 11",
+          "B) 12",
+          "C) 10",
+          "D) 8"
+        ],
+        "ans": "A",
+        "explanation": "dy/dx = 3x\u00b2 - 1. At x = 2: 3(4) - 1 = 11.",
+        "concept": "Application of Derivatives (PYQ 2024)",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      }
+    ]
+  },
+  {
+    "id": "neet_ug_full_1",
+    "title": "NEET UG 2026 Full All-India Mock #1",
+    "exam": "NEET UG",
+    "durationMinutes": 180,
+    "totalMarks": 720,
+    "questionsCount": 20,
+    "markingScheme": "+4 correct, -1 wrong",
+    "isSuperBatchOnly": true,
+    "sections": [
+      "Biology",
+      "Physics",
+      "Chemistry"
+    ],
+    "questions": [
+      {
+        "id": 1,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "Crossing over during meiosis occurs at which stage of Prophase I?",
+        "options": [
           "A) Pachytene",
           "B) Diplotene",
           "C) Leptotene",
           "D) Zygotene"
         ],
-        ans: "A",
-        explanation: "Crossing over occurs at the Pachytene stage of Prophase I, mediated by the enzyme recombinase.",
-        concept: "Cell Cycle & Meiosis",
-        difficulty: "Easy",
-        idealTimeSec: 30
+        "ans": "A",
+        "explanation": "Crossing over between non-sister chromatids occurs at Pachytene catalyzed by recombinase.",
+        "concept": "Cell Cycle & Meiosis",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
       },
       {
-        id: 2,
-        section: "Biology",
-        type: "MCQ",
-        q: "In the Lac Operon model of E. coli, which gene synthesizes the repressor protein?",
-        options: [
-          "A) i-gene (inhibitor gene)",
-          "B) z-gene (beta-galactosidase)",
-          "C) y-gene (permease)",
-          "D) a-gene (transacetylase)"
+        "id": 2,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "In the Lac Operon model of E. coli, the repressor protein is synthesized by:",
+        "options": [
+          "A) i-gene (inhibitor)",
+          "B) z-gene",
+          "C) y-gene",
+          "D) a-gene"
         ],
-        ans: "A",
-        explanation: "The regulatory i-gene codes for the repressor of the lac operon. It is constitutively transcribed.",
-        concept: "Genetics • Molecular Basis of Inheritance",
-        difficulty: "Easy",
-        idealTimeSec: 30
+        "ans": "A",
+        "explanation": "The regulatory i-gene constitutively codes for the lac repressor.",
+        "concept": "Molecular Basis of Inheritance",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
       },
       {
-        id: 3,
-        section: "Biology",
-        type: "MCQ",
-        q: "Which hormone is primarily responsible for the concentration of urine through the counter-current mechanism in Henle's loop?",
-        options: [
-          "A) Antidiuretic Hormone (ADH / Vasopressin)",
+        "id": 3,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "Which hormone promotes water reabsorption in the collecting duct of kidney nephrons?",
+        "options": [
+          "A) ADH (Vasopressin)",
           "B) Oxytocin",
           "C) Prolactin",
-          "D) Glucagon"
+          "D) Insulin"
         ],
-        ans: "A",
-        explanation: "ADH (Vasopressin) increases water permeability of the late distal tubule and collecting duct, leading to concentrated urine.",
-        concept: "Human Physiology • Excretory Products",
-        difficulty: "Easy",
-        idealTimeSec: 30
+        "ans": "A",
+        "explanation": "Antidiuretic hormone increases aquaporin water channels in DCT and collecting duct.",
+        "concept": "Human Physiology \u2022 Excretion",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
       },
       {
-        id: 4,
-        section: "Physics",
-        type: "MCQ",
-        q: "A body of mass 2 kg moving with velocity 3 m/s collides with a spring of spring constant k = 18 N/m. What is the maximum compression in the spring?",
-        options: [
+        "id": 4,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "Which of the following is an example of Ex-situ conservation?",
+        "options": [
+          "A) Botanical garden",
+          "B) National park",
+          "C) Wildlife sanctuary",
+          "D) Biosphere reserve"
+        ],
+        "ans": "A",
+        "explanation": "Botanical gardens and zoological parks conserve species outside their natural habitats.",
+        "concept": "Ecology & Biodiversity",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 5,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "Enzyme responsible for joining DNA fragments during replication is:",
+        "options": [
+          "A) DNA ligase",
+          "B) DNA helicase",
+          "C) RNA polymerase",
+          "D) Topoisomerase"
+        ],
+        "ans": "A",
+        "explanation": "DNA ligase forms phosphodiester bonds between Okazaki fragments.",
+        "concept": "Biotechnology & Genetics",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 6,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "Double fertilization is a characteristic feature of:",
+        "options": [
+          "A) Angiosperms",
+          "B) Gymnosperms",
+          "C) Pteridophytes",
+          "D) Bryophytes"
+        ],
+        "ans": "A",
+        "explanation": "Syngamy + triple fusion occurs uniquely in flowering plants (angiosperms).",
+        "concept": "Plant Reproduction",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 7,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "Universal blood recipient ABO blood group is:",
+        "options": [
+          "A) AB positive",
+          "B) O negative",
+          "C) A positive",
+          "D) B positive"
+        ],
+        "ans": "A",
+        "explanation": "AB+ individuals possess both A and B surface antigens and no plasma antibodies.",
+        "concept": "Body Fluids & Circulation",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 8,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "Which cell organelle is known as the suicidal bag of the cell?",
+        "options": [
+          "A) Lysosome",
+          "B) Ribosome",
+          "C) Chloroplast",
+          "D) Vacuole"
+        ],
+        "ans": "A",
+        "explanation": "Lysosomes contain hydrolytic digestive enzymes that can autolyse cells.",
+        "concept": "Cell Biology",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 9,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "A body of mass 2 kg moving at 3 m/s strikes a spring (k = 18 N/m). Max compression is:",
+        "options": [
           "A) 1.0 m",
           "B) 0.5 m",
           "C) 2.0 m",
           "D) 1.5 m"
         ],
-        ans: "A",
-        explanation: "1/2 m v^2 = 1/2 k x^2 => 2 × 3^2 = 18 × x^2 => 18 = 18 x^2 => x = 1.0 m.",
-        concept: "Work, Energy & Power",
-        difficulty: "Easy",
-        idealTimeSec: 40
+        "ans": "A",
+        "explanation": "1/2 m v\u00b2 = 1/2 k x\u00b2 => 2 * 9 = 18 * x\u00b2 => x\u00b2 = 1 => x = 1.0 m.",
+        "concept": "Work, Power & Energy",
+        "difficulty": "Easy",
+        "idealTimeSec": 40
       },
       {
-        id: 5,
-        section: "Chemistry",
-        type: "MCQ",
-        q: "Which of the following compounds is non-reducing sugar?",
-        options: [
+        "id": 10,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Speed of electromagnetic waves in vacuum is equal to:",
+        "options": [
+          "A) 3 * 10^8 m/s",
+          "B) 3 * 10^6 m/s",
+          "C) 330 m/s",
+          "D) Infinite"
+        ],
+        "ans": "A",
+        "explanation": "c = 1 / \u221a(\u03bc0 \u03b50) \u2248 3 * 10^8 m/s.",
+        "concept": "EM Waves",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 11,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "A convex lens of focal length 20 cm has optical power equal to:",
+        "options": [
+          "A) +5 D",
+          "B) -5 D",
+          "C) +0.05 D",
+          "D) +2 D"
+        ],
+        "ans": "A",
+        "explanation": "P = 100 / f(cm) = 100 / 20 = +5 Diopters.",
+        "concept": "Ray Optics",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 12,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Which law states that induced emf opposes the change in magnetic flux?",
+        "options": [
+          "A) Lenz's Law",
+          "B) Faraday's First Law",
+          "C) Ampere's Law",
+          "D) Gauss's Law"
+        ],
+        "ans": "A",
+        "explanation": "Lenz's law provides the negative sign in Faraday's law of induction.",
+        "concept": "Electromagnetic Induction",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 13,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Resistance of an ideal voltmeter is:",
+        "options": [
+          "A) Infinite",
+          "B) Zero",
+          "C) 100 \u03a9",
+          "D) 1 \u03a9"
+        ],
+        "ans": "A",
+        "explanation": "An ideal voltmeter draws zero current, hence its resistance is infinite.",
+        "concept": "Current Electricity",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 14,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Which of the following carbohydrates is a non-reducing sugar?",
+        "options": [
           "A) Sucrose",
           "B) Maltose",
           "C) Lactose",
           "D) Glucose"
         ],
-        ans: "A",
-        explanation: "In sucrose, both reducing groups of glucose and fructose are involved in glycosidic linkage (C1-C2), hence it is a non-reducing sugar.",
-        concept: "Biomolecules • Carbohydrates",
-        difficulty: "Easy",
-        idealTimeSec: 25
+        "ans": "A",
+        "explanation": "Both reducing aldehyde/ketone groups are locked in glycosidic linkage in sucrose.",
+        "concept": "Biomolecules \u2022 Carbohydrates",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
       },
       {
-        id: 6,
-        section: "Chemistry",
-        type: "MCQ",
-        q: "What is the primary valency of Cobalt in [Co(NH3)5Cl]Cl2?",
-        options: [
+        "id": 15,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Primary valency of Cobalt in [Co(NH3)5Cl]Cl2 is:",
+        "options": [
           "A) 3",
           "B) 2",
           "C) 6",
           "D) 5"
         ],
-        ans: "A",
-        explanation: "Primary valency corresponds to the oxidation state of the central metal atom. Here x + 5(0) + (-1) = +2 => x = +3.",
-        concept: "Coordination Compounds • Werner Theory",
-        difficulty: "Easy",
-        idealTimeSec: 30
+        "ans": "A",
+        "explanation": "Primary valency corresponds to oxidation state: Co3+.",
+        "concept": "Coordination Compounds \u2022 Werner",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 16,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "pH of human blood is slightly alkaline and strictly maintained around:",
+        "options": [
+          "A) 7.35 - 7.45",
+          "B) 6.00 - 6.50",
+          "C) 8.50 - 9.00",
+          "D) 5.00 - 5.50"
+        ],
+        "ans": "A",
+        "explanation": "Blood pH is buffered by bicarbonate system around 7.4.",
+        "concept": "Buffer Solutions & Bio-chem",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 17,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Hybridisation of carbon in diamond and graphite respectively are:",
+        "options": [
+          "A) sp3 and sp2",
+          "B) sp2 and sp3",
+          "C) sp3 and sp",
+          "D) sp2 and sp"
+        ],
+        "ans": "A",
+        "explanation": "Diamond is 3D tetrahedral (sp3), graphite is 2D planar hex sheets (sp2).",
+        "concept": "Carbon & p-Block",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 18,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Reagent used in Lucas test to distinguish alcohols is:",
+        "options": [
+          "A) Conc. HCl + Anhydrous ZnCl2",
+          "B) Dil. H2SO4",
+          "C) Alkaline KMnO4",
+          "D) NaBH4"
+        ],
+        "ans": "A",
+        "explanation": "Lucas reagent is an equimolar mixture of concentrated HCl and anhydrous ZnCl2.",
+        "concept": "Alcohols, Phenols & Ethers",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 19,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Number of sigma and pi bonds in ethyne (acetylene, HC\u2261CH) are:",
+        "options": [
+          "A) 3 sigma and 2 pi",
+          "B) 2 sigma and 3 pi",
+          "C) 4 sigma and 1 pi",
+          "D) 1 sigma and 2 pi"
+        ],
+        "ans": "A",
+        "explanation": "Two C-H sigma bonds, one C-C sigma bond, and two C-C pi bonds = 3 sigma, 2 pi.",
+        "concept": "Chemical Bonding",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 20,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "The site of production of ADA (Adenosine Deaminase) enzyme in humans is:",
+        "options": [
+          "A) Lymphocytes",
+          "B) Erythrocytes",
+          "C) Platelets",
+          "D) Osteocytes"
+        ],
+        "ans": "A",
+        "explanation": "ADA deficiency impairs lymphocyte function and causes SCID.",
+        "concept": "Biotechnology Applications",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
       }
     ]
   },
   {
-    id: "cbse_board_rank_1",
-    title: "CBSE Class 10 & 12 Board Exam 95%+ High-Scoring Simulator",
-    exam: "CBSE Board",
-    durationMinutes: 90,
-    totalMarks: 80,
-    questionsCount: 5,
-    markingScheme: "+3 for correct, 0 for incorrect (Step Marking)",
-    isSuperBatchOnly: false, // Sample test available for normal users!
-    sections: ["Mathematics", "Science"],
-    questions: [
+    "id": "neet_pyq_2024",
+    "title": "NEET 2024 Official NTA Question Paper",
+    "exam": "NEET UG",
+    "durationMinutes": 180,
+    "totalMarks": 720,
+    "questionsCount": 15,
+    "markingScheme": "+4 correct, -1 wrong",
+    "isSuperBatchOnly": true,
+    "sections": [
+      "Biology",
+      "Physics",
+      "Chemistry"
+    ],
+    "questions": [
       {
-        id: 1,
-        section: "Mathematics",
-        type: "MCQ",
-        q: "If the points A(6, 1), B(8, 2), C(9, 4) and D(p, 3) are the vertices of a parallelogram taken in order, then the value of p is:",
-        options: [
-          "A) 7",
-          "B) 8",
-          "C) 6",
-          "D) 5"
+        "id": 1,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "Which part of the brain regulates body temperature and urge for eating?",
+        "options": [
+          "A) Hypothalamus",
+          "B) Cerebellum",
+          "C) Medulla oblongata",
+          "D) Thalamus"
         ],
-        ans: "A",
-        explanation: "Diagonals of a parallelogram bisect each other. Midpoint of AC = Midpoint of BD. (6 + 9)/2 = (8 + p)/2 => 15 = 8 + p => p = 7.",
-        concept: "Class 10 Coordinate Geometry",
-        difficulty: "Easy",
-        idealTimeSec: 60
+        "ans": "A",
+        "explanation": "Hypothalamus contains centers that control body temperature and hunger.",
+        "concept": "Neural Control (PYQ 2024)",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
       },
       {
-        id: 2,
-        section: "Mathematics",
-        type: "MCQ",
-        q: "If sin θ + cos θ = √2 cos θ, then the value of (cos θ - sin θ) is:",
-        options: [
-          "A) √2 sin θ",
-          "B) √2 cos θ",
-          "C) 2 sin θ",
-          "D) 1"
+        "id": 2,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "Gause's principle of competitive exclusion states that:",
+        "options": [
+          "A) Two closely related species competing for same limiting resource cannot co-exist",
+          "B) Larger organisms dominate",
+          "C) Mutants replace parents",
+          "D) None"
         ],
-        ans: "A",
-        explanation: "cos θ - sin θ = √2 sin θ by standard trigonometric squaring or rationalization.",
-        concept: "Class 10 Trigonometry",
-        difficulty: "Moderate",
-        idealTimeSec: 60
+        "ans": "A",
+        "explanation": "Inferior competitor is eventually eliminated under limited resources.",
+        "concept": "Ecology (PYQ 2024)",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
       },
       {
-        id: 3,
-        section: "Science",
-        type: "MCQ",
-        q: "A student traces the path of a ray of light through a glass slab. What is the relation between the angle of incidence (i) and angle of emergence (e)?",
-        options: [
-          "A) Angle i = Angle e",
-          "B) Angle i > Angle e",
-          "C) Angle i < Angle e",
-          "D) Angle i + Angle e = 90°"
+        "id": 3,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "In RNA, thymine is replaced by:",
+        "options": [
+          "A) Uracil",
+          "B) Guanine",
+          "C) Cytosine",
+          "D) Adenine"
         ],
-        ans: "A",
-        explanation: "For a parallel-faced rectangular glass slab, the emergent ray is parallel to the incident ray, so angle of incidence i equals angle of emergence e.",
-        concept: "Class 10 Light Refraction",
-        difficulty: "Easy",
-        idealTimeSec: 45
+        "ans": "A",
+        "explanation": "RNA contains Uracil (U) instead of Thymine (T).",
+        "concept": "Biomolecules (PYQ 2024)",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
       },
       {
-        id: 4,
-        section: "Science",
-        type: "MCQ",
-        q: "Which part of the human nephron is primarily responsible for the reabsorption of glucose and amino acids?",
-        options: [
-          "A) Proximal Convoluted Tubule (PCT)",
-          "B) Henle's Loop",
-          "C) Distal Convoluted Tubule (DCT)",
-          "D) Collecting Duct"
+        "id": 4,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "Which hormone triggers ovulation from mature Graafian follicles in females?",
+        "options": [
+          "A) LH (Luteinizing Hormone)",
+          "B) Progesterone",
+          "C) Estrogen",
+          "D) FSH"
         ],
-        ans: "A",
-        explanation: "Nearly all of the essential nutrients (glucose, amino acids) and 70-80% of electrolytes and water are reabsorbed by PCT.",
-        concept: "Class 10 Life Processes",
-        difficulty: "Easy",
-        idealTimeSec: 35
+        "ans": "A",
+        "explanation": "LH surge around day 14 triggers ovulation.",
+        "concept": "Human Reproduction (PYQ 2024)",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
       },
       {
-        id: 5,
-        section: "Science",
-        type: "MCQ",
-        q: "Why does detergent form lather easily even in hard water compared to soap?",
-        options: [
-          "A) Charged ends of detergents do not form insoluble precipitate with calcium/magnesium ions",
-          "B) Detergents are completely non-polar",
-          "C) Detergents precipitate calcium faster",
-          "D) Detergents have smaller carbon chains"
+        "id": 5,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "Golden rice is a genetically modified crop rich in:",
+        "options": [
+          "A) Vitamin A (beta-carotene)",
+          "B) Vitamin C",
+          "C) Iron only",
+          "D) Lysine"
         ],
-        ans: "A",
-        explanation: "Detergents are generally ammonium or sulphonate salts of long chain carboxylic acids. Their charged ends do not form insoluble precipitates with the calcium and magnesium ions present in hard water.",
-        concept: "Class 10 Carbon & Its Compounds",
-        difficulty: "Moderate",
-        idealTimeSec: 45
+        "ans": "A",
+        "explanation": "Golden rice is biofortified with provitamin A to fight blindness.",
+        "concept": "Biotech (PYQ 2024)",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 6,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Dimension formula of Planck's constant (h) is:",
+        "options": [
+          "A) [ML\u00b2T^-1]",
+          "B) [MLT^-1]",
+          "C) [ML\u00b2T^-2]",
+          "D) [ML^0T^-1]"
+        ],
+        "ans": "A",
+        "explanation": "E = h\u03bd => h = E/\u03bd = [ML\u00b2T^-2] / [T^-1] = [ML\u00b2T^-1].",
+        "concept": "Units & Dimensions (PYQ 2024)",
+        "difficulty": "Easy",
+        "idealTimeSec": 35
+      },
+      {
+        "id": 7,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Magnetic field at center of a circular coil of radius R carrying current I is:",
+        "options": [
+          "A) \u03bc0 I / (2R)",
+          "B) \u03bc0 I / (4\u03c0 R)",
+          "C) 2 \u03bc0 I / R",
+          "D) Zero"
+        ],
+        "ans": "A",
+        "explanation": "Standard Biot-Savart formula for circular coil center is B = \u03bc0 I / (2R).",
+        "concept": "Moving Charges & Magnetism",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 8,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "In a nuclear reactor, heavy water (D2O) is used as:",
+        "options": [
+          "A) Moderator",
+          "B) Fuel",
+          "C) Coolant only",
+          "D) Control rod"
+        ],
+        "ans": "A",
+        "explanation": "Heavy water slows down fast neutrons into thermal neutrons as a moderator.",
+        "concept": "Nuclei (PYQ 2024)",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 9,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Total internal reflection occurs only when light travels from:",
+        "options": [
+          "A) Denser medium to Rarer medium",
+          "B) Rarer to Denser",
+          "C) Any medium",
+          "D) Air to Glass"
+        ],
+        "ans": "A",
+        "explanation": "Light must travel from denser to rarer with incidence angle greater than critical angle.",
+        "concept": "Ray Optics (PYQ 2024)",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 10,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "SI unit of magnetic flux is:",
+        "options": [
+          "A) Weber (Wb)",
+          "B) Tesla (T)",
+          "C) Henry (H)",
+          "D) Gauss"
+        ],
+        "ans": "A",
+        "explanation": "Magnetic flux \u03a6 = B \u00b7 A is measured in Webers (Tesla * m\u00b2).",
+        "concept": "Electromagnetism (PYQ 2024)",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 11,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Which of the following is an electrophile?",
+        "options": [
+          "A) BF3",
+          "B) NH3",
+          "C) H2O",
+          "D) OH-"
+        ],
+        "ans": "A",
+        "explanation": "Boron in BF3 has only 6 valence electrons, an electron-deficient Lewis acid.",
+        "concept": "Organic Chemistry (PYQ 2024)",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 12,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Oxidation state of Cr in potassium dichromate (K2Cr2O7) is:",
+        "options": [
+          "A) +6",
+          "B) +3",
+          "C) +7",
+          "D) +4"
+        ],
+        "ans": "A",
+        "explanation": "2(+1) + 2x + 7(-2) = 0 => 2x = 12 => x = +6.",
+        "concept": "Redox Reactions (PYQ 2024)",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 13,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Which gas is released during the fermentation of sugars by yeast?",
+        "options": [
+          "A) Carbon dioxide (CO2)",
+          "B) Oxygen (O2)",
+          "C) Nitrogen (N2)",
+          "D) Chlorine"
+        ],
+        "ans": "A",
+        "explanation": "C6H12O6 -> 2 C2H5OH + 2 CO2.",
+        "concept": "Applied Chemistry (PYQ 2024)",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 14,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Shape of ammonia (NH3) molecule according to VSEPR theory is:",
+        "options": [
+          "A) Trigonal pyramidal",
+          "B) Tetrahedral",
+          "C) Linear",
+          "D) Trigonal planar"
+        ],
+        "ans": "A",
+        "explanation": "sp3 hybridization with 3 bond pairs and 1 lone pair gives trigonal pyramidal shape.",
+        "concept": "Chemical Bonding (PYQ 2024)",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 15,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Deficiency of Vitamin C in humans leads to:",
+        "options": [
+          "A) Scurvy",
+          "B) Rickets",
+          "C) Beriberi",
+          "D) Night blindness"
+        ],
+        "ans": "A",
+        "explanation": "Vitamin C (Ascorbic acid) deficiency impairs collagen synthesis causing Scurvy.",
+        "concept": "Biomolecules (PYQ 2024)",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      }
+    ]
+  },
+  {
+    "id": "cbse_board_10_science",
+    "title": "CBSE Class 10 Science Official Board PYQ",
+    "exam": "CBSE Board",
+    "durationMinutes": 90,
+    "totalMarks": 80,
+    "questionsCount": 12,
+    "markingScheme": "+1 correct, 0 wrong",
+    "isSuperBatchOnly": false,
+    "sections": [
+      "Science"
+    ],
+    "questions": [
+      {
+        "id": 1,
+        "section": "Science",
+        "type": "MCQ",
+        "q": "When iron nail is placed in copper sulphate solution, blue color turns green due to:",
+        "options": [
+          "A) Formation of FeSO4",
+          "B) Formation of Cu",
+          "C) Formation of Fe2O3",
+          "D) No reaction"
+        ],
+        "ans": "A",
+        "explanation": "Fe displaces Cu: Fe + CuSO4 -> FeSO4 (light green) + Cu.",
+        "concept": "Chemical Reactions & Equations",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 2,
+        "section": "Science",
+        "type": "MCQ",
+        "q": "Chemical formula of baking soda used in cooking is:",
+        "options": [
+          "A) NaHCO3",
+          "B) Na2CO3\u00b710H2O",
+          "C) CaOCl2",
+          "D) CaSO4\u00b71/2H2O"
+        ],
+        "ans": "A",
+        "explanation": "Sodium hydrogen carbonate (NaHCO3) is baking soda.",
+        "concept": "Acids, Bases & Salts",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 3,
+        "section": "Science",
+        "type": "MCQ",
+        "q": "The site of complete digestion of carbohydrates, proteins, and fats in humans is:",
+        "options": [
+          "A) Small intestine",
+          "B) Stomach",
+          "C) Large intestine",
+          "D) Mouth"
+        ],
+        "ans": "A",
+        "explanation": "Small intestine receives bile and pancreatic juice completing digestion.",
+        "concept": "Life Processes",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 4,
+        "section": "Science",
+        "type": "MCQ",
+        "q": "A real and inverted image of equal size is formed by a convex lens when object is at:",
+        "options": [
+          "A) At 2F1",
+          "B) At Focus F1",
+          "C) Between F1 and 2F1",
+          "D) Beyond 2F1"
+        ],
+        "ans": "A",
+        "explanation": "Object placed at 2F1 forms an image of equal size at 2F2.",
+        "concept": "Light - Reflection & Refraction",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 5,
+        "section": "Science",
+        "type": "MCQ",
+        "q": "SI unit of electrical resistivity (\u03c1) is:",
+        "options": [
+          "A) Ohm-meter (\u03a9\u00b7m)",
+          "B) Ohm",
+          "C) Ohm/meter",
+          "D) Ampere-meter"
+        ],
+        "ans": "A",
+        "explanation": "\u03c1 = R*A/l = \u03a9 * m\u00b2 / m = \u03a9\u00b7m.",
+        "concept": "Electricity",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 6,
+        "section": "Science",
+        "type": "MCQ",
+        "q": "In human males, the testes lie outside the abdominal cavity in scrotum because:",
+        "options": [
+          "A) Sperm formation requires 2-2.5\u00b0C lower temperature than body",
+          "B) To protect from pressure",
+          "C) To connect with kidney",
+          "D) Random position"
+        ],
+        "ans": "A",
+        "explanation": "Scrotum maintains 2-2.5\u00b0C lower temperature essential for spermatogenesis.",
+        "concept": "How do Organisms Reproduce",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 7,
+        "section": "Science",
+        "type": "MCQ",
+        "q": "A phenotypic monohybrid F2 ratio observed by Mendel was:",
+        "options": [
+          "A) 3 : 1",
+          "B) 9 : 3 : 3 : 1",
+          "C) 1 : 2 : 1",
+          "D) 1 : 1"
+        ],
+        "ans": "A",
+        "explanation": "Phenotypic ratio in F2 generation of monohybrid cross is 3 Tall : 1 Dwarf.",
+        "concept": "Heredity",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 8,
+        "section": "Science",
+        "type": "MCQ",
+        "q": "Which part of eye regulates the amount of light entering the pupil?",
+        "options": [
+          "A) Iris",
+          "B) Cornea",
+          "C) Retina",
+          "D) Ciliary muscles"
+        ],
+        "ans": "A",
+        "explanation": "Iris is the dark muscular diaphragm controlling pupil aperture.",
+        "concept": "Human Eye & Colorful World",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 9,
+        "section": "Science",
+        "type": "MCQ",
+        "q": "Which element forms versatile covalent bonds leading to catenation?",
+        "options": [
+          "A) Carbon",
+          "B) Sodium",
+          "C) Iron",
+          "D) Calcium"
+        ],
+        "ans": "A",
+        "explanation": "Tetravalency and strong C-C bond energy enable extensive catenation in carbon.",
+        "concept": "Carbon and its Compounds",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 10,
+        "section": "Science",
+        "type": "MCQ",
+        "q": "Commercial unit of electrical energy (1 unit) in Joules is:",
+        "options": [
+          "A) 3.6 * 10^6 J",
+          "B) 3.6 * 10^5 J",
+          "C) 1000 J",
+          "D) 3600 J"
+        ],
+        "ans": "A",
+        "explanation": "1 kWh = 1000 W * 3600 s = 3.6 * 10^6 J.",
+        "concept": "Electricity",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 11,
+        "section": "Science",
+        "type": "MCQ",
+        "q": "Which gas protects Earth's surface from harmful ultraviolet (UV) radiations?",
+        "options": [
+          "A) Ozone (O3)",
+          "B) Oxygen (O2)",
+          "C) Nitrogen",
+          "D) Carbon monoxide"
+        ],
+        "ans": "A",
+        "explanation": "Stratospheric ozone layer shields Earth from cancer-causing UV rays.",
+        "concept": "Our Environment",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 12,
+        "section": "Science",
+        "type": "MCQ",
+        "q": "Magnetic field lines around a straight current-carrying conductor are in the form of:",
+        "options": [
+          "A) Concentric circles",
+          "B) Straight lines",
+          "C) Ellipses",
+          "D) Random arcs"
+        ],
+        "ans": "A",
+        "explanation": "According to Right-Hand Thumb Rule, field lines form concentric circles.",
+        "concept": "Magnetic Effects of Electric Current",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      }
+    ]
+  },
+  {
+    "id": "cbse_board_10_math",
+    "title": "CBSE Class 10 Math Standard Board PYQ",
+    "exam": "CBSE Board",
+    "durationMinutes": 90,
+    "totalMarks": 80,
+    "questionsCount": 12,
+    "markingScheme": "+1 correct, 0 wrong",
+    "isSuperBatchOnly": false,
+    "sections": [
+      "Mathematics"
+    ],
+    "questions": [
+      {
+        "id": 1,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "The HCF of two numbers is 23 and their LCM is 1449. If one number is 161, other number is:",
+        "options": [
+          "A) 207",
+          "B) 217",
+          "C) 197",
+          "D) 227"
+        ],
+        "ans": "A",
+        "explanation": "Product of numbers = HCF * LCM => Other = (23 * 1449)/161 = 207.",
+        "concept": "Real Numbers",
+        "difficulty": "Easy",
+        "idealTimeSec": 45
+      },
+      {
+        "id": 2,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "If one zero of quadratic polynomial x\u00b2 + 3x + k is 2, then value of k is:",
+        "options": [
+          "A) -10",
+          "B) 10",
+          "C) -7",
+          "D) 7"
+        ],
+        "ans": "A",
+        "explanation": "Put x = 2: 2\u00b2 + 3(2) + k = 0 => 4 + 6 + k = 0 => k = -10.",
+        "concept": "Polynomials",
+        "difficulty": "Easy",
+        "idealTimeSec": 35
+      },
+      {
+        "id": 3,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "Nature of roots of quadratic equation 2x\u00b2 - 4x + 3 = 0 is:",
+        "options": [
+          "A) No real roots",
+          "B) Real and equal",
+          "C) Real and distinct",
+          "D) Infinite roots"
+        ],
+        "ans": "A",
+        "explanation": "D = b\u00b2 - 4ac = (-4)\u00b2 - 4(2)(3) = 16 - 24 = -8 < 0 (no real roots).",
+        "concept": "Quadratic Equations",
+        "difficulty": "Easy",
+        "idealTimeSec": 35
+      },
+      {
+        "id": 4,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "The 10th term of the AP: 2, 7, 12, ... is:",
+        "options": [
+          "A) 47",
+          "B) 52",
+          "C) 42",
+          "D) 50"
+        ],
+        "ans": "A",
+        "explanation": "a = 2, d = 5. a10 = a + 9d = 2 + 9(5) = 47.",
+        "concept": "Arithmetic Progressions",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 5,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "Distance of point P(3, 4) from the origin (0, 0) is:",
+        "options": [
+          "A) 5 units",
+          "B) 7 units",
+          "C) 25 units",
+          "D) 1 unit"
+        ],
+        "ans": "A",
+        "explanation": "d = \u221a(3\u00b2 + 4\u00b2) = \u221a25 = 5 units.",
+        "concept": "Coordinate Geometry",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 6,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "If sin \u03b8 = 1/2, then the value of (3 cos \u03b8 - 4 cos\u00b3 \u03b8) is:",
+        "options": [
+          "A) 0",
+          "B) 1",
+          "C) 1/2",
+          "D) \u221a3/2"
+        ],
+        "ans": "A",
+        "explanation": "sin \u03b8 = 1/2 => \u03b8 = 30\u00b0. Formula: cos 3\u03b8 = cos 90\u00b0 = 0.",
+        "concept": "Trigonometry",
+        "difficulty": "Medium",
+        "idealTimeSec": 45
+      },
+      {
+        "id": 7,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "From a point Q, length of tangent to a circle is 24 cm and distance from center is 25 cm. Radius is:",
+        "options": [
+          "A) 7 cm",
+          "B) 12 cm",
+          "C) 15 cm",
+          "D) 24.5 cm"
+        ],
+        "ans": "A",
+        "explanation": "r = \u221a(25\u00b2 - 24\u00b2) = \u221a(625 - 576) = \u221a49 = 7 cm.",
+        "concept": "Circles",
+        "difficulty": "Easy",
+        "idealTimeSec": 35
+      },
+      {
+        "id": 8,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "Area of a sector of circle of radius 6 cm with central angle 60\u00b0 is (take \u03c0 = 22/7):",
+        "options": [
+          "A) 132/7 cm\u00b2",
+          "B) 66/7 cm\u00b2",
+          "C) 44/7 cm\u00b2",
+          "D) 22/7 cm\u00b2"
+        ],
+        "ans": "A",
+        "explanation": "Area = (\u03b8/360)*\u03c0 r\u00b2 = (60/360)*(22/7)*36 = (1/6)*(22/7)*36 = 132/7 cm\u00b2.",
+        "concept": "Areas Related to Circles",
+        "difficulty": "Easy",
+        "idealTimeSec": 40
+      },
+      {
+        "id": 9,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "Empirical relationship between three measures of central tendency is:",
+        "options": [
+          "A) 3 Median = Mode + 2 Mean",
+          "B) Mode = 3 Mean - 2 Median",
+          "C) Mean = 3 Median - 2 Mode",
+          "D) Median = Mode + Mean"
+        ],
+        "ans": "A",
+        "explanation": "Standard empirical formula is Mode = 3 Median - 2 Mean, i.e., 3 Median = Mode + 2 Mean.",
+        "concept": "Statistics",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 10,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "A card is drawn from a well-shuffled pack of 52 cards. Probability of drawing a King is:",
+        "options": [
+          "A) 1/13",
+          "B) 1/52",
+          "C) 1/4",
+          "D) 4/13"
+        ],
+        "ans": "A",
+        "explanation": "4 Kings in 52 cards: 4/52 = 1/13.",
+        "concept": "Probability",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 11,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "If tangents PA and PB from point P to a circle with center O are inclined at 80\u00b0, then \u2220POA is:",
+        "options": [
+          "A) 50\u00b0",
+          "B) 60\u00b0",
+          "C) 70\u00b0",
+          "D) 80\u00b0"
+        ],
+        "ans": "A",
+        "explanation": "\u2220AOB = 180\u00b0 - 80\u00b0 = 100\u00b0. Line OP bisects \u2220AOB, so \u2220POA = 100\u00b0/2 = 50\u00b0.",
+        "concept": "Circles",
+        "difficulty": "Easy",
+        "idealTimeSec": 35
+      },
+      {
+        "id": 12,
+        "section": "Mathematics",
+        "type": "NUMERICAL",
+        "q": "If the perimeter and area of a circle are numerically equal, the radius of the circle is:",
+        "options": [],
+        "ans": "2",
+        "explanation": "2 \u03c0 r = \u03c0 r\u00b2 => r = 2 units.",
+        "concept": "Mensuration",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      }
+    ]
+  },
+  {
+    "id": "cbse_board_12_physics",
+    "title": "CBSE Class 12 Physics Official Board PYQ",
+    "exam": "CBSE Board",
+    "durationMinutes": 180,
+    "totalMarks": 70,
+    "questionsCount": 12,
+    "markingScheme": "+1 correct, 0 wrong",
+    "isSuperBatchOnly": true,
+    "sections": [
+      "Physics"
+    ],
+    "questions": [
+      {
+        "id": 1,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Electric flux through a closed Gaussian surface enclosing charge q in vacuum is:",
+        "options": [
+          "A) q / \u03b50",
+          "B) q \u03b50",
+          "C) Zero",
+          "D) 4\u03c0 q"
+        ],
+        "ans": "A",
+        "explanation": "Gauss's Theorem states \u03a6 = q_enclosed / \u03b50.",
+        "concept": "Electrostatics",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 2,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Work done in moving a test charge over an equipotential surface is:",
+        "options": [
+          "A) Zero",
+          "B) Infinite",
+          "C) Dependent on path",
+          "D) Positive always"
+        ],
+        "ans": "A",
+        "explanation": "W = q * \u0394V. On equipotential surface \u0394V = 0, hence W = 0.",
+        "concept": "Electrostatic Potential",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 3,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "When temperature of a metallic conductor increases, its resistance:",
+        "options": [
+          "A) Increases",
+          "B) Decreases",
+          "C) Remains constant",
+          "D) Becomes zero"
+        ],
+        "ans": "A",
+        "explanation": "Thermal vibrations of lattice ions increase relaxation time decreases, increasing resistance.",
+        "concept": "Current Electricity",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 4,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "A charged particle moves perpendicular to a uniform magnetic field. Its kinetic energy:",
+        "options": [
+          "A) Remains constant",
+          "B) Increases",
+          "C) Decreases",
+          "D) Becomes zero"
+        ],
+        "ans": "A",
+        "explanation": "Magnetic Lorentz force is perpendicular to velocity, so work done is zero and KE is constant.",
+        "concept": "Moving Charges & Magnetism",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 5,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "In an AC circuit with pure capacitor, current leads voltage by phase angle of:",
+        "options": [
+          "A) \u03c0/2 (90\u00b0)",
+          "B) 0\u00b0",
+          "C) \u03c0 (180\u00b0)",
+          "D) \u03c0/4 (45\u00b0)"
+        ],
+        "ans": "A",
+        "explanation": "In capacitive circuit, current leads voltage by 90 degrees.",
+        "concept": "Alternating Current",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 6,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Electromagnetic waves are transverse in nature, proved directly by phenomenon of:",
+        "options": [
+          "A) Polarization",
+          "B) Interference",
+          "C) Diffraction",
+          "D) Refraction"
+        ],
+        "ans": "A",
+        "explanation": "Only transverse waves can be polarized; longitudinal waves cannot.",
+        "concept": "Wave Optics",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 7,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "de-Broglie wavelength associated with an electron accelerated through potential V is:",
+        "options": [
+          "A) 1.227 / \u221aV nm",
+          "B) 12.27 / \u221aV nm",
+          "C) 1.227 \u221aV nm",
+          "D) \u221aV / 1.227 nm"
+        ],
+        "ans": "A",
+        "explanation": "\u03bb = 1.227 / \u221aV nm = 12.27 / \u221aV \u00c5.",
+        "concept": "Dual Nature of Radiation",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 8,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "In Bohr's hydrogen atom model, radius of nth orbit is proportional to:",
+        "options": [
+          "A) n\u00b2",
+          "B) n",
+          "C) 1/n",
+          "D) 1/n\u00b2"
+        ],
+        "ans": "A",
+        "explanation": "r_n = 0.529 * n\u00b2 / Z \u00c5.",
+        "concept": "Atoms",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 9,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Binding energy per nucleon is maximum for nucleus of:",
+        "options": [
+          "A) Fe-56",
+          "B) U-238",
+          "C) He-4",
+          "D) H-2"
+        ],
+        "ans": "A",
+        "explanation": "Fe-56 has highest binding energy per nucleon (~8.75 MeV/nucleon), making it most stable.",
+        "concept": "Nuclei",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 10,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "In an n-type semiconductor, majority charge carriers are:",
+        "options": [
+          "A) Free electrons",
+          "B) Holes",
+          "C) Positive ions",
+          "D) Protons"
+        ],
+        "ans": "A",
+        "explanation": "Pentavalent doping donates free electrons as majority carriers.",
+        "concept": "Semiconductor Electronics",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 11,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Transformer works on the fundamental principle of:",
+        "options": [
+          "A) Mutual induction",
+          "B) Self induction",
+          "C) Eddy currents",
+          "D) Seebeck effect"
+        ],
+        "ans": "A",
+        "explanation": "Changing magnetic flux in primary coil induces alternating emf in secondary via mutual inductance.",
+        "concept": "Alternating Current",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 12,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Two thin lenses of power +3 D and -1 D in contact form a combination of power:",
+        "options": [
+          "A) +2 D",
+          "B) +4 D",
+          "C) -3 D",
+          "D) +3 D"
+        ],
+        "ans": "A",
+        "explanation": "P_total = P1 + P2 = +3 + (-1) = +2 D.",
+        "concept": "Ray Optics",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      }
+    ]
+  },
+  {
+    "id": "cbse_board_12_chemistry",
+    "title": "CBSE Class 12 Chemistry Official Board PYQ",
+    "exam": "CBSE Board",
+    "durationMinutes": 180,
+    "totalMarks": 70,
+    "questionsCount": 12,
+    "markingScheme": "+1 correct, 0 wrong",
+    "isSuperBatchOnly": true,
+    "sections": [
+      "Chemistry"
+    ],
+    "questions": [
+      {
+        "id": 1,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Van't Hoff factor (i) for complete dissociation of BaCl2 in dilute solution is:",
+        "options": [
+          "A) 3",
+          "B) 2",
+          "C) 1",
+          "D) 4"
+        ],
+        "ans": "A",
+        "explanation": "BaCl2 -> Ba2+ + 2 Cl- produces 3 ions, so i = 3.",
+        "concept": "Solutions",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 2,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Kohlrausch law is primarily used to calculate limiting molar conductivity of:",
+        "options": [
+          "A) Weak electrolytes",
+          "B) Strong electrolytes only",
+          "C) Non-electrolytes",
+          "D) Insoluble gases"
+        ],
+        "ans": "A",
+        "explanation": "Enables determining \u039b\u00b0m for weak electrolytes like CH3COOH.",
+        "concept": "Electrochemistry",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 3,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Slope of plot of ln k versus 1/T in Arrhenius equation is equal to:",
+        "options": [
+          "A) -Ea / R",
+          "B) -Ea / 2.303R",
+          "C) Ea / R",
+          "D) A / R"
+        ],
+        "ans": "A",
+        "explanation": "ln k = ln A - (Ea/R)(1/T), slope is -Ea/R.",
+        "concept": "Chemical Kinetics",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 4,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Which transition element has the highest melting point in 3d series?",
+        "options": [
+          "A) Chromium (Cr)",
+          "B) Copper (Cu)",
+          "C) Zinc (Zn)",
+          "D) Scandium (Sc)"
+        ],
+        "ans": "A",
+        "explanation": "Cr has 6 unpaired valence electrons (3d5 4s1), providing strongest metallic bonding.",
+        "concept": "d & f Block Elements",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 5,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Coordination number of central metal atom in [Co(en)3]3+ is:",
+        "options": [
+          "A) 6",
+          "B) 3",
+          "C) 4",
+          "D) 2"
+        ],
+        "ans": "A",
+        "explanation": "Ethylenediamine (en) is bidentate: 3 ligands * 2 donor atoms = 6.",
+        "concept": "Coordination Compounds",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 6,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Which halogen derivative reacts fastest via SN1 mechanism?",
+        "options": [
+          "A) (CH3)3C-Br",
+          "B) (CH3)2CH-Br",
+          "C) CH3CH2-Br",
+          "D) CH3-Br"
+        ],
+        "ans": "A",
+        "explanation": "Tertiary halide forms the most stable tertiary carbocation intermediate.",
+        "concept": "Haloalkanes & Haloarenes",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 7,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Phenol reacts with dilute HNO3 at room temperature to produce:",
+        "options": [
+          "A) o-nitrophenol & p-nitrophenol",
+          "B) Picric acid (2,4,6-trinitrophenol)",
+          "C) Benzoic acid",
+          "D) Nitrobenzene"
+        ],
+        "ans": "A",
+        "explanation": "Dilute HNO3 yields ortho and para nitrophenol (separated by steam distillation).",
+        "concept": "Alcohols, Phenols & Ethers",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 8,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Tollens' reagent is chemically described as:",
+        "options": [
+          "A) Ammoniacal silver nitrate solution",
+          "B) Alkaline copper sulphate",
+          "C) Acidified potassium permanganate",
+          "D) Neutral ferric chloride"
+        ],
+        "ans": "A",
+        "explanation": "[Ag(NH3)2]+ OH- is Tollens' reagent, used to distinguish aldehydes from ketones.",
+        "concept": "Aldehydes & Ketones",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 9,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Hoffmann Bromamide degradation reaction converts an amide into:",
+        "options": [
+          "A) Primary amine with one less carbon",
+          "B) Secondary amine",
+          "C) Acid chloride",
+          "D) Nitrile"
+        ],
+        "ans": "A",
+        "explanation": "RCONH2 + Br2 + 4 KOH -> RNH2 + K2CO3 + 2 KBr + 2 H2O.",
+        "concept": "Amines",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 10,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Which base is present in RNA but absent in DNA?",
+        "options": [
+          "A) Uracil",
+          "B) Thymine",
+          "C) Cytosine",
+          "D) Adenine"
+        ],
+        "ans": "A",
+        "explanation": "RNA contains Uracil in place of Thymine.",
+        "concept": "Biomolecules",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 11,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "The primary structure of a protein is linked together by:",
+        "options": [
+          "A) Peptide bonds",
+          "B) Hydrogen bonds",
+          "C) Disulphide bonds",
+          "D) Ionic bonds"
+        ],
+        "ans": "A",
+        "explanation": "Amino acid residues are held linearly by covalent peptide (amide) linkages.",
+        "concept": "Biomolecules \u2022 Proteins",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 12,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Aldol condensation is given only by aldehydes and ketones containing:",
+        "options": [
+          "A) At least one alpha-hydrogen atom",
+          "B) No alpha-hydrogen",
+          "C) An aromatic ring",
+          "D) Carboxyl group"
+        ],
+        "ans": "A",
+        "explanation": "Base removes acidic alpha-hydrogen to form the enolate ion nucleophile.",
+        "concept": "Aldehydes & Ketones",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      }
+    ]
+  },
+  {
+    "id": "cbse_board_12_math",
+    "title": "CBSE Class 12 Mathematics Official Board PYQ",
+    "exam": "CBSE Board",
+    "durationMinutes": 180,
+    "totalMarks": 80,
+    "questionsCount": 12,
+    "markingScheme": "+1 correct, 0 wrong",
+    "isSuperBatchOnly": true,
+    "sections": [
+      "Mathematics"
+    ],
+    "questions": [
+      {
+        "id": 1,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "A relation R on set A = {1, 2, 3} given by R = {(1, 1), (2, 2), (3, 3)} is:",
+        "options": [
+          "A) Equivalence relation",
+          "B) Reflexive only",
+          "C) Symmetric only",
+          "D) Transitive only"
+        ],
+        "ans": "A",
+        "explanation": "Identity relation is reflexive, symmetric, and transitive, hence an equivalence relation.",
+        "concept": "Relations & Functions",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 2,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "The principal value of sin^-1(-1/2) is:",
+        "options": [
+          "A) -\u03c0/6",
+          "B) 5\u03c0/6",
+          "C) \u03c0/6",
+          "D) -\u03c0/3"
+        ],
+        "ans": "A",
+        "explanation": "Range of sin^-1 is [-\u03c0/2, \u03c0/2]. sin(-\u03c0/6) = -1/2.",
+        "concept": "Inverse Trigonometric Functions",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 3,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "If A is a square matrix such that A\u00b2 = A, then (I + A)\u00b3 - 7A is equal to:",
+        "options": [
+          "A) I",
+          "B) A",
+          "C) I - A",
+          "D) 3I"
+        ],
+        "ans": "A",
+        "explanation": "(I + A)\u00b3 = I + 3A + 3A\u00b2 + A\u00b3 = I + 3A + 3A + A = I + 7A. Subtracting 7A leaves I.",
+        "concept": "Matrices",
+        "difficulty": "Medium",
+        "idealTimeSec": 45
+      },
+      {
+        "id": 4,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "If A is a 3x3 matrix and |A| = 5, then |2A| is equal to:",
+        "options": [
+          "A) 40",
+          "B) 10",
+          "C) 30",
+          "D) 125"
+        ],
+        "ans": "A",
+        "explanation": "|kA| = k^n |A|. For n = 3: 2\u00b3 * 5 = 8 * 5 = 40.",
+        "concept": "Determinants",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 5,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "Derivative of log(cos x) with respect to x is:",
+        "options": [
+          "A) -tan x",
+          "B) tan x",
+          "C) sec x",
+          "D) -cot x"
+        ],
+        "ans": "A",
+        "explanation": "d/dx[log(cos x)] = (1/cos x) * (-sin x) = -tan x.",
+        "concept": "Continuity & Differentiability",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 6,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "The function f(x) = x\u00b3 - 3x is strictly increasing in the interval:",
+        "options": [
+          "A) (-\u221e, -1) U (1, \u221e)",
+          "B) (-1, 1)",
+          "C) (0, \u221e)",
+          "D) (-\u221e, 0)"
+        ],
+        "ans": "A",
+        "explanation": "f'(x) = 3(x\u00b2 - 1) > 0 => x\u00b2 > 1 => x < -1 or x > 1.",
+        "concept": "Application of Derivatives",
+        "difficulty": "Easy",
+        "idealTimeSec": 35
+      },
+      {
+        "id": 7,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "Value of \u222b e^x (sin x + cos x) dx is:",
+        "options": [
+          "A) e^x sin x + C",
+          "B) e^x cos x + C",
+          "C) -e^x sin x + C",
+          "D) e^x (sin x - cos x) + C"
+        ],
+        "ans": "A",
+        "explanation": "Standard result: \u222b e^x [f(x) + f'(x)] dx = e^x f(x) + C. Here f(x) = sin x.",
+        "concept": "Integrals",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 8,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "Order and degree of differential equation [1 + (dy/dx)\u00b2]^(3/2) = d\u00b2y/dx\u00b2 are:",
+        "options": [
+          "A) Order 2, Degree 2",
+          "B) Order 2, Degree 1",
+          "C) Order 1, Degree 2",
+          "D) Order 3, Degree 2"
+        ],
+        "ans": "A",
+        "explanation": "Squaring both sides: [1 + (dy/dx)\u00b2]\u00b3 = (d\u00b2y/dx\u00b2)\u00b2. Highest derivative is 2, power is 2.",
+        "concept": "Differential Equations",
+        "difficulty": "Easy",
+        "idealTimeSec": 35
+      },
+      {
+        "id": 9,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "Projection of vector a = 2i + 3j + 2k on vector b = i + 2j + k is:",
+        "options": [
+          "A) 5 / \u221a6",
+          "B) 10 / \u221a6",
+          "C) \u221a6",
+          "D) 8 / \u221a6"
+        ],
+        "ans": "A",
+        "explanation": "Projection = (a \u00b7 b)/|b| = (2*1 + 3*2 + 2*1) / \u221a(1 + 4 + 1) = (2+6+2)/\u221a6 = 10/\u221a6 = 5\u221a6/3.",
+        "concept": "Vector Algebra",
+        "difficulty": "Easy",
+        "idealTimeSec": 40
+      },
+      {
+        "id": 10,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "Distance of the plane 2x - 3y + 6z + 14 = 0 from the origin (0, 0, 0) is:",
+        "options": [
+          "A) 2 units",
+          "B) 7 units",
+          "C) 14 units",
+          "D) 1 unit"
+        ],
+        "ans": "A",
+        "explanation": "d = |14| / \u221a(2\u00b2 + (-3)\u00b2 + 6\u00b2) = 14 / \u221a(4 + 9 + 36) = 14 / \u221a49 = 14 / 7 = 2.",
+        "concept": "Three Dimensional Geometry",
+        "difficulty": "Easy",
+        "idealTimeSec": 35
+      },
+      {
+        "id": 11,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "If P(A) = 0.4, P(B) = 0.8 and P(B|A) = 0.6, then P(A \u2229 B) is:",
+        "options": [
+          "A) 0.24",
+          "B) 0.32",
+          "C) 0.48",
+          "D) 0.12"
+        ],
+        "ans": "A",
+        "explanation": "P(A \u2229 B) = P(A) * P(B|A) = 0.4 * 0.6 = 0.24.",
+        "concept": "Probability",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 12,
+        "section": "Mathematics",
+        "type": "NUMERICAL",
+        "q": "The value of the definite integral \u222b[-1 to 1] x\u00b3 dx is:",
+        "options": [],
+        "ans": "0",
+        "explanation": "x\u00b3 is an odd function; integral of odd function from -a to a is 0.",
+        "concept": "Definite Integrals",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      }
+    ]
+  },
+  {
+    "id": "cbse_board_12_biology",
+    "title": "CBSE Class 12 Biology Official Board PYQ",
+    "exam": "CBSE Board",
+    "durationMinutes": 180,
+    "totalMarks": 70,
+    "questionsCount": 12,
+    "markingScheme": "+1 correct, 0 wrong",
+    "isSuperBatchOnly": true,
+    "sections": [
+      "Biology"
+    ],
+    "questions": [
+      {
+        "id": 1,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "Persistent nucellus in black pepper seed is termed as:",
+        "options": [
+          "A) Perisperm",
+          "B) Pericarp",
+          "C) Endosperm",
+          "D) Scutellum"
+        ],
+        "ans": "A",
+        "explanation": "Residual persistent nucellus in seeds like black pepper and beet is called perisperm.",
+        "concept": "Sexual Reproduction in Flowering Plants",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 2,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "Which structure in human females prevents implantation as an IUD?",
+        "options": [
+          "A) Copper-T",
+          "B) Saheli",
+          "C) Condom",
+          "D) Vasectomy"
+        ],
+        "ans": "A",
+        "explanation": "Copper-T releases Cu ions suppressing sperm motility and fertilizing capacity.",
+        "concept": "Reproductive Health",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 3,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "Down's syndrome is caused by the chromosomal abnormality of:",
+        "options": [
+          "A) Trisomy of chromosome 21",
+          "B) Monosomy of X",
+          "C) XXY genotype",
+          "D) Deletion on chromosome 5"
+        ],
+        "ans": "A",
+        "explanation": "Presence of an additional copy of chromosome 21 (Trisomy 21) leads to Down's syndrome.",
+        "concept": "Genetics \u2022 Chromosomal Disorders",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 4,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "During DNA transcription, RNA polymerase binds to which region of the transcription unit?",
+        "options": [
+          "A) Promoter",
+          "B) Operator",
+          "C) Terminator",
+          "D) Structural gene"
+        ],
+        "ans": "A",
+        "explanation": "Promoter sequence at the 5'-end initiates RNA polymerase binding.",
+        "concept": "Molecular Basis of Inheritance",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 5,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "The semi-conservative nature of DNA replication was experimentally proven by:",
+        "options": [
+          "A) Meselson and Stahl",
+          "B) Hershey and Chase",
+          "C) Watson and Crick",
+          "D) Griffith"
+        ],
+        "ans": "A",
+        "explanation": "Used heavy isotope 15N in E. coli with CsCl equilibrium density gradient centrifugation.",
+        "concept": "Molecular Basis of Inheritance",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 6,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "The antibody found abundantly in mothers' colostrum is:",
+        "options": [
+          "A) IgA",
+          "B) IgG",
+          "C) IgM",
+          "D) IgE"
+        ],
+        "ans": "A",
+        "explanation": "IgA provides passive natural immunity to the newborn.",
+        "concept": "Human Health & Disease",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 7,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "In gel electrophoresis, DNA fragments separate according to their size because:",
+        "options": [
+          "A) Smaller fragments move faster toward anode (+)",
+          "B) Larger fragments move faster",
+          "C) DNA is positively charged",
+          "D) Random movement"
+        ],
+        "ans": "A",
+        "explanation": "Negatively charged DNA moves toward anode; agarose sieves smaller fragments faster.",
+        "concept": "Biotechnology Principles",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 8,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "Bt toxin protein produced by Bacillus thuringiensis is activated inside insect gut by:",
+        "options": [
+          "A) Alkaline pH of the gut",
+          "B) Acidic pH of stomach",
+          "C) High body temperature",
+          "D) Salivary enzymes"
+        ],
+        "ans": "A",
+        "explanation": "Alkaline pH of the insect midgut solubilizes inactive protoxin crystals into active toxin.",
+        "concept": "Biotechnology Applications",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 9,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "Interaction between sea anemone and clownfish living among its tentacles is an example of:",
+        "options": [
+          "A) Commensalism (+, 0)",
+          "B) Mutualism (+, +)",
+          "C) Parasitism (+, -)",
+          "D) Amensalism (-, 0)"
+        ],
+        "ans": "A",
+        "explanation": "Clownfish gains protection (+), sea anemone remains unharmed and unaffected (0).",
+        "concept": "Organisms & Populations",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 10,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "The pyramid of energy in an ecosystem is:",
+        "options": [
+          "A) Always upright",
+          "B) Inverted in oceans",
+          "C) Spindle shaped",
+          "D) Variable"
+        ],
+        "ans": "A",
+        "explanation": "Energy flow follows 10% law from one trophic level to the next, always upright.",
+        "concept": "Ecosystem",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 11,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "Alexander von Humboldt observed that within a region, species richness:",
+        "options": [
+          "A) Increases with increasing area up to a limit",
+          "B) Decreases with area",
+          "C) Stays constant",
+          "D) Has no relationship"
+        ],
+        "ans": "A",
+        "explanation": "Rectangular hyperbola log S = log C + Z log A.",
+        "concept": "Biodiversity & Conservation",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 12,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "Which vector is commonly used to transfer foreign genes into dicot plants?",
+        "options": [
+          "A) Agrobacterium tumefaciens (Ti plasmid)",
+          "B) Bacillus subtilis",
+          "C) E. coli pBR322",
+          "D) Retrovirus"
+        ],
+        "ans": "A",
+        "explanation": "Agrobacterium is known as nature's genetic engineer for transferring T-DNA to plant genome.",
+        "concept": "Biotechnology",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      }
+    ]
+  },
+  {
+    "id": "jee_main_pyq_2023",
+    "title": "JEE Main 2023 Official NTA PYQ Paper",
+    "exam": "JEE Main",
+    "durationMinutes": 180,
+    "totalMarks": 300,
+    "questionsCount": 12,
+    "markingScheme": "+4 correct, -1 wrong",
+    "isSuperBatchOnly": true,
+    "sections": [
+      "Physics",
+      "Chemistry",
+      "Mathematics"
+    ],
+    "questions": [
+      {
+        "id": 1,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Ratio of magnetic field at center of circular loop to magnetic field on axis at distance x = R from center is:",
+        "options": [
+          "A) 2\u221a2 : 1",
+          "B) \u221a2 : 1",
+          "C) 4 : 1",
+          "D) 8 : 1"
+        ],
+        "ans": "A",
+        "explanation": "B_center/B_axis = (R\u00b2 + x\u00b2)^(3/2) / R\u00b3 = (2R\u00b2)^(3/2)/R\u00b3 = 2\u221a2.",
+        "concept": "Magnetic Effects (PYQ 2023)",
+        "difficulty": "Medium",
+        "idealTimeSec": 50
+      },
+      {
+        "id": 2,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Apparent weight of a man in an elevator accelerating downwards with acceleration a (a < g) is:",
+        "options": [
+          "A) m(g - a)",
+          "B) m(g + a)",
+          "C) mg",
+          "D) Zero"
+        ],
+        "ans": "A",
+        "explanation": "Effective normal force N = m(g - a).",
+        "concept": "Laws of Motion",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 3,
+        "section": "Physics",
+        "type": "NUMERICAL",
+        "q": "Two point charges +2 \u03bcC and +6 \u03bcC repel with 12 N. An additional charge of -4 \u03bcC is given to each. New force in N is:",
+        "options": [],
+        "ans": "4",
+        "explanation": "q1' = -2 \u03bcC, q2' = +2 \u03bcC. Ratio = |-2*2| / (2*6) = 4/12 = 1/3. F' = 12 * (1/3) = 4 N (attractive).",
+        "concept": "Electrostatics",
+        "difficulty": "Medium",
+        "idealTimeSec": 50
+      },
+      {
+        "id": 4,
+        "section": "Physics",
+        "type": "NUMERICAL",
+        "q": "A simple pendulum has period 2.0 s on Earth. If length is quadrupled, its new period in seconds is:",
+        "options": [],
+        "ans": "4",
+        "explanation": "T = 2\u03c0 \u221a(L/g). When L becomes 4L, T' = \u221a4 * T = 2 * 2.0 = 4.0 s.",
+        "concept": "Oscillations",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 5,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Which of the following molecules has zero dipole moment?",
+        "options": [
+          "A) BF3",
+          "B) NH3",
+          "C) H2O",
+          "D) NF3"
+        ],
+        "ans": "A",
+        "explanation": "BF3 is symmetrical trigonal planar (sp2), individual B-F dipoles cancel out to zero.",
+        "concept": "Chemical Bonding",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 6,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Primary amine reacts with nitrous acid (HNO2) at 0-5\u00b0C to form an aliphatic diazonium salt which decomposes to give:",
+        "options": [
+          "A) Alcohol and N2 gas",
+          "B) Ether",
+          "C) Aldehyde",
+          "D) Amide"
+        ],
+        "ans": "A",
+        "explanation": "Aliphatic diazonium salts are unstable and decompose quantitatively to alcohol and nitrogen gas.",
+        "concept": "Amines (PYQ 2023)",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 7,
+        "section": "Chemistry",
+        "type": "NUMERICAL",
+        "q": "Number of tetrahedral voids in a face-centered cubic (fcc) unit cell with 4 lattice atoms is:",
+        "options": [],
+        "ans": "8",
+        "explanation": "For N atoms, number of tetrahedral voids = 2N = 2 * 4 = 8.",
+        "concept": "Solid State",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 8,
+        "section": "Chemistry",
+        "type": "NUMERICAL",
+        "q": "Equivalent mass of KMnO4 in acidic medium (molecular mass M = 158) is M / x. Value of x is:",
+        "options": [],
+        "ans": "5",
+        "explanation": "MnO4- + 8H+ + 5e- -> Mn2+ + 4H2O. Valency factor x = 5.",
+        "concept": "Redox Titrations",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 9,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "If vectors a = i - 2j + 3k and b = 2i + \u03bbj - k are perpendicular, the value of \u03bb is:",
+        "options": [
+          "A) -1/2",
+          "B) 1/2",
+          "C) 1",
+          "D) -1"
+        ],
+        "ans": "A",
+        "explanation": "a \u00b7 b = 1(2) - 2\u03bb + 3(-1) = 2 - 2\u03bb - 3 = -1 - 2\u03bb = 0 => \u03bb = -1/2.",
+        "concept": "Vector Algebra",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 10,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "The slope of normal to curve y = 2x\u00b2 + 3 sin x at x = 0 is:",
+        "options": [
+          "A) -1/3",
+          "B) 1/3",
+          "C) 3",
+          "D) -3"
+        ],
+        "ans": "A",
+        "explanation": "dy/dx = 4x + 3 cos x. At x = 0, m_tangent = 3. Slope of normal = -1/3.",
+        "concept": "Application of Derivatives",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 11,
+        "section": "Mathematics",
+        "type": "NUMERICAL",
+        "q": "Value of C(5, 2) (combinations of 5 taken 2) is:",
+        "options": [],
+        "ans": "10",
+        "explanation": "5! / (2! * 3!) = (5 * 4)/2 = 10.",
+        "concept": "Combinatorics",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 12,
+        "section": "Mathematics",
+        "type": "NUMERICAL",
+        "q": "The value of limit as x->0 of (e^x - 1) / x is:",
+        "options": [],
+        "ans": "1",
+        "explanation": "Standard calculus limit lim (e^x - 1)/x = 1.",
+        "concept": "Limits",
+        "difficulty": "Easy",
+        "idealTimeSec": 15
+      }
+    ]
+  },
+  {
+    "id": "neet_pyq_2023",
+    "title": "NEET 2023 Official NTA Question Paper",
+    "exam": "NEET UG",
+    "durationMinutes": 180,
+    "totalMarks": 720,
+    "questionsCount": 12,
+    "markingScheme": "+4 correct, -1 wrong",
+    "isSuperBatchOnly": true,
+    "sections": [
+      "Biology",
+      "Physics",
+      "Chemistry"
+    ],
+    "questions": [
+      {
+        "id": 1,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "Movement of water through xylem tracheids and vessels is mainly driven by:",
+        "options": [
+          "A) Transpiration pull",
+          "B) Root pressure",
+          "C) Guttation",
+          "D) Imbibition"
+        ],
+        "ans": "A",
+        "explanation": "Cohesion-tension-transpiration pull model is the major driving force.",
+        "concept": "Plant Physiology (PYQ 2023)",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 2,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "Which of the following is NOT a greenhouse gas?",
+        "options": [
+          "A) Nitrogen (N2)",
+          "B) Methane (CH4)",
+          "C) Carbon dioxide (CO2)",
+          "D) CFCs"
+        ],
+        "ans": "A",
+        "explanation": "N2 is not a greenhouse gas; CO2, CH4, N2O, and CFCs absorb thermal IR.",
+        "concept": "Environmental Issues",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 3,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "The functional unit of contraction in a skeletal muscle is called:",
+        "options": [
+          "A) Sarcomere",
+          "B) Sarcolemma",
+          "C) Sarcoplasm",
+          "D) Myofibril"
+        ],
+        "ans": "A",
+        "explanation": "Portion of myofibril between two successive Z-lines is the sarcomere.",
+        "concept": "Locomotion & Movement",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 4,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "Karyotype of Klinefelter's syndrome male is:",
+        "options": [
+          "A) 47, XXY",
+          "B) 45, XO",
+          "C) 47, XYY",
+          "D) 46, XY"
+        ],
+        "ans": "A",
+        "explanation": "Klinefelter syndrome is caused by extra X chromosome (44 + XXY = 47).",
+        "concept": "Genetics (PYQ 2023)",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 5,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Angular momentum of an electron in 2nd Bohr orbit of Hydrogen atom is:",
+        "options": [
+          "A) h / \u03c0",
+          "B) h / 2\u03c0",
+          "C) 2h / \u03c0",
+          "D) h / 4\u03c0"
+        ],
+        "ans": "A",
+        "explanation": "L = n h / (2\u03c0). For n = 2: L = 2h / (2\u03c0) = h / \u03c0.",
+        "concept": "Atoms & Quantum",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 6,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Critical angle for a medium with refractive index \u03bc = \u221a2 into air is:",
+        "options": [
+          "A) 45\u00b0",
+          "B) 30\u00b0",
+          "C) 60\u00b0",
+          "D) 90\u00b0"
+        ],
+        "ans": "A",
+        "explanation": "sin C = 1/\u03bc = 1/\u221a2 => C = 45\u00b0.",
+        "concept": "Ray Optics (PYQ 2023)",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 7,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Unit of electric dipole moment in SI system is:",
+        "options": [
+          "A) Coulomb-meter (C\u00b7m)",
+          "B) Coulomb/meter",
+          "C) Volt-meter",
+          "D) Newton-meter"
+        ],
+        "ans": "A",
+        "explanation": "p = q * 2a has units of Coulomb * meter.",
+        "concept": "Electrostatics",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 8,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "In an adiabatic expansion of an ideal gas, temperature of the gas:",
+        "options": [
+          "A) Decreases",
+          "B) Increases",
+          "C) Remains constant",
+          "D) First increases then decreases"
+        ],
+        "ans": "A",
+        "explanation": "dW > 0, dQ = 0 => dU = -dW < 0, internal energy and temperature decrease.",
+        "concept": "Thermodynamics",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 9,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Which of the following compounds is aromatic according to Huckel's rule?",
+        "options": [
+          "A) Benzene",
+          "B) Cyclobutadiene",
+          "C) Cyclooctatetraene",
+          "D) Cyclohexane"
+        ],
+        "ans": "A",
+        "explanation": "Benzene has planar ring with 6 \u03c0 electrons satisfying (4n+2) rule (n=1).",
+        "concept": "General Organic Chemistry",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 10,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Oxidation state of iron in haemoglobin is:",
+        "options": [
+          "A) +2",
+          "B) +3",
+          "C) +4",
+          "D) 0"
+        ],
+        "ans": "A",
+        "explanation": "In functional deoxy/oxyhaemoglobin, iron is in the ferrous Fe(II) state.",
+        "concept": "Biochemistry",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 11,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Which gas is evolved at cathode during electrolysis of brine solution (aqueous NaCl)?",
+        "options": [
+          "A) Hydrogen (H2)",
+          "B) Chlorine (Cl2)",
+          "C) Oxygen (O2)",
+          "D) Sodium vapor"
+        ],
+        "ans": "A",
+        "explanation": "2H+ + 2e- -> H2 occurs at cathode due to higher reduction potential than Na+.",
+        "concept": "Electrochemistry (PYQ 2023)",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 12,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "The geometry of SF6 molecule according to VSEPR theory is:",
+        "options": [
+          "A) Octahedral",
+          "B) Trigonal bipyramidal",
+          "C) Tetrahedral",
+          "D) Square planar"
+        ],
+        "ans": "A",
+        "explanation": "sp3d2 hybridization with 6 bond pairs gives regular octahedral geometry.",
+        "concept": "Chemical Bonding",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
       }
     ]
   }

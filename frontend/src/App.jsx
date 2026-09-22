@@ -771,6 +771,7 @@ export default function App() {
   const [examTrack, setExamTrack] = useState('JEE') // 'JEE' | 'NEET' | 'CBSE'
   const [weightageSub, setWeightageSub] = useState('Physics')
   const [practiceSubTab, setPracticeSubTab] = useState('tests') // 'tests' | 'weightage' | 'battle'
+  const [testFilter, setTestFilter] = useState('All')
   
   // CBT Mock Test Simulator State
   const [activeMockTest, setActiveMockTest] = useState(null)
@@ -881,6 +882,164 @@ export default function App() {
 
     setTestAnalytics(analytics)
     addXP(Math.max(30, score * 5))
+  }
+
+  // Download Question Paper with Separate Answer Sheet & Detailed Solutions PDF
+  const downloadTestPaperAndAnswerSheet = (test) => {
+    if (!test) return
+    const qList = (test.questions || []).map((q, i) => `
+      <div style="margin-bottom:14px;page-break-inside:avoid;padding-bottom:10px;border-bottom:1px dashed #e2e8f0">
+        <p style="font-weight:bold;margin:0 0 6px">Q${i+1}. [${q.section}] ${q.q} <span style="font-weight:normal;color:#64748b;font-size:11px">(${q.concept || ''})</span></p>
+        ${q.options && q.options.length > 0 ? `
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px;margin-left:12px">
+            ${q.options.map(opt => `<div>${opt}</div>`).join('')}
+          </div>
+        ` : `<div style="font-size:12px;color:#64748b;margin-left:12px;font-style:italic">[Numerical Value Type Question]</div>`}
+      </div>
+    `).join('')
+
+    const answerKeyRows = (test.questions || []).map((q, i) => `
+      <tr style="border-bottom:1px solid #e2e8f0">
+        <td style="padding:6px 10px;text-align:center;font-weight:bold">Q${i+1}</td>
+        <td style="padding:6px 10px;text-align:center">${q.section}</td>
+        <td style="padding:6px 10px;text-align:center;font-weight:bold;color:#1d4ed8;background:#eff6ff">${q.ans}</td>
+        <td style="padding:6px 10px;font-size:12px">${q.concept || 'General'}</td>
+      </tr>
+    `).join('')
+
+    const detailedSolutions = (test.questions || []).map((q, i) => `
+      <div style="margin-bottom:12px;page-break-inside:avoid;padding:8px 12px;background:#f8fafc;border-radius:6px;border-left:3px solid #2563eb">
+        <p style="font-weight:bold;margin:0 0 3px;font-size:12px">Q${i+1}. Correct Answer: <span style="color:#16a34a">${q.ans}</span></p>
+        <p style="margin:0;font-size:12px;color:#334155">${q.explanation || 'Direct syllabus answer.'}</p>
+      </div>
+    `).join('')
+
+    const html = `<!DOCTYPE html>
+    <html>
+      <head>
+        <title>${test.title} - Question Paper & Separate Answer Sheet</title>
+        <meta charset="utf-8"/>
+        <style>
+          @page { size: A4; margin: 16mm; }
+          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #0f172a; line-height: 1.5; font-size: 13px; margin: 0; padding: 12px; }
+          h1 { font-size: 18px; margin: 0 0 4px; color: #1e3a8a; }
+          .badge { display: inline-block; background: #e0e7ff; color: #3730a3; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 11px; }
+          .meta-box { display: flex; justify-content: space-between; border-bottom: 2px solid #0f172a; padding-bottom: 8px; margin-bottom: 16px; font-size: 12px; color: #475569; }
+          .page-break { page-break-before: always; break-before: page; margin-top: 24px; padding-top: 16px; border-top: 3px double #94a3b8; }
+          table { width: 100%; border-collapse: collapse; margin-top: 10px; margin-bottom: 20px; }
+          th { background: #f1f5f9; padding: 8px 10px; font-size: 11px; text-transform: uppercase; border-bottom: 2px solid #cbd5e1; text-align: center; }
+          @media print { .no-print { display: none !important; } body { padding: 0; } }
+        </style>
+      </head>
+      <body>
+        <div class="no-print" style="background:#2563eb;color:white;padding:12px;border-radius:8px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <b>Study Buddy Pro</b> — Complete Test Paper with Separate Answer Sheet & Solutions PDF
+          </div>
+          <button onclick="window.print()" style="background:white;color:#2563eb;border:none;padding:6px 14px;border-radius:6px;font-weight:bold;cursor:pointer">
+            🖨️ Print / Save as PDF
+          </button>
+        </div>
+
+        <!-- SECTION 1: QUESTION PAPER -->
+        <div>
+          <span class="badge">${test.exam} • OFFICIAL EXAMINATION</span>
+          <h1 style="margin-top:6px">${test.title}</h1>
+          <div class="meta-box">
+            <span>⏱ Duration: ${test.durationMinutes} Minutes</span>
+            <span>📊 Total Marks: ${test.totalMarks}</span>
+            <span>Marking: ${test.markingScheme}</span>
+          </div>
+
+          <div style="margin-top:16px">
+            ${qList}
+          </div>
+        </div>
+
+        <!-- SECTION 2: SEPARATE OFFICIAL ANSWER SHEET & SOLUTIONS -->
+        <div class="page-break">
+          <div style="text-align:center;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #2563eb">
+            <span class="badge" style="background:#dcfce7;color:#15803d;font-size:12px;padding:3px 12px">CONFIDENTIAL OFFICIAL ANSWER KEY</span>
+            <h1 style="font-size:20px;margin-top:8px;color:#0f172a">${test.title}</h1>
+            <p style="margin:2px 0 0;font-size:13px;color:#64748b">Separate Official Answer Key Sheet & Step-by-Step Solutions</p>
+          </div>
+
+          <h3 style="font-size:14px;margin:16px 0 6px;text-transform:uppercase;color:#1e3a8a">Section A: Answer Key Sheet</h3>
+          <table>
+            <thead>
+              <tr>
+                <th style="width:15%">Question #</th>
+                <th style="width:25%">Subject</th>
+                <th style="width:25%">Official Answer Key</th>
+                <th style="width:35%">Concept Tested</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${answerKeyRows}
+            </tbody>
+          </table>
+
+          <h3 style="font-size:14px;margin:20px 0 8px;text-transform:uppercase;color:#1e3a8a">Section B: Step-by-Step Detailed Solutions</h3>
+          ${detailedSolutions}
+
+          <div style="text-align:center;margin-top:30px;padding-top:10px;border-top:1px solid #e2e8f0;font-size:11px;color:#94a3b8">
+            Study Buddy Pro • CBSE / JEE / NEET Examination System • All Rights Reserved
+          </div>
+        </div>
+
+        <script>
+          setTimeout(() => { window.print(); }, 400);
+        </script>
+      </body>
+    </html>`
+
+    const w = window.open('', '_blank')
+    if (w) {
+      w.document.write(html)
+      w.document.close()
+    }
+  }
+
+  // Download Answer Sheet as printable PDF (opens print dialog)
+  const downloadAnswerSheet = () => {
+    if (!activeMockTest || !testAnalytics) return
+    const t = activeMockTest, a = testAnalytics
+    const rows = a.breakdown.map((item, i) => `
+      <tr style="border-bottom:1px solid #e2e8f0">
+        <td style="padding:6px 8px;text-align:center;font-weight:bold">Q${i+1}</td>
+        <td style="padding:6px 8px;font-size:12px">${item.q.substring(0, 80)}${item.q.length > 80 ? '...' : ''}</td>
+        <td style="padding:6px 8px;text-align:center;font-weight:bold;color:#059669">${item.ans}</td>
+        <td style="padding:6px 8px;text-align:center;font-weight:bold;color:${item.isCorrect ? '#059669' : item.isAnswered ? '#dc2626' : '#94a3b8'}">${item.userAns}</td>
+        <td style="padding:6px 8px;text-align:center;font-weight:bold;color:${item.markDelta > 0 ? '#059669' : item.markDelta < 0 ? '#dc2626' : '#64748b'}">${item.markDelta > 0 ? '+' : ''}${item.markDelta}</td>
+      </tr>`).join('')
+    const explanations = a.breakdown.map((item, i) => `
+      <div style="margin-bottom:12px;page-break-inside:avoid">
+        <p style="font-weight:bold;margin:0 0 4px">Q${i+1}. ${item.q}</p>
+        <p style="margin:0 0 2px;font-size:12px"><b>Correct Answer:</b> ${item.ans} &nbsp; | &nbsp; <b>Your Answer:</b> ${item.userAns} &nbsp; | &nbsp; <b>Marks:</b> ${item.markDelta > 0 ? '+' : ''}${item.markDelta}</p>
+        <p style="margin:0;font-size:12px;color:#475569"><b>Explanation:</b> ${item.explanation}</p>
+      </div>`).join('')
+    const html = `<!DOCTYPE html><html><head><title>Answer Sheet - ${t.title}</title>
+      <style>body{font-family:Arial,sans-serif;padding:24px;color:#1e293b;font-size:13px}
+      h1{font-size:18px;margin:0 0 4px}h2{font-size:14px;margin:16px 0 8px;border-bottom:2px solid #3b82f6;padding-bottom:4px}
+      table{width:100%;border-collapse:collapse;margin-bottom:16px}th{background:#f1f5f9;padding:8px;text-align:center;font-size:11px;text-transform:uppercase}
+      .summary{display:flex;gap:16px;margin:12px 0}.stat{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 16px;text-align:center}
+      .stat b{display:block;font-size:18px}@media print{.no-print{display:none}}</style></head><body>
+      <h1>${t.title}</h1>
+      <p style="color:#64748b;margin:0 0 8px">Marking: ${t.markingScheme} &nbsp;|&nbsp; Duration: ${t.durationMinutes} mins &nbsp;|&nbsp; Total: ${t.totalMarks} marks</p>
+      <div class="summary">
+        <div class="stat"><b>${a.score}/${a.totalPossibleMarks}</b>Score</div>
+        <div class="stat"><b>${a.accuracy}%</b>Accuracy</div>
+        <div class="stat"><b>✓ ${a.correct}</b>Correct</div>
+        <div class="stat"><b>✗ ${a.wrong}</b>Wrong</div>
+        <div class="stat"><b>— ${a.unattempted}</b>Skipped</div>
+      </div>
+      <h2>Answer Key</h2>
+      <table><thead><tr><th>Q#</th><th>Question</th><th>Key</th><th>Your Ans</th><th>Marks</th></tr></thead><tbody>${rows}</tbody></table>
+      <h2 style="page-break-before:always">Detailed Solutions</h2>${explanations}
+      <p style="text-align:center;color:#94a3b8;margin-top:24px;font-size:11px">Generated by Study Buddy Pro • ${new Date().toLocaleDateString()}</p>
+      <script>window.print()</script></body></html>`
+    const w = window.open('', '_blank')
+    if (w) { w.document.write(html); w.document.close() }
   }
 
   const guardPro = (fn, reason) => {
@@ -1208,111 +1367,118 @@ Report verified by Study Buddy AI.`
       {/* Mobile App Device Shell (clean Allen app interface) */}
       <div className="w-full max-w-md bg-[#F8FAFC] min-h-screen flex flex-col shadow-2xl relative border-x border-slate-200">
         
-        {/* ── ALLEN-STYLE TOP APP BAR ── */}
-        <header className="sticky top-0 z-30 bg-white border-b border-slate-200/80 px-4 py-3 shadow-xs">
-          <div className="flex items-center justify-between">
-            {/* Left: Avatar + Greeting */}
-            <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-blue-700 to-blue-500 text-white font-extrabold flex items-center justify-center text-sm shadow-sm">
-                {name.charAt(0).toUpperCase()}
-              </div>
-              <div>
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-bold text-slate-900 leading-none">Hi, {name}</span>
-                  <span className="text-[10px] bg-blue-50 text-blue-700 font-bold px-1.5 py-0.5 rounded-md border border-blue-200/60">
-                    Class {classNum}
-                  </span>
+        {/* ── TOP APP BAR (Hidden during full CBT exam) ── */}
+        {!activeMockTest && (
+          <header className="sticky top-0 z-30 bg-white border-b border-slate-200 px-4 pt-3 pb-3 shadow-xs">
+            <div className="flex items-center justify-between">
+              {/* Left: Avatar + Greeting */}
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-blue-600 text-white font-extrabold flex items-center justify-center text-xs shadow-xs">
+                  {name.charAt(0).toUpperCase()}
                 </div>
-                <p className="text-[10px] text-slate-500 font-medium mt-0.5">CBSE 2026-27 Prep</p>
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs font-bold text-slate-900 leading-none">Hi, {name}</span>
+                    <span className="text-[10px] bg-blue-50 text-blue-700 font-bold px-1.5 py-0.5 rounded-md border border-blue-200/60">
+                      Class {classNum}
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-slate-400 font-medium mt-0.5">CBSE 2026-27</p>
+                </div>
+              </div>
+
+              {/* Right: VIP Badge + Streak + Language Toggle */}
+              <div className="flex items-center gap-1.5">
+                {subscription?.isPro ? (
+                  <button
+                    onClick={() => { setSubReason(''); setShowSubModal(true) }}
+                    className="flex items-center gap-1 bg-amber-400 text-slate-900 px-2 py-1 rounded-lg text-[10px] font-black shadow-xs btn-press"
+                    title="Study Buddy PRO Active"
+                  >
+                    <span>👑</span>
+                    <span>PRO</span>
+                  </button>
+                ) : isTrialExpired ? (
+                  <button
+                    onClick={() => { setSubReason('Your 5-Day Free Trial has ended. Subscribe to Pro to continue unlimited access.'); setShowSubModal(true) }}
+                    className="flex items-center gap-1 bg-rose-600 text-white px-2 py-1 rounded-lg text-[10px] font-black animate-pulse shadow-xs btn-press"
+                    title="5-Day Trial Expired • Tap to Unlock"
+                  >
+                    <span>🔒</span>
+                    <span>Expired</span>
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => { setSubReason(''); setShowSubModal(true) }}
+                    className="flex items-center gap-1 bg-blue-50 text-blue-700 border border-blue-200 px-2 py-1 rounded-lg text-[10px] font-bold btn-press"
+                    title="5-Day Free Trial Active"
+                  >
+                    <span>👑</span>
+                    <span>{daysRemaining}d Left</span>
+                  </button>
+                )}
+
+                <div className="flex items-center gap-1 bg-amber-50 text-amber-700 border border-amber-200 px-2 py-1 rounded-lg text-[11px] font-bold">
+                  <span>🔥</span>
+                  <span>{stats.streak}d</span>
+                </div>
+                <select
+                  value={language}
+                  onChange={e => setLanguage(e.target.value)}
+                  className="text-[11px] font-bold bg-slate-100 text-slate-700 border border-slate-200 rounded-lg px-1.5 py-1 outline-none"
+                >
+                  <option value="English">EN</option>
+                  <option value="Hindi">हिंदी</option>
+                  <option value="Hinglish">Hinglish</option>
+                </select>
               </div>
             </div>
 
-            {/* Right: VIP Badge + Streak + Language Toggle */}
-            <div className="flex items-center gap-1.5">
-              {subscription?.isPro ? (
+            {/* Subject Pills */}
+            <div className="flex gap-1.5 overflow-x-auto mt-2.5 pb-1 no-scrollbar">
+              {subjects.map(s => (
                 <button
-                  onClick={() => { setSubReason(''); setShowSubModal(true) }}
-                  className="flex items-center gap-1 bg-gradient-to-r from-amber-400 to-amber-500 text-slate-900 border border-amber-300 px-2 py-1 rounded-xl text-[10px] font-black shadow-xs btn-press"
-                  title="Study Buddy PRO Active"
+                  key={s}
+                  onClick={() => setSubject(s)}
+                  className={`shrink-0 flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold transition-all btn-press ${subject === s ? 'bg-blue-600 text-white shadow-xs' : 'bg-white text-slate-600 border border-slate-200'}`}
                 >
-                  <span>👑</span>
-                  <span>PRO</span>
+                  <span>{subjectIcons[s] || '📚'}</span>
+                  <span>{s}</span>
                 </button>
-              ) : isTrialExpired ? (
-                <button
-                  onClick={() => { setSubReason('Your 5-Day Free Trial has ended. Subscribe to Pro to continue unlimited access.'); setShowSubModal(true) }}
-                  className="flex items-center gap-1 bg-rose-600 text-white px-2 py-1 rounded-xl text-[10px] font-black animate-pulse shadow-xs btn-press"
-                  title="5-Day Trial Expired • Tap to Unlock"
-                >
-                  <span>🔒</span>
-                  <span>Expired</span>
-                </button>
-              ) : (
-                <button
-                  onClick={() => { setSubReason(''); setShowSubModal(true) }}
-                  className="flex items-center gap-1 bg-blue-50 text-blue-700 border border-blue-200 px-2 py-1 rounded-xl text-[10px] font-extrabold btn-press"
-                  title="5-Day Free Trial Active"
-                >
-                  <span>👑</span>
-                  <span>{daysRemaining}d Left</span>
-                </button>
-              )}
+              ))}
+            </div>
 
-              <div className="flex items-center gap-1 bg-amber-50 text-amber-700 border border-amber-200 px-2 py-1 rounded-xl text-xs font-extrabold">
-                <span>🔥</span>
-                <span>{stats.streak}d</span>
+            {/* Active Chapter Selector — Plain, Simple with Clear Upper Margin */}
+            <div className="mt-3 pt-2.5 border-t border-slate-100">
+              <div className="flex items-center justify-between mb-1 text-[11px] text-slate-500 font-medium">
+                <span>Current Chapter</span>
+                {deletedTopics.length > 0 && (
+                  <button
+                    onClick={() => setShowDel(!showDel)}
+                    className="text-[10px] font-bold text-rose-600 hover:text-rose-700"
+                  >
+                    🚫 {deletedTopics.length} Deleted {showDel ? '▲' : '▼'}
+                  </button>
+                )}
               </div>
               <select
-                value={language}
-                onChange={e => setLanguage(e.target.value)}
-                className="text-[11px] font-bold bg-slate-100 text-slate-700 border border-slate-200 rounded-xl px-1.5 py-1 outline-none"
+                value={chapter}
+                onChange={e => setChapter(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs font-medium rounded-xl px-3 py-2 outline-none focus:border-blue-500 transition-all truncate"
               >
-                <option value="English">EN</option>
-                <option value="Hindi">हिंदी</option>
-                <option value="Hinglish">Hinglish</option>
+                {chapters.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
-          </div>
-
-          {/* Subject Pills (horizontal scroll like Allen Digital) */}
-          <div className="flex gap-2 overflow-x-auto mt-2.5 pb-1 no-scrollbar">
-            {subjects.map(s => (
-              <button
-                key={s}
-                onClick={() => setSubject(s)}
-                className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all btn-press ${subject === s ? 'bg-blue-600 text-white shadow-xs shadow-blue-500/30' : 'bg-white text-slate-600 border border-slate-200'}`}
-              >
-                <span>{subjectIcons[s] || '📚'}</span>
-                <span>{s}</span>
-              </button>
-            ))}
-          </div>
-
-          {/* Active Chapter Selector */}
-          <div className="mt-2 flex items-center gap-2">
-            <select
-              value={chapter}
-              onChange={e => setChapter(e.target.value)}
-              className="flex-1 bg-slate-100 border border-slate-200 text-slate-800 text-xs font-semibold rounded-xl px-2.5 py-1.5 outline-none truncate"
-            >
-              {chapters.map(c => <option key={c} value={c}>{c}</option>)}
-            </select>
-            {deletedTopics.length > 0 && (
-              <button
-                onClick={() => setShowDel(!showDel)}
-                className="text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200 px-2 py-1.5 rounded-xl shrink-0"
-              >
-                🚫 {deletedTopics.length} Deleted {showDel ? '▲' : '▼'}
-              </button>
+            {showDel && deletedTopics.length > 0 && (
+              <div className="mt-2 p-2 bg-rose-50 border border-rose-200/70 rounded-xl text-[10px] text-rose-800 animate-slide-up">
+                <p className="font-bold mb-1">CBSE 2026-27 Deleted Topics (Do not study for boards):</p>
+                <div className="space-y-0.5">
+                  {deletedTopics.map((t, i) => <p key={i}>• {t}</p>)}
+                </div>
+              </div>
             )}
-          </div>
-          {showDel && deletedTopics.length > 0 && (
-            <div className="mt-1.5 p-2 bg-rose-50/80 border border-rose-200 rounded-xl text-[10px] text-rose-800 animate-slide-up">
-              <p className="font-bold mb-1">CBSE 2026-27 Deleted Topics (Do not study for boards):</p>
-              {deletedTopics.map((t, i) => <p key={i}>• {t}</p>)}
-            </div>
-          )}
-        </header>
+          </header>
+        )}
 
         {/* ── TAB CONTENT ── */}
         <main className="flex-1 p-4 pb-28 overflow-y-auto">
@@ -1987,13 +2153,21 @@ Report verified by Study Buddy AI.`
                     ))}
                   </div>
 
-                  {/* Exit to Test Catalog */}
-                  <button
-                    onClick={() => { setActiveMockTest(null); setTestSubmitted(false); setTestAnalytics(null) }}
-                    className="w-full py-3 rounded-2xl bg-blue-600 text-white text-xs font-black shadow-md btn-press"
-                  >
-                    ← Return to Test Series Catalog
-                  </button>
+                  {/* Action Buttons */}
+                  <div className="flex gap-2">
+                    <button
+                      onClick={downloadAnswerSheet}
+                      className="flex-1 py-3 rounded-2xl bg-white text-blue-700 text-xs font-bold border border-blue-200 btn-press"
+                    >
+                      📄 Answer Sheet PDF
+                    </button>
+                    <button
+                      onClick={() => { setActiveMockTest(null); setTestSubmitted(false); setTestAnalytics(null) }}
+                      className="flex-1 py-3 rounded-2xl bg-blue-600 text-white text-xs font-bold shadow-md btn-press"
+                    >
+                      ← Back to Tests
+                    </button>
+                  </div>
                 </div>
               )}
 
@@ -2028,69 +2202,78 @@ Report verified by Study Buddy AI.`
                     </button>
                   </div>
 
-                  {/* SUB-VIEW A: 📝 NTA CBT MOCK TESTS */}
+                  {/* SUB-VIEW A: 📝 MOCK TESTS */}
                   {practiceSubTab === 'tests' && (
                     <div className="space-y-3 animate-slide-up">
-                      <div className="flex justify-between items-center">
-                        <div>
-                          <h3 className="text-sm font-black text-slate-900">All-India CBT Mock Test Series</h3>
-                          <p className="text-[11px] text-slate-500">Exact NTA Exam Pattern • MathonGo Analytics</p>
-                        </div>
-                        <span className="text-[10px] font-black bg-amber-100 text-amber-800 border border-amber-300 px-2 py-0.5 rounded-full">
-                          ALLEN Grade
-                        </span>
+                      <h3 className="text-sm font-bold text-slate-900">Mock Test Series</h3>
+
+                      {/* Exam Filter Pills */}
+                      <div className="flex gap-1.5">
+                        {['All', 'JEE Main', 'NEET UG', 'CBSE Board'].map(f => (
+                          <button
+                            key={f}
+                            onClick={() => setTestFilter(f)}
+                            className={`px-3 py-1 rounded-lg text-[11px] font-semibold border ${
+                              testFilter === f ? 'bg-slate-800 text-white border-slate-800' : 'bg-white text-slate-600 border-slate-200'
+                            }`}
+                          >
+                            {f === 'All' ? 'All' : f.split(' ')[0]}
+                          </button>
+                        ))}
                       </div>
 
-                      {/* Test Series Cards */}
-                      <div className="space-y-2.5">
-                        {MOCK_TESTS_CATALOG.map(t => (
-                          <div key={t.id} className="allen-card p-3.5 border-slate-200 hover:border-blue-400 transition-all shadow-xs">
-                            <div className="flex justify-between items-start mb-1.5">
-                              <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
-                                {t.exam}
-                              </span>
+                      {/* Test Cards */}
+                      <div className="space-y-2">
+                        {MOCK_TESTS_CATALOG
+                          .filter(t => testFilter === 'All' || t.exam === testFilter)
+                          .map(t => (
+                          <div key={t.id} className="bg-white rounded-xl border border-slate-200 p-3 hover:border-blue-300 transition-all">
+                            <div className="flex justify-between items-start mb-1">
+                              <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-blue-50 text-blue-700">{t.exam}</span>
                               {t.isSuperBatchOnly ? (
-                                <span className="text-[10px] font-black bg-amber-500 text-white px-2 py-0.5 rounded-full shadow-xs">
-                                  👑 SUPER BATCH
-                                </span>
+                                <span className="text-[10px] font-semibold bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded">👑 Pro</span>
                               ) : (
-                                <span className="text-[10px] font-black bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
-                                  FREE SAMPLE
-                                </span>
+                                <span className="text-[10px] font-semibold bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded">Free</span>
                               )}
                             </div>
-
-                            <h4 className="text-xs font-black text-slate-900 leading-snug">{t.title}</h4>
-                            
-                            <div className="flex items-center gap-3 text-[10px] text-slate-500 my-2">
-                              <span>⏱️ {t.durationMinutes} Mins</span>
+                            <h4 className="text-xs font-bold text-slate-900 mb-1">{t.title}</h4>
+                            <div className="flex items-center gap-2 text-[10px] text-slate-500 mb-2">
+                              <span>⏱ {t.durationMinutes}m</span>
                               <span>•</span>
-                              <span>📊 {t.totalMarks} Marks</span>
+                              <span>{t.totalMarks} marks</span>
                               <span>•</span>
                               <span>{t.questionsCount} Qs</span>
                             </div>
-
-                            <button
-                              onClick={() => handleStartMockTest(t)}
-                              className={`w-full py-2.5 rounded-xl text-xs font-black btn-press flex items-center justify-center gap-1.5 ${
-                                t.isSuperBatchOnly && !isSuperBatchActive && isTrialExpired
-                                  ? 'bg-slate-100 text-slate-700 border border-slate-300'
-                                  : 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/20'
-                              }`}
-                            >
-                              <span>{t.isSuperBatchOnly && !isSuperBatchActive && isTrialExpired ? '🔒 Unlock with Super Batch' : 'Start CBT Mock Test'}</span>
-                              <span>→</span>
-                            </button>
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() => handleStartMockTest(t)}
+                                className={`flex-1 py-2 rounded-lg text-xs font-bold btn-press ${
+                                  t.isSuperBatchOnly && !isSuperBatchActive && isTrialExpired
+                                    ? 'bg-slate-100 text-slate-600 border border-slate-200'
+                                    : 'bg-blue-600 text-white'
+                                }`}
+                              >
+                                {t.isSuperBatchOnly && !isSuperBatchActive && isTrialExpired ? '🔒 Unlock' : 'Start Test →'}
+                              </button>
+                              <button
+                                onClick={() => downloadTestPaperAndAnswerSheet(t)}
+                                className="py-2 px-3 rounded-lg text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 btn-press shrink-0 flex items-center gap-1"
+                                title="Download Question Paper with Separate Answer Sheet PDF"
+                              >
+                                <span>📄</span>
+                                <span>PDF + Key</span>
+                              </button>
+                            </div>
                           </div>
                         ))}
                       </div>
                     </div>
                   )}
 
-                  {/* SUB-VIEW B: 🎯 NTA CHAPTER WEIGHTAGE & 10-YEAR PYQ TRENDS */}
+                  {/* SUB-VIEW B: 🎯 NTA CHAPTER WEIGHTAGE */}
                   {practiceSubTab === 'weightage' && (
                     <div className="space-y-3 animate-slide-up">
-                      {/* Exam Goal Selector */}
+                      {/* Exam Selector */}
                       <div className="flex gap-1 bg-slate-100 p-1 rounded-xl">
                         {['JEE', 'NEET', 'CBSE'].map(ex => (
                           <button
@@ -2099,23 +2282,23 @@ Report verified by Study Buddy AI.`
                               setExamTrack(ex)
                               setWeightageSub(ex === 'NEET' ? 'Biology' : ex === 'CBSE' ? 'Class 10' : 'Physics')
                             }}
-                            className={`flex-1 py-1.5 rounded-lg text-xs font-extrabold transition-all ${
-                              examTrack === ex ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600'
+                            className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                              examTrack === ex ? 'bg-blue-600 text-white' : 'text-slate-500'
                             }`}
                           >
-                            {ex === 'CBSE' ? 'CBSE Boards' : `${ex} 2026`}
+                            {ex === 'CBSE' ? 'Boards' : ex}
                           </button>
                         ))}
                       </div>
 
-                      {/* Subject Filter */}
+                      {/* Subject Pills */}
                       <div className="flex gap-1.5 overflow-x-auto no-scrollbar">
                         {Object.keys(NTA_WEIGHTAGE_DATA[examTrack] || {}).map(subName => (
                           <button
                             key={subName}
                             onClick={() => setWeightageSub(subName)}
-                            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 ${
-                              weightageSub === subName ? 'bg-slate-900 text-white' : 'bg-white border border-slate-200 text-slate-700'
+                            className={`px-3 py-1 rounded-lg text-xs font-semibold shrink-0 border ${
+                              weightageSub === subName ? 'bg-slate-800 text-white border-slate-800' : 'bg-white text-slate-600 border-slate-200'
                             }`}
                           >
                             {subName}
@@ -2123,51 +2306,37 @@ Report verified by Study Buddy AI.`
                         ))}
                       </div>
 
-                      {/* Weightage Chapters List */}
-                      <div className="space-y-2.5">
+                      {/* Chapter List — Clean & Simple */}
+                      <div className="space-y-1.5">
                         {(NTA_WEIGHTAGE_DATA[examTrack]?.[weightageSub] || []).map((ch, idx) => (
-                          <div key={idx} className="allen-card p-3.5 border-slate-200 space-y-2">
-                            <div className="flex justify-between items-start">
-                              <span className="text-[10px] font-black bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-md">
-                                {ch.priority}
-                              </span>
-                              <span className="text-xs font-black text-rose-700">{ch.weightage}</span>
+                          <div key={idx} className="bg-white rounded-xl border border-slate-200 p-3">
+                            {/* Row 1: Chapter name + weightage */}
+                            <div className="flex justify-between items-start gap-2 mb-1">
+                              <h4 className="text-xs font-bold text-slate-900 leading-snug flex-1">{ch.chapter}</h4>
+                              <span className="text-[10px] font-bold text-rose-600 whitespace-nowrap">{ch.weightage}</span>
                             </div>
 
-                            <h4 className="text-xs font-black text-slate-900 leading-snug">{ch.chapter}</h4>
-                            
-                            {ch.avgQuestions && (
-                              <p className="text-[11px] font-bold text-blue-700">
-                                📊 NTA Frequency: {ch.avgQuestions}
-                              </p>
-                            )}
+                            {/* Row 2: Priority + NTA frequency */}
+                            <div className="flex items-center gap-2 text-[10px] mb-1.5">
+                              <span className="font-semibold text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded">{ch.priority}</span>
+                              {ch.avgQuestions && <span className="text-blue-600 font-medium">{ch.avgQuestions}</span>}
+                            </div>
 
-                            <p className="text-[11px] text-slate-600 leading-relaxed bg-slate-50 p-2 rounded-xl">
-                              <b>10-Yr Trend:</b> {ch.trend}
+                            {/* Trend */}
+                            <p className="text-[11px] text-slate-500 leading-relaxed mb-1.5">
+                              <span className="font-semibold text-slate-600">Trend:</span> {ch.trend}
                             </p>
 
+                            {/* Top PYQ Topics */}
                             {ch.topTopics && (
-                              <div className="pt-1">
-                                <p className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-1">Top Recurring PYQ Topics:</p>
-                                <div className="space-y-1">
-                                  {ch.topTopics.map((top, i) => (
-                                    <p key={i} className="text-[11px] text-slate-700 flex items-center gap-1.5">
-                                      <span className="text-blue-600 font-bold">•</span> {top}
-                                    </p>
-                                  ))}
-                                </div>
+                              <div className="flex flex-wrap gap-1">
+                                {ch.topTopics.map((top, i) => (
+                                  <span key={i} className="text-[10px] text-slate-600 bg-slate-50 border border-slate-100 px-1.5 py-0.5 rounded">
+                                    {top}
+                                  </span>
+                                ))}
                               </div>
                             )}
-
-                            <button
-                              onClick={() => {
-                                setQ(`Explain the most asked NTA PYQ concept of ${ch.chapter} with formula and shortcuts`)
-                                setActiveTab('doubt')
-                              }}
-                              className="w-full py-1.5 rounded-xl bg-blue-50 text-blue-700 font-bold text-xs btn-press"
-                            >
-                              💡 Ask AI Doubt on this Chapter
-                            </button>
                           </div>
                         ))}
                       </div>
