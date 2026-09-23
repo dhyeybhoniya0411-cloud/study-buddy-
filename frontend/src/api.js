@@ -1,9 +1,9 @@
-import { getClasses, getSubjects, getChapters, getDeletedTopics } from './cbse_data'
+import { getClasses, getSubjects, getChapters, getDeletedTopics, getChapterBattleQuestions } from './cbse_data'
 import { callGeminiDirect, callGeminiVisionDirect } from './geminiService'
 
 const API_BASE = import.meta.env.VITE_API_URL || ''
 
-export { getClasses, getSubjects, getChapters, getDeletedTopics }
+export { getClasses, getSubjects, getChapters, getDeletedTopics, getChapterBattleQuestions }
 
 export async function apiAsk({ question, class_num, subject, chapter, mode, language }) {
   // Try backend first if available

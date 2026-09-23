@@ -4,7 +4,7 @@ import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import remarkGfm from 'remark-gfm'
 import 'katex/dist/katex.min.css'
-import { getClasses, getSubjects, getChapters, getDeletedTopics, apiAsk, apiChat, apiCheckAnswer, apiScan, apiGenerateLesson, apiGeneratePlan } from './api'
+import { getClasses, getSubjects, getChapters, getDeletedTopics, getChapterBattleQuestions, apiAsk, apiChat, apiCheckAnswer, apiScan, apiGenerateLesson, apiGeneratePlan } from './api'
 import { NTA_WEIGHTAGE_DATA, MOCK_TESTS_CATALOG } from './cbse_data'
 
 // ── Markdown Formatter ──
@@ -1231,7 +1231,7 @@ export default function App() {
     setBtQs([])
     try {
       const data = await apiAsk({ question: `Generate 5 quick multiple choice questions on ${chapter}`, class_num: classNum, subject, chapter, mode: 'quiz', language })
-      const lines = data.answer.split('\n').filter(l => l.trim())
+      const lines = (data?.answer || '').split('\n').filter(l => l.trim())
       const qs = []
       let cur = null
       for (const l of lines) {
@@ -1248,10 +1248,14 @@ export default function App() {
         setBtQs(qs)
         setBtActive(true)
       } else {
-        alert('Could not format battle questions. Please tap again!')
+        const fallbackQs = getChapterBattleQuestions(classNum, subject, chapter)
+        setBtQs(fallbackQs)
+        setBtActive(true)
       }
     } catch {
-      alert('Error connecting to quiz server.')
+      const fallbackQs = getChapterBattleQuestions(classNum, subject, chapter)
+      setBtQs(fallbackQs)
+      setBtActive(true)
     }
     setBtLoad(false)
   }

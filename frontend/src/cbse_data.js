@@ -579,6 +579,59 @@ export function getDeletedTopics(classNum, subject) {
   return CBSE_CURRICULUM[classNum]?.[subject]?.deleted_topics || [];
 }
 
+export function getChapterBattleQuestions(classNum, subject, chapter) {
+  const ch = (chapter || '').toLowerCase();
+  const sub = (subject || '').toLowerCase();
+
+  if (ch.includes('nationalism in europe') || ch.includes('europe')) {
+    return [
+      { q: "The Civil Code of 1804 in France is usually known as:", opts: ["A) Napoleonic Code", "B) French Constitution", "C) Vienna Settlement", "D) Warsaw Pact"], ans: "A" },
+      { q: "Who was celebrated for the unification of Southern Italy with his 'Red Shirts'?", opts: ["A) Giuseppe Garibaldi", "B) Count Cavour", "C) Otto von Bismarck", "D) Metternich"], ans: "A" },
+      { q: "What was the customs union formed in 1834 at the initiative of Prussia called?", opts: ["A) Zollverein", "B) Estates General", "C) Duma", "D) Reichstag"], ans: "A" },
+      { q: "Which Austrian Chancellor hosted the Congress of Vienna in 1815?", opts: ["A) Duke Metternich", "B) Bismarck", "C) Mazzini", "D) Napoleon III"], ans: "A" },
+      { q: "The Treaty of Constantinople in 1832 recognized which country as an independent nation?", opts: ["A) Greece", "B) Italy", "C) Germany", "D) Poland"], ans: "A" }
+    ];
+  }
+
+  if (ch.includes('nationalism in india') || ch.includes('india')) {
+    return [
+      { q: "In which year did the Jallianwala Bagh massacre take place?", opts: ["A) 1919", "B) 1920", "C) 1922", "D) 1917"], ans: "A" },
+      { q: "Gandhiji organized the Dandi Salt March from Sabarmati to Dandi covering how many miles?", opts: ["A) 240 miles", "B) 100 miles", "C) 350 miles", "D) 150 miles"], ans: "A" },
+      { q: "Who announced a vague offer of 'Dominion Status' for India in October 1929?", opts: ["A) Lord Irwin", "B) General Dyer", "C) Lord Curzon", "D) Sir John Simon"], ans: "A" },
+      { q: "The Poona Pact of September 1932 was signed between Mahatma Gandhi and:", opts: ["A) Dr. B.R. Ambedkar", "B) Jawaharlal Nehru", "C) Subhas Chandra Bose", "D) Muhammad Ali Jinnah"], ans: "A" },
+      { q: "Who wrote the famous book 'Hind Swaraj' in 1909?", opts: ["A) Mahatma Gandhi", "B) Bal Gangadhar Tilak", "C) Lala Lajpat Rai", "D) Dadabhai Naoroji"], ans: "A" }
+    ];
+  }
+
+  if (sub.includes('math') || sub.includes('algebra') || sub.includes('geometry')) {
+    return [
+      { q: `What is the degree of a quadratic polynomial ax² + bx + c (a ≠ 0)?`, opts: ["A) 2", "B) 1", "C) 3", "D) 0"], ans: "A" },
+      { q: "If the discriminant D = b² - 4ac > 0 for a quadratic equation, the roots are:", opts: ["A) Real and distinct", "B) Real and equal", "C) Imaginary", "D) Undefined"], ans: "A" },
+      { q: "The distance of point P(3, 4) from the origin (0, 0) is:", opts: ["A) 5 units", "B) 7 units", "C) 25 units", "D) 1 unit"], ans: "A" },
+      { q: "The empirical relationship between Mean, Median, and Mode is:", opts: ["A) 3 Median = Mode + 2 Mean", "B) Mode = 3 Mean - 2 Median", "C) Mean = 3 Median - 2 Mode", "D) Median = Mode + Mean"], ans: "A" },
+      { q: "The probability of an impossible event is always:", opts: ["A) 0", "B) 1", "C) 0.5", "D) -1"], ans: "A" }
+    ];
+  }
+
+  if (sub.includes('sci') || sub.includes('phy') || sub.includes('chem') || sub.includes('bio')) {
+    return [
+      { q: "The SI unit of electric current measured by an ammeter in series is:", opts: ["A) Ampere (A)", "B) Volt (V)", "C) Ohm (Ω)", "D) Joule (J)"], ans: "A" },
+      { q: "Which organelle is known as the powerhouse of the cell?", opts: ["A) Mitochondria", "B) Nucleus", "C) Ribosome", "D) Chloroplast"], ans: "A" },
+      { q: "The pH of a neutral aqueous solution at 25°C is strictly:", opts: ["A) 7.0", "B) 0", "C) 14.0", "D) 1.0"], ans: "A" },
+      { q: "When iron rusts, it undergoes which type of chemical reaction?", opts: ["A) Oxidation", "B) Reduction", "C) Precipitation", "D) Displacement"], ans: "A" },
+      { q: "A convex mirror always forms an image that is:", opts: ["A) Virtual, erect and diminished", "B) Real and magnified", "C) Real and inverted", "D) None"], ans: "A" }
+    ];
+  }
+
+  return [
+    { q: `What is the primary theme explored in ${chapter}?`, opts: [`A) Historical and conceptual development of ${chapter}`, "B) Fiction and fantasy", "C) Unrelated modern trivia", "D) None of the above"], ans: "A" },
+    { q: "In the context of the Indian democratic constitution, sovereignty lies with:", opts: ["A) The People of India", "B) The Parliament only", "C) The Armed Forces", "D) The Judiciary alone"], ans: "A" },
+    { q: `Which of the following is an essential takeaway from ${chapter}?`, opts: [`A) Critical understanding of events and principles in ${chapter}`, "B) Memorizing dates without context", "C) Ignoring key causes", "D) None of the above"], ans: "A" },
+    { q: "Which sector of the Indian economy generates the maximum employment?", opts: ["A) Primary Sector (Agriculture)", "B) Secondary Sector", "C) Tertiary Sector", "D) IT Sector"], ans: "A" },
+    { q: "What is the literacy rate criterion according to the Census of India?", opts: ["A) Person aged 7 and above who can read and write with understanding", "B) Person aged 18 and above", "C) Person holding a degree", "D) Person who can sign their name"], ans: "A" }
+  ];
+}
+
 // ═══════════════════════════════════════════════════════════
 // NTA JEE / NEET & CBSE CHAPTER WEIGHTAGE & PYQ ANALYSIS
 // ═══════════════════════════════════════════════════════════
