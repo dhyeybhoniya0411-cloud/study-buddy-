@@ -101,7 +101,7 @@ function Onboarding({ onComplete }) {
           <div className="w-10 h-10 rounded-2xl bg-blue-600 flex items-center justify-center text-white font-black text-xl shadow-md shadow-blue-500/30">S</div>
           <div>
             <h2 className="text-base font-extrabold text-slate-900">Study Buddy</h2>
-            <p className="text-[11px] text-blue-600 font-semibold">ALLEN-Powered AI Tutor</p>
+            <p className="text-[11px] text-blue-600 font-semibold">AI Personal Tutor</p>
           </div>
         </div>
 
