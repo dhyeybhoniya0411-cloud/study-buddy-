@@ -910,10 +910,364 @@ export const NTA_WEIGHTAGE_DATA = {
 };
 
 // ═══════════════════════════════════════════════════════════
-// AUTHENTIC MOCK TESTS (ALLEN & MATHONGO STYLE)
+
 // ═══════════════════════════════════════════════════════════
-// MOCK TESTS CATALOG
-// MOCK TESTS CATALOG
+// JEE & NEET CHAPTERWISE SUMMARIES & NTA PYQ TRENDS
+// ═══════════════════════════════════════════════════════════
+export const JEE_NEET_CHAPTER_SUMMARIES = {
+  "Physics": [
+    {
+      "chapter": "Modern Physics & Dual Nature",
+      "weightage": "12-14%",
+      "highYield": true,
+      "pyqCount": "4-5 Qs per shift",
+      "keyFormulas": [
+        "Einstein's Photoelectric Eq: K_max = h\u03bd - W0 = eV0",
+        "de-Broglie Wavelength: \u03bb = h / p = h / \u221a(2mE) = 12.27 / \u221aV \u00c5",
+        "Bohr's Orbit Radius: r_n = 0.529 * (n\u00b2 / Z) \u00c5",
+        "Energy Levels: E_n = -13.6 * (Z\u00b2 / n\u00b2) eV",
+        "Radioactive Decay Law: N(t) = N0 * e^(-\u03bbt); t_1/2 = 0.693 / \u03bb"
+      ],
+      "commonTraps": "Don't confuse threshold frequency (\u03bd0) with work function (h\u03bd0). Remember de-Broglie wavelength depends on momentum, not kinetic energy alone.",
+      "repeatedTopics": [
+        "Stopping potential vs frequency graph",
+        "Rydberg formula for Balmer series",
+        "Binding energy curve per nucleon"
+      ]
+    },
+    {
+      "chapter": "Current Electricity & Circuits",
+      "weightage": "8-10%",
+      "highYield": true,
+      "pyqCount": "3 Qs per shift",
+      "keyFormulas": [
+        "Drift Velocity: v_d = eE\u03c4 / m; Current: I = n e A v_d",
+        "Ohm's Law in Vector Form: J = \u03c3 E = E / \u03c1",
+        "Resistivity with Temperature: \u03c1(T) = \u03c10 [1 + \u03b1(T - T0)]",
+        "Kirchhoff's Rules: \u03a3 I_junction = 0 and \u03a3 \u0394V_loop = 0",
+        "Potentiometer: Potential gradient k = V / L; E1/E2 = l1/l2"
+      ],
+      "commonTraps": "In parallel combination, internal resistance of non-identical cells requires E_eq = \u03a3(E_i/r_i) / \u03a3(1/r_i).",
+      "repeatedTopics": [
+        "Meter bridge unknown resistance",
+        "Symmetrical resistor cube network",
+        "Power consumed in parallel vs series bulbs"
+      ]
+    },
+    {
+      "chapter": "Electrostatics & Capacitance",
+      "weightage": "10-12%",
+      "highYield": true,
+      "pyqCount": "3-4 Qs per shift",
+      "keyFormulas": [
+        "Coulomb's Law: F = (1 / 4\u03c0\u03b50) * (q1 q2 / r\u00b2)",
+        "Electric Field of Dipole: E_axial = 2kp / r\u00b3, E_equatorial = kp / r\u00b3",
+        "Gauss's Law: \u03a6 = \u222e E \u00b7 dA = q_in / \u03b50",
+        "Capacitance of Parallel Plate: C = K \u03b50 A / d",
+        "Energy Stored: U = (1/2) C V\u00b2 = Q\u00b2 / (2C)"
+      ],
+      "commonTraps": "Inserting dielectric with battery connected (V constant) vs battery disconnected (Q constant) gives different energy changes.",
+      "repeatedTopics": [
+        "Dielectric slab insertion in charged capacitor",
+        "Equipotential surfaces of point charges",
+        "Gauss's law on non-conducting solid spheres"
+      ]
+    },
+    {
+      "chapter": "Thermodynamics & KTG",
+      "weightage": "8-9%",
+      "highYield": true,
+      "pyqCount": "2-3 Qs per shift",
+      "keyFormulas": [
+        "First Law: \u0394Q = \u0394U + W; \u0394U = n C_v \u0394T",
+        "Work Done: Isobaric W = P \u0394V; Isothermal W = nRT ln(V2/V1); Adiabatic W = (P1V1 - P2V2)/(\u03b3 - 1)",
+        "Carnot Efficiency: \u03b7 = 1 - T_cold / T_hot = W / Q_hot",
+        "rms Velocity: v_rms = \u221a(3RT / M); Average: v_avg = \u221a(8RT / \u03c0M)"
+      ],
+      "commonTraps": "Remember work done by gas in cyclic process equals the enclosed area on P-V indicator diagram (clockwise = positive).",
+      "repeatedTopics": [
+        "Adiabatic curve steeper than isothermal by factor \u03b3",
+        "Degree of freedom calculations for gas mixtures",
+        "Carnot engine efficiency problems"
+      ]
+    }
+  ],
+  "Chemistry": [
+    {
+      "chapter": "Coordination Compounds",
+      "weightage": "10-12%",
+      "highYield": true,
+      "pyqCount": "3-4 Qs per shift",
+      "keyFormulas": [
+        "Spin-only Magnetic Moment: \u03bc = \u221a[n(n + 2)] Bohr Magnetons",
+        "Crystal Field Stabilization Energy (CFSE): CFSE_oct = [-0.4(t_2g) + 0.6(e_g)] \u03940",
+        "Spectrochemical Series: I- < Br- < S2- < Cl- < F- < OH- < H2O < NH3 < en < CN- < CO"
+      ],
+      "commonTraps": "Strong field ligands like CN- and CO cause electron pairing (low spin complexes). Check pairing energy P vs \u03940.",
+      "repeatedTopics": [
+        "Isomerism (Fac-mer, cis-trans, optical in [Co(en)3]3+)",
+        "IUPAC naming of anionic complexes",
+        "Hybridization (d2sp3 vs sp3d2)"
+      ]
+    },
+    {
+      "chapter": "Chemical Kinetics & Solutions",
+      "weightage": "9-11%",
+      "highYield": true,
+      "pyqCount": "3 Qs per shift",
+      "keyFormulas": [
+        "1st Order Rate: k = (2.303 / t) log(a / (a - x)); t_1/2 = 0.693 / k",
+        "Arrhenius Equation: ln(k2 / k1) = (Ea / R) * [(1 / T1) - (1 / T2)]",
+        "Relative Lowering of Vapor Pressure: (P0 - P) / P0 = i * X_solute",
+        "Elevation of Boiling Point: \u0394Tb = i * Kb * m; Freezing: \u0394Tf = i * Kf * m",
+        "Osmotic Pressure: \u03c0 = i * C * R * T"
+      ],
+      "commonTraps": "Never forget Van't Hoff factor (i) for electrolytes (e.g. i = 3 for K2SO4 or BaCl2).",
+      "repeatedTopics": [
+        "Rate constant units across different reaction orders",
+        "Van't Hoff factor with degree of association/dissociation",
+        "Half-life independent of initial concentration for 1st order"
+      ]
+    },
+    {
+      "chapter": "Aldehydes, Ketones & Carboxylic Acids",
+      "weightage": "9-10%",
+      "highYield": true,
+      "pyqCount": "3 Qs per shift",
+      "keyFormulas": [
+        "Nucleophilic Addition: Reactivity: Formaldehyde > Aldehyde > Ketone",
+        "Cannizzaro Reaction: Non-enolizable aldehydes + 50% KOH -> Alcohol + Carboxylate",
+        "Aldol Condensation: Requires \u03b1-H, catalyzed by dilute base -> \u03b2-hydroxy aldehyde -> \u03b1,\u03b2-unsaturated carbonyl"
+      ],
+      "commonTraps": "Iodoform test is given by compounds with CH3-C=O or CH3-CH(OH)- group. Benzaldehyde does not give Iodoform test.",
+      "repeatedTopics": [
+        "Clemmensen (Zn-Hg/HCl) vs Wolff-Kishner (NH2NH2/KOH) reduction",
+        "Hell-Volhard-Zelinsky (HVZ) halogenation",
+        "Tollens and Fehling test differences"
+      ]
+    }
+  ],
+  "Mathematics": [
+    {
+      "chapter": "Vectors & 3D Geometry",
+      "weightage": "12-14%",
+      "highYield": true,
+      "pyqCount": "4 Qs per shift",
+      "keyFormulas": [
+        "Dot Product: a \u00b7 b = |a||b| cos \u03b8; Cross Product: |a \u00d7 b| = |a||b| sin \u03b8",
+        "Shortest Distance between Skew Lines: d = |(a2 - a1) \u00b7 (b1 \u00d7 b2)| / |b1 \u00d7 b2|",
+        "Angle between Planes: cos \u03b8 = |n1 \u00b7 n2| / (|n1||n2|)",
+        "Distance of Point from Plane: d = |ax1 + by1 + cz1 + d| / \u221a(a\u00b2 + b\u00b2 + c\u00b2)"
+      ],
+      "commonTraps": "Verify if two lines are intersecting before calculating distance. If b1 \u00d7 b2 = 0, lines are parallel, use d = |(a2 - a1) \u00d7 b| / |b|.",
+      "repeatedTopics": [
+        "Foot of perpendicular from point to line/plane",
+        "Image of a point in a plane",
+        "Coplanarity of two lines: [(a2 - a1) b1 b2] = 0"
+      ]
+    },
+    {
+      "chapter": "Matrices & Determinants",
+      "weightage": "8-10%",
+      "highYield": true,
+      "pyqCount": "2-3 Qs per shift",
+      "keyFormulas": [
+        "Determinant Properties: |kA| = k^n |A| for n\u00d7n matrix",
+        "Adjoint Properties: |adj(A)| = |A|^(n - 1); |adj(adj(A))| = |A|^{(n - 1)\u00b2}",
+        "Inverse: A^(-1) = adj(A) / |A| (exists if |A| \u2260 0)",
+        "Cramer's Rule: System has unique solution if \u0394 \u2260 0; infinite if \u0394 = \u03941 = \u03942 = \u03943 = 0"
+      ],
+      "commonTraps": "(AB)^(-1) = B^(-1) A^(-1) and (AB)^T = B^T A^T (order reverses!).",
+      "repeatedTopics": [
+        "Finding parameter \u03bb for non-trivial solutions in homogeneous systems",
+        "Characteristic equation and Cayley-Hamilton theorem",
+        "Orthogonal matrices: AA^T = I"
+      ]
+    },
+    {
+      "chapter": "Definite Integration & Area Under Curves",
+      "weightage": "9-11%",
+      "highYield": true,
+      "pyqCount": "3 Qs per shift",
+      "keyFormulas": [
+        "King's Property: \u222b[a to b] f(x) dx = \u222b[a to b] f(a + b - x) dx",
+        "Odd/Even Functions: \u222b[-a to a] f(x) dx = 0 (if odd), 2 \u222b[0 to a] f(x) dx (if even)",
+        "Periodic Property: \u222b[0 to nT] f(x) dx = n \u222b[0 to T] f(x) dx",
+        "Leibniz Integral Rule: d/dx [\u222b[u(x) to v(x)] f(t) dt] = f(v(x))\u00b7v'(x) - f(u(x))\u00b7u'(x)"
+      ],
+      "commonTraps": "Always check for points of discontinuity or sign change when computing areas bounded by curves.",
+      "repeatedTopics": [
+        "Area between parabola y\u00b2 = 4ax and line y = mx",
+        "Evaluating limits of Riemann sums as integrals",
+        "Integration using King's rule with sin and cos ratios"
+      ]
+    }
+  ]
+};
+
+// ═══════════════════════════════════════════════════════════
+// CHAPTERWISE REPEATED BOARD QUESTIONS (1M, 2M, 3M, 5M)
+// ═══════════════════════════════════════════════════════════
+export const CHAPTER_IMPORTANT_QUESTIONS = {
+  "History - Ch 1: The Rise of Nationalism in Europe": [
+    {
+      "marks": 1,
+      "type": "MCQ",
+      "repeatedCount": 5,
+      "q": "What was the main aim of the French revolutionaries in 1789?",
+      "ans": "To create a sense of collective identity among the French people by introducing 'la patrie' (the fatherland) and 'le citoyen' (the citizen), replacing the royal flag with the tricolor."
+    },
+    {
+      "marks": 1,
+      "type": "VSA",
+      "repeatedCount": 4,
+      "q": "Name the customs union formed in 1834 at the initiative of Prussia.",
+      "ans": "Zollverein. It abolished tariff barriers and reduced the number of currencies from over thirty to two."
+    },
+    {
+      "marks": 2,
+      "type": "SA I",
+      "repeatedCount": 6,
+      "q": "State any two major provisions of the Napoleonic Code of 1804.",
+      "ans": "1. It abolished all privileges based on birth and established equality before the law.\n2. It secured the right to property and simplified administrative divisions, eliminating feudal dues."
+    },
+    {
+      "marks": 2,
+      "type": "SA I",
+      "repeatedCount": 3,
+      "q": "Why did nationalistic tensions emerge in the Balkans after 1871?",
+      "ans": "The Balkans was a region of geographical and ethnic variation with explosive nationalist rivalries among Slavic nationalities, exacerbated by the disintegration of the Ottoman Empire and interference by European Great Powers."
+    },
+    {
+      "marks": 3,
+      "type": "SA II",
+      "repeatedCount": 7,
+      "q": "Explain the role of Giuseppe Mazzini in the unification of Italy.",
+      "ans": "1. Mazzini was an Italian revolutionary who founded secret societies 'Young Italy' in Marseilles and 'Young Europe' in Berne.\n2. He believed God intended nations to be natural units of mankind, and Italy could not remain a patchwork of small states.\n3. His relentless opposition to monarchy and vision of a democratic republic frightened conservatives, prompting Metternich to call him 'the most dangerous enemy of our social order.'"
+    },
+    {
+      "marks": 3,
+      "type": "SA II",
+      "repeatedCount": 5,
+      "q": "How did culture play a vital role in creating the idea of the nation in Europe? Give examples.",
+      "ans": "1. Romanticism emphasized emotions, intuition, and mystical feelings over science and reason to create a shared collective heritage.\n2. Folk songs, folk poetry, and folk dances (like polonaise and mazurka by Chopin in Poland) popularized the true spirit of the nation.\n3. Language was used as a weapon of national resistance, as seen in Poland where Polish was preserved despite Russian repression."
+    },
+    {
+      "marks": 5,
+      "type": "LA",
+      "repeatedCount": 8,
+      "q": "Describe the stages of the unification of Germany led by Otto von Bismarck.",
+      "ans": "1. Nationalist feelings were widespread among middle-class Germans who attempted to unite the German confederation in the Frankfurt Parliament (1848), which was suppressed by monarchy and military.\n2. Prussia took on the leadership of national unification under Chief Minister Otto von Bismarck, the architect who used the Prussian army and bureaucracy.\n3. Over seven years, three wars were fought against Denmark, Austria, and France, ending in Prussian victory.\n4. In January 1871, the Prussian King William I was proclaimed German Emperor in the Hall of Mirrors at Versailles.\n5. The unified nation modernized currency, banking, legal, and judicial systems in Germany."
+    }
+  ],
+  "Science - Class 10": [
+    {
+      "marks": 1,
+      "type": "MCQ",
+      "repeatedCount": 6,
+      "q": "Which gas is evolved when zinc granules react with dilute sulphuric acid?",
+      "ans": "Hydrogen gas (H2). It burns with a characteristic pop sound when a burning candle is brought near."
+    },
+    {
+      "marks": 2,
+      "type": "SA I",
+      "repeatedCount": 5,
+      "q": "Differentiate between an exothermic and an endothermic chemical reaction with one equation each.",
+      "ans": "\u2022 Exothermic: Reactions in which heat is released along with formation of products. E.g., Respiration or CaO + H2O -> Ca(OH)2 + Heat.\n\u2022 Endothermic: Reactions which absorb heat energy. E.g., Photosynthesis or 2 Pb(NO3)2 + Heat -> 2 PbO + 4 NO2 + O2."
+    },
+    {
+      "marks": 3,
+      "type": "SA II",
+      "repeatedCount": 7,
+      "q": "State Ohm's Law. Draw a circuit diagram to verify it and plot the V-I graph.",
+      "ans": "1. Ohm's Law: The electric current flowing through a metallic conductor is directly proportional to the potential difference across its ends, provided temperature remains constant (V = IR).\n2. Graph: A straight line passing through the origin on a V-I plot, where the slope represents resistance (R = \u0394V/\u0394I)."
+    },
+    {
+      "marks": 5,
+      "type": "LA",
+      "repeatedCount": 9,
+      "q": "Explain the human excretory system with the structure and functioning of a nephron.",
+      "ans": "1. Excretory System: Consists of a pair of kidneys, a pair of ureters, a urinary bladder, and a urethra.\n2. Structure of Nephron: The functional filtration unit consisting of Bowman's capsule enclosing a glomerulus, followed by a coiled tubular system.\n3. Functioning: \n   a. Ultrafiltration: High blood pressure filters water, glucose, salts, and urea into Bowman's capsule.\n   b. Selective Reabsorption: Useful substances like glucose, amino acids, and water are reabsorbed by capillaries.\n   c. Tubular Secretion & Excretion: Remaining filtrate forms urine and flows into collecting duct."
+    }
+  ],
+  "Class 12 - Physics": [
+    {
+      "marks": 1,
+      "type": "MCQ",
+      "repeatedCount": 5,
+      "q": "What is the direction of electric dipole moment in vector notation?",
+      "ans": "From negative charge (-q) to positive charge (+q) along the dipole axis."
+    },
+    {
+      "marks": 2,
+      "type": "SA I",
+      "repeatedCount": 6,
+      "q": "State Gauss's Theorem in electrostatics and write its mathematical formula.",
+      "ans": "The total electric flux through any closed Gaussian surface in vacuum is equal to 1/\u03b50 times the total net charge enclosed inside the surface: \u03a6 = \u222e E \u00b7 dA = q_enclosed / \u03b50."
+    },
+    {
+      "marks": 3,
+      "type": "SA II",
+      "repeatedCount": 8,
+      "q": "Derive the expression for electric field intensity on the axial line of a short electric dipole.",
+      "ans": "1. Field at point P at distance r from center due to +q: E1 = q / [4\u03c0\u03b50 (r - a)\u00b2].\n2. Field due to -q: E2 = q / [4\u03c0\u03b50 (r + a)\u00b2].\n3. Net field E = E1 - E2 = (q / 4\u03c0\u03b50) [ (4ar) / (r\u00b2 - a\u00b2)\u00b2 ].\n4. For a short dipole (r >> a) and p = 2qa: E_axial = (1 / 4\u03c0\u03b50) * (2p / r\u00b3), pointing along dipole moment p."
+    },
+    {
+      "marks": 5,
+      "type": "LA",
+      "repeatedCount": 10,
+      "q": "Explain the principle, construction, and working of an AC generator with a labeled diagram and derive induced emf e = e0 sin(\u03c9t).",
+      "ans": "1. Principle: Electromagnetic induction \u2014 when a closed armature coil rotates in a uniform magnetic field, the magnetic flux changes, inducing an alternating emf.\n2. Construction: Rectangular armature coil PQRS, strong permanent field magnets (N-S), slip rings R1 and R2, and carbon brushes B1 and B2.\n3. Derivation: Magnetic flux at time t is \u03a6 = B A cos(\u03c9t). By Faraday's Law, e = -N d\u03a6/dt = -N d/dt [BA cos(\u03c9t)] = N B A \u03c9 sin(\u03c9t) = e0 sin(\u03c9t), where e0 = NAB\u03c9 is peak emf."
+    }
+  ]
+};
+
+export function getChapterImportantQuestions(classNum, subject, chapter) {
+  if (CHAPTER_IMPORTANT_QUESTIONS[chapter]) {
+    return CHAPTER_IMPORTANT_QUESTIONS[chapter];
+  }
+  // Check partial key
+  for (const [key, list] of Object.entries(CHAPTER_IMPORTANT_QUESTIONS)) {
+    if (chapter && (key.toLowerCase().includes(chapter.toLowerCase()) || chapter.toLowerCase().includes(key.toLowerCase()))) {
+      return list;
+    }
+  }
+  // Fallback high-yield question set for any chapter
+  return [
+    {
+      marks: 1,
+      type: "VSA / Objective",
+      repeatedCount: 4,
+      q: `State the fundamental definition or governing equation of ${chapter || 'this chapter'}.`,
+      ans: `The core principle of ${chapter} establishes the relationship between key variables and specifies all standard SI units for board answers.`
+    },
+    {
+      marks: 2,
+      type: "SA I",
+      repeatedCount: 5,
+      q: `Give two scientific or logical reasons illustrating the significance of ${chapter || 'this topic'}.`,
+      ans: `1. It satisfies the conservation laws and fundamental principles prescribed in CBSE Class ${classNum} syllabus.\n2. It accounts for real-world phenomena and experimental observations.`
+    },
+    {
+      marks: 3,
+      type: "SA II",
+      repeatedCount: 6,
+      q: `Derive or explain the step-by-step mechanism of the primary concept in ${chapter || 'this chapter'}.`,
+      ans: `1. State the fundamental hypothesis and define all symbols clearly.\n2. Apply the governing theorem with intermediate mathematical/conceptual steps.\n3. State the final boxed result with proper SI units and conditions of validity.`
+    },
+    {
+      marks: 5,
+      type: "LA",
+      repeatedCount: 8,
+      q: `With a neat labeled diagram, explain the complete working principle, derivation, and major board exam applications of ${chapter || 'this chapter'}.`,
+      ans: `1. Principle: Based directly on core CBSE Class ${classNum} ${subject} curriculum.\n2. Labeled Diagram: Shows all essential components, polarities, or flow lines clearly.\n3. Working & Derivation: Complete step-by-step derivation earning full 5 marks according to official CBSE marking guidelines.\n4. High-Yield Tip: Board examiners award 1 mark for the diagram, 2 marks for derivation, and 2 marks for final application.`
+    }
+  ];
+}
+
+// ═══════════════════════════════════════════════════════════
+// AUTHENTIC MOCK TESTS (20 FULL TESTS: 5 BASE, 10 PASS, 20 ALL-ACCESS)
+// ═══════════════════════════════════════════════════════════
 export const MOCK_TESTS_CATALOG = [
   {
     "id": "jee_main_full_1",
@@ -923,7 +1277,7 @@ export const MOCK_TESTS_CATALOG = [
     "totalMarks": 300,
     "questionsCount": 25,
     "markingScheme": "+4 correct, -1 wrong",
-    "isSuperBatchOnly": true,
+    "isSuperBatchOnly": false,
     "sections": [
       "Physics",
       "Chemistry",
@@ -1305,7 +1659,10 @@ export const MOCK_TESTS_CATALOG = [
         "difficulty": "Easy",
         "idealTimeSec": 30
       }
-    ]
+    ],
+    "tierRank": 1,
+    "planTier": "free",
+    "planLabel": "Free Trial Sample"
   },
   {
     "id": "jee_main_full_2",
@@ -1315,7 +1672,7 @@ export const MOCK_TESTS_CATALOG = [
     "totalMarks": 300,
     "questionsCount": 20,
     "markingScheme": "+4 correct, -1 wrong",
-    "isSuperBatchOnly": true,
+    "isSuperBatchOnly": false,
     "sections": [
       "Physics",
       "Chemistry",
@@ -1612,7 +1969,10 @@ export const MOCK_TESTS_CATALOG = [
         "difficulty": "Easy",
         "idealTimeSec": 15
       }
-    ]
+    ],
+    "tierRank": 2,
+    "planTier": "free",
+    "planLabel": "Free Trial Sample"
   },
   {
     "id": "jee_main_pyq_2024",
@@ -1854,7 +2214,10 @@ export const MOCK_TESTS_CATALOG = [
         "difficulty": "Easy",
         "idealTimeSec": 30
       }
-    ]
+    ],
+    "tierRank": 3,
+    "planTier": "base",
+    "planLabel": "Included in 5-Test Plan"
   },
   {
     "id": "neet_ug_full_1",
@@ -2211,7 +2574,10 @@ export const MOCK_TESTS_CATALOG = [
         "difficulty": "Easy",
         "idealTimeSec": 25
       }
-    ]
+    ],
+    "tierRank": 4,
+    "planTier": "base",
+    "planLabel": "Included in 5-Test Plan"
   },
   {
     "id": "neet_pyq_2024",
@@ -2483,7 +2849,10 @@ export const MOCK_TESTS_CATALOG = [
         "difficulty": "Easy",
         "idealTimeSec": 20
       }
-    ]
+    ],
+    "tierRank": 5,
+    "planTier": "base",
+    "planLabel": "Included in 5-Test Plan"
   },
   {
     "id": "cbse_board_10_science",
@@ -2493,7 +2862,7 @@ export const MOCK_TESTS_CATALOG = [
     "totalMarks": 80,
     "questionsCount": 12,
     "markingScheme": "+1 correct, 0 wrong",
-    "isSuperBatchOnly": false,
+    "isSuperBatchOnly": true,
     "sections": [
       "Science"
     ],
@@ -2702,7 +3071,10 @@ export const MOCK_TESTS_CATALOG = [
         "difficulty": "Easy",
         "idealTimeSec": 25
       }
-    ]
+    ],
+    "tierRank": 6,
+    "planTier": "quarterly",
+    "planLabel": "Included in 10-Test Pass"
   },
   {
     "id": "cbse_board_10_math",
@@ -2712,7 +3084,7 @@ export const MOCK_TESTS_CATALOG = [
     "totalMarks": 80,
     "questionsCount": 12,
     "markingScheme": "+1 correct, 0 wrong",
-    "isSuperBatchOnly": false,
+    "isSuperBatchOnly": true,
     "sections": [
       "Mathematics"
     ],
@@ -2916,7 +3288,10 @@ export const MOCK_TESTS_CATALOG = [
         "difficulty": "Easy",
         "idealTimeSec": 30
       }
-    ]
+    ],
+    "tierRank": 7,
+    "planTier": "quarterly",
+    "planLabel": "Included in 10-Test Pass"
   },
   {
     "id": "cbse_board_12_physics",
@@ -3135,7 +3510,10 @@ export const MOCK_TESTS_CATALOG = [
         "difficulty": "Easy",
         "idealTimeSec": 25
       }
-    ]
+    ],
+    "tierRank": 8,
+    "planTier": "quarterly",
+    "planLabel": "Included in 10-Test Pass"
   },
   {
     "id": "cbse_board_12_chemistry",
@@ -3354,7 +3732,10 @@ export const MOCK_TESTS_CATALOG = [
         "difficulty": "Easy",
         "idealTimeSec": 30
       }
-    ]
+    ],
+    "tierRank": 9,
+    "planTier": "quarterly",
+    "planLabel": "Included in 10-Test Pass"
   },
   {
     "id": "cbse_board_12_math",
@@ -3568,7 +3949,10 @@ export const MOCK_TESTS_CATALOG = [
         "difficulty": "Easy",
         "idealTimeSec": 20
       }
-    ]
+    ],
+    "tierRank": 10,
+    "planTier": "quarterly",
+    "planLabel": "Included in 10-Test Pass"
   },
   {
     "id": "cbse_board_12_biology",
@@ -3787,7 +4171,10 @@ export const MOCK_TESTS_CATALOG = [
         "difficulty": "Easy",
         "idealTimeSec": 25
       }
-    ]
+    ],
+    "tierRank": 11,
+    "planTier": "super",
+    "planLabel": "Included in 20-Test All-Access"
   },
   {
     "id": "jee_main_pyq_2023",
@@ -3978,7 +4365,10 @@ export const MOCK_TESTS_CATALOG = [
         "difficulty": "Easy",
         "idealTimeSec": 15
       }
-    ]
+    ],
+    "tierRank": 12,
+    "planTier": "super",
+    "planLabel": "Included in 20-Test All-Access"
   },
   {
     "id": "neet_pyq_2023",
@@ -4199,6 +4589,1412 @@ export const MOCK_TESTS_CATALOG = [
         "difficulty": "Easy",
         "idealTimeSec": 20
       }
-    ]
+    ],
+    "tierRank": 13,
+    "planTier": "super",
+    "planLabel": "Included in 20-Test All-Access"
+  },
+  {
+    "id": "cbse_board_10_social",
+    "title": "CBSE Class 10 Social Science Board Mock 2026",
+    "exam": "CBSE Board",
+    "durationMinutes": 90,
+    "totalMarks": 80,
+    "questionsCount": 12,
+    "markingScheme": "+1 correct, 0 wrong",
+    "sections": [
+      "History",
+      "Geography",
+      "Civics",
+      "Economics"
+    ],
+    "questions": [
+      {
+        "id": 1,
+        "section": "History",
+        "type": "MCQ",
+        "q": "Who was proclaimed King of unified Italy in 1861?",
+        "options": [
+          "A) Victor Emmanuel II",
+          "B) Giuseppe Garibaldi",
+          "C) Count Cavour",
+          "D) Mazzini"
+        ],
+        "ans": "A",
+        "explanation": "Victor Emmanuel II of Sardinia-Piedmont was proclaimed King of Italy.",
+        "concept": "Nationalism in Europe",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 2,
+        "section": "Geography",
+        "type": "MCQ",
+        "q": "Black soil is ideal for growing which major commercial crop in India?",
+        "options": [
+          "A) Cotton",
+          "B) Tea",
+          "C) Jute",
+          "D) Wheat"
+        ],
+        "ans": "A",
+        "explanation": "Black soil (Regur soil) has high water-retaining capacity, ideal for cotton.",
+        "concept": "Resources & Development",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 3,
+        "section": "Civics",
+        "type": "MCQ",
+        "q": "Sharing of power between Union, State, and Local governments is called:",
+        "options": [
+          "A) Vertical division of power",
+          "B) Horizontal division",
+          "C) Coalition",
+          "D) Separation of powers"
+        ],
+        "ans": "A",
+        "explanation": "Power shared at different levels of government is vertical power sharing.",
+        "concept": "Power Sharing",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 4,
+        "section": "Economics",
+        "type": "MCQ",
+        "q": "Per Capita Income is calculated by dividing total national income by:",
+        "options": [
+          "A) Total population of country",
+          "B) Total workforce",
+          "C) Number of families",
+          "D) Geographic area"
+        ],
+        "ans": "A",
+        "explanation": "Per Capita Income = Total National Income / Total Population.",
+        "concept": "Development",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 5,
+        "section": "History",
+        "type": "MCQ",
+        "q": "The Rowlatt Act of 1919 authorized British government to:",
+        "options": [
+          "A) Detain political prisoners without trial for two years",
+          "B) Impose salt tax",
+          "C) Ban newspapers",
+          "D) Confiscate land"
+        ],
+        "ans": "A",
+        "explanation": "Enacted detention without trial to repress national activities.",
+        "concept": "Nationalism in India",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 6,
+        "section": "Geography",
+        "type": "MCQ",
+        "q": "Which dam is constructed across the Mahanadi river in Odisha?",
+        "options": [
+          "A) Hirakud Dam",
+          "B) Bhakra Nangal",
+          "C) Sardar Sarovar",
+          "D) Tehri Dam"
+        ],
+        "ans": "A",
+        "explanation": "Hirakud Dam is built across Mahanadi river.",
+        "concept": "Water Resources",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 7,
+        "section": "Civics",
+        "type": "MCQ",
+        "q": "Which subject is included in the Union List in the Indian Constitution?",
+        "options": [
+          "A) Defense & Foreign Affairs",
+          "B) Agriculture",
+          "C) Police",
+          "D) Trade & Commerce"
+        ],
+        "ans": "A",
+        "explanation": "Subjects of national importance like Defense are on Union List.",
+        "concept": "Federalism",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 8,
+        "section": "Economics",
+        "type": "MCQ",
+        "q": "Which sector provides the service of banking, communication, and transport?",
+        "options": [
+          "A) Tertiary Sector",
+          "B) Primary Sector",
+          "C) Secondary Sector",
+          "D) Agriculture"
+        ],
+        "ans": "A",
+        "explanation": "Tertiary sector activities generate services rather than physical goods.",
+        "concept": "Sectors of Indian Economy",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 9,
+        "section": "History",
+        "type": "MCQ",
+        "q": "Who printed the first Bible with his movable mechanical printing press?",
+        "options": [
+          "A) Johannes Gutenberg",
+          "B) Martin Luther",
+          "C) Marco Polo",
+          "D) Erasmus"
+        ],
+        "ans": "A",
+        "explanation": "Gutenberg developed the printing press in Mainz, Germany around 1448.",
+        "concept": "Print Culture",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 10,
+        "section": "Geography",
+        "type": "MCQ",
+        "q": "Which is the highest quality commercial coal in India?",
+        "options": [
+          "A) Anthracite",
+          "B) Bituminous",
+          "C) Lignite",
+          "D) Peat"
+        ],
+        "ans": "A",
+        "explanation": "Anthracite has highest carbon content (>85%) and highest heating value.",
+        "concept": "Minerals and Energy",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 11,
+        "section": "Civics",
+        "type": "MCQ",
+        "q": "A system where all decisions are made based on gender equality and rights for women is:",
+        "options": [
+          "A) Feminist movement",
+          "B) Patriarchal system",
+          "C) Casteism",
+          "D) Secularism"
+        ],
+        "ans": "A",
+        "explanation": "Feminist movements advocate for equal political, social, and economic rights for women.",
+        "concept": "Gender, Religion and Caste",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 12,
+        "section": "Economics",
+        "type": "MCQ",
+        "q": "Which currency issuing authority functions as India's central bank?",
+        "options": [
+          "A) Reserve Bank of India (RBI)",
+          "B) State Bank of India",
+          "C) Ministry of Finance",
+          "D) SEBI"
+        ],
+        "ans": "A",
+        "explanation": "RBI issues currency notes and supervises commercial banks.",
+        "concept": "Money and Credit",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      }
+    ],
+    "tierRank": 14,
+    "planTier": "super",
+    "isSuperBatchOnly": true,
+    "planLabel": "Included in 20-Test All-Access"
+  },
+  {
+    "id": "cbse_board_10_english",
+    "title": "CBSE Class 10 English Board Mock 2026",
+    "exam": "CBSE Board",
+    "durationMinutes": 90,
+    "totalMarks": 80,
+    "questionsCount": 10,
+    "markingScheme": "+1 correct, 0 wrong",
+    "sections": [
+      "Reading",
+      "Grammar",
+      "Literature"
+    ],
+    "questions": [
+      {
+        "id": 1,
+        "section": "Literature",
+        "type": "MCQ",
+        "q": "In 'A Letter to God', why did Lencho write a letter to God?",
+        "options": [
+          "A) A hailstorm destroyed his entire cornfield",
+          "B) He wanted a tractor",
+          "C) His house burned down",
+          "D) To invite God"
+        ],
+        "ans": "A",
+        "explanation": "The heavy hailstorm devastated his ripe corn field leaving nothing.",
+        "concept": "First Flight \u2022 Ch 1",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 2,
+        "section": "Literature",
+        "type": "MCQ",
+        "q": "According to Nelson Mandela, what is courage?",
+        "options": [
+          "A) Triumph over fear",
+          "B) Absence of fear",
+          "C) Physical bravery",
+          "D) Winning battles"
+        ],
+        "ans": "A",
+        "explanation": "Mandela taught that the brave man is not he who does not feel afraid, but he who conquers fear.",
+        "concept": "Long Walk to Freedom",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 3,
+        "section": "Grammar",
+        "type": "MCQ",
+        "q": "Complete the sentence: Neither of the two boys _____ present yesterday.",
+        "options": [
+          "A) was",
+          "B) were",
+          "C) are",
+          "D) have been"
+        ],
+        "ans": "A",
+        "explanation": "'Neither of' takes a singular verb.",
+        "concept": "Subject-Verb Agreement",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 4,
+        "section": "Grammar",
+        "type": "MCQ",
+        "q": "Choose correct reported speech: He said, 'I am reading a novel.'",
+        "options": [
+          "A) He said that he was reading a novel.",
+          "B) He said he is reading a novel.",
+          "C) He told he had been reading.",
+          "D) He asked if he read."
+        ],
+        "ans": "A",
+        "explanation": "Present continuous changes to past continuous in indirect speech.",
+        "concept": "Reported Speech",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 5,
+        "section": "Literature",
+        "type": "MCQ",
+        "q": "In the poem 'Fire and Ice', Robert Frost equates fire with:",
+        "options": [
+          "A) Desire and greed",
+          "B) Cold hatred",
+          "C) Physical warmth",
+          "D) War"
+        ],
+        "ans": "A",
+        "explanation": "Frost associates fire with human desire, passion, and greed.",
+        "concept": "Poetry",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 6,
+        "section": "Literature",
+        "type": "MCQ",
+        "q": "Who was Hari Singh in Ruskin Bond's 'The Thief's Story'?",
+        "options": [
+          "A) A fifteen-year-old thief",
+          "B) A wrestling champion",
+          "C) A publisher",
+          "D) A cook"
+        ],
+        "ans": "A",
+        "explanation": "Hari Singh was a young experienced thief taken in by Anil.",
+        "concept": "Footprints without Feet",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 7,
+        "section": "Grammar",
+        "type": "MCQ",
+        "q": "Fill in the blank with appropriate modal: You _____ obey traffic signals.",
+        "options": [
+          "A) must",
+          "B) may",
+          "C) might",
+          "D) could"
+        ],
+        "ans": "A",
+        "explanation": "'Must' expresses mandatory obligation.",
+        "concept": "Modals",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 8,
+        "section": "Literature",
+        "type": "MCQ",
+        "q": "Why was the seagull afraid to fly in 'His First Flight'?",
+        "options": [
+          "A) He felt his wings would never support him",
+          "B) His parents forbade him",
+          "C) The sea was too small",
+          "D) He had injured feet"
+        ],
+        "ans": "A",
+        "explanation": "He lacked self-confidence and feared plunging into the vast sea.",
+        "concept": "First Flight",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 9,
+        "section": "Grammar",
+        "type": "MCQ",
+        "q": "Identify the error: 'Each of the students have submitted their assignment.'",
+        "options": [
+          "A) have -> has",
+          "B) of -> in",
+          "C) their -> its",
+          "D) submitted -> submit"
+        ],
+        "ans": "A",
+        "explanation": "'Each' is singular and requires the singular verb 'has'.",
+        "concept": "Error Correction",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 10,
+        "section": "Literature",
+        "type": "MCQ",
+        "q": "What precious possession did Ausable pretend was in his hotel room in 'The Midnight Visitor'?",
+        "options": [
+          "A) A secret military report",
+          "B) Diamond necklace",
+          "C) Gold bar",
+          "D) Royal treaty"
+        ],
+        "ans": "A",
+        "explanation": "A report concerning some new missiles which several men had risked lives for.",
+        "concept": "Footprints without Feet",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      }
+    ],
+    "tierRank": 15,
+    "planTier": "super",
+    "isSuperBatchOnly": true,
+    "planLabel": "Included in 20-Test All-Access"
+  },
+  {
+    "id": "jee_main_pyq_2022",
+    "title": "JEE Main 2022 Official Shift PYQ Paper",
+    "exam": "JEE Main",
+    "durationMinutes": 180,
+    "totalMarks": 300,
+    "questionsCount": 12,
+    "markingScheme": "+4 correct, -1 wrong",
+    "sections": [
+      "Physics",
+      "Chemistry",
+      "Mathematics"
+    ],
+    "questions": [
+      {
+        "id": 1,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "A car accelerates uniformly from rest to 72 km/h in 10 s. Distance traveled in meters is:",
+        "options": [
+          "A) 100 m",
+          "B) 200 m",
+          "C) 50 m",
+          "D) 150 m"
+        ],
+        "ans": "A",
+        "explanation": "v = 72 km/h = 20 m/s. a = 20/10 = 2 m/s\u00b2. s = 1/2 a t\u00b2 = 0.5 * 2 * 100 = 100 m.",
+        "concept": "Kinematics",
+        "difficulty": "Easy",
+        "idealTimeSec": 35
+      },
+      {
+        "id": 2,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Magnetic energy density in a region of magnetic field B is given by:",
+        "options": [
+          "A) B\u00b2 / (2 \u03bc0)",
+          "B) B / (2 \u03bc0)",
+          "C) 2 B\u00b2 / \u03bc0",
+          "D) B\u00b2 \u03bc0 / 2"
+        ],
+        "ans": "A",
+        "explanation": "Standard magnetic energy density u_B = B\u00b2 / (2 \u03bc0).",
+        "concept": "Magnetism",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 3,
+        "section": "Physics",
+        "type": "NUMERICAL",
+        "q": "Two sound waves of frequencies 300 Hz and 304 Hz superpose. Number of beats per second produced is:",
+        "options": [],
+        "ans": "4",
+        "explanation": "Beat frequency = |f1 - f2| = |304 - 300| = 4 beats/s.",
+        "concept": "Waves & Acoustics",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 4,
+        "section": "Physics",
+        "type": "NUMERICAL",
+        "q": "Kinetic energy of a body of mass 4 kg moving with velocity 5 m/s in Joules is:",
+        "options": [],
+        "ans": "50",
+        "explanation": "KE = 1/2 m v\u00b2 = 0.5 * 4 * 25 = 50 J.",
+        "concept": "Work & Energy",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 5,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Which of the following has highest lattice energy?",
+        "options": [
+          "A) LiF",
+          "B) LiCl",
+          "C) LiBr",
+          "D) LiI"
+        ],
+        "ans": "A",
+        "explanation": "Lattice energy is inversely proportional to interionic distance r0; F- has smallest ionic radius.",
+        "concept": "Chemical Bonding",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 6,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Gabriel phthalimide synthesis is exclusively used for preparation of:",
+        "options": [
+          "A) Primary aliphatic amines",
+          "B) Secondary amines",
+          "C) Aromatic primary amines",
+          "D) Tertiary amines"
+        ],
+        "ans": "A",
+        "explanation": "Aromatic halides do not undergo nucleophilic substitution with phthalimide anion.",
+        "concept": "Amines",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 7,
+        "section": "Chemistry",
+        "type": "NUMERICAL",
+        "q": "Oxidation state of nickel in volatile metal carbonyl [Ni(CO)4] is:",
+        "options": [],
+        "ans": "0",
+        "explanation": "CO is a neutral ligand, so oxidation state of Ni is 0.",
+        "concept": "Coordination Compounds",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 8,
+        "section": "Chemistry",
+        "type": "NUMERICAL",
+        "q": "Number of bridging carbonyl ligands in solid Co2(CO)8 is:",
+        "options": [],
+        "ans": "2",
+        "explanation": "Co2(CO)8 has 2 bridging CO ligands and 6 terminal CO ligands in solid state.",
+        "concept": "Coordination Chemistry",
+        "difficulty": "Medium",
+        "idealTimeSec": 35
+      },
+      {
+        "id": 9,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "The value of determinant of skew-symmetric matrix of odd order 3x3 is always:",
+        "options": [
+          "A) 0",
+          "B) 1",
+          "C) -1",
+          "D) Any real number"
+        ],
+        "ans": "A",
+        "explanation": "|A| = |-A^T| = (-1)^n |A| = -|A| for odd n => 2|A| = 0 => |A| = 0.",
+        "concept": "Matrices & Determinants",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 10,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "If the mean of observations x, x+3, x+6, x+9 is 15, then value of x is:",
+        "options": [
+          "A) 10.5",
+          "B) 12",
+          "C) 15",
+          "D) 9"
+        ],
+        "ans": "A",
+        "explanation": "(4x + 18)/4 = 15 => 4x + 18 = 60 => 4x = 42 => x = 10.5.",
+        "concept": "Statistics",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 11,
+        "section": "Mathematics",
+        "type": "NUMERICAL",
+        "q": "Number of diagonals in a convex hexagon (6 sides) is:",
+        "options": [],
+        "ans": "9",
+        "explanation": "n(n - 3)/2 = 6(3)/2 = 9.",
+        "concept": "Combinatorics",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 12,
+        "section": "Mathematics",
+        "type": "NUMERICAL",
+        "q": "Slope of line parallel to 3x - 4y + 7 = 0 is m. Value of 4m is:",
+        "options": [],
+        "ans": "3",
+        "explanation": "y = (3/4)x + 7/4. Slope m = 3/4. Therefore 4m = 3.",
+        "concept": "Straight Lines",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      }
+    ],
+    "tierRank": 16,
+    "planTier": "super",
+    "isSuperBatchOnly": true,
+    "planLabel": "Included in 20-Test All-Access"
+  },
+  {
+    "id": "neet_pyq_2022",
+    "title": "NEET 2022 Official NTA Question Paper",
+    "exam": "NEET UG",
+    "durationMinutes": 180,
+    "totalMarks": 720,
+    "questionsCount": 12,
+    "markingScheme": "+4 correct, -1 wrong",
+    "sections": [
+      "Biology",
+      "Physics",
+      "Chemistry"
+    ],
+    "questions": [
+      {
+        "id": 1,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "Which gaseous phytohormone promotes fruit ripening?",
+        "options": [
+          "A) Ethylene",
+          "B) Auxin",
+          "C) Gibberellin",
+          "D) Abscisic acid"
+        ],
+        "ans": "A",
+        "explanation": "Ethylene (C2H4) is a gaseous plant growth regulator that triggers fruit ripening.",
+        "concept": "Plant Growth & Development",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 2,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "Presence of which hormone in human urine confirms pregnancy?",
+        "options": [
+          "A) hCG (human Chorionic Gonadotropin)",
+          "B) Progesterone",
+          "C) Estrogen",
+          "D) LH"
+        ],
+        "ans": "A",
+        "explanation": "hCG is secreted by trophoblast of placenta, basis of pregnancy test kits.",
+        "concept": "Human Reproduction",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 3,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "Which organism is commonly known as bread mold?",
+        "options": [
+          "A) Rhizopus",
+          "B) Yeast",
+          "C) Penicillium",
+          "D) Agaricus"
+        ],
+        "ans": "A",
+        "explanation": "Rhizopus stolonifer is the common black bread mold.",
+        "concept": "Biological Classification",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 4,
+        "section": "Biology",
+        "type": "MCQ",
+        "q": "Juxtaglomerular apparatus (JGA) releases renin in response to:",
+        "options": [
+          "A) Fall in glomerular filtration rate (GFR)",
+          "B) Rise in blood pressure",
+          "C) High sodium levels",
+          "D) Atrial natriuretic peptide"
+        ],
+        "ans": "A",
+        "explanation": "A fall in glomerular blood flow/pressure stimulates JG cells to release renin.",
+        "concept": "Excretory Products",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 5,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "The reciprocal of resistance is called:",
+        "options": [
+          "A) Conductance",
+          "B) Conductance",
+          "C) Inductance",
+          "D) Reactance"
+        ],
+        "ans": "A",
+        "explanation": "Conductance G = 1/R measured in Siemens (\u03a9^-1).",
+        "concept": "Current Electricity",
+        "difficulty": "Easy",
+        "idealTimeSec": 15
+      },
+      {
+        "id": 6,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Unit of magnetic permeability (\u03bc0) in SI system is:",
+        "options": [
+          "A) T\u00b7m / A (or H/m)",
+          "B) T / m",
+          "C) Wb / m",
+          "D) A / m"
+        ],
+        "ans": "A",
+        "explanation": "\u03bc0 has units of Tesla\u00b7meter/Ampere or Henry/meter.",
+        "concept": "Magnetism",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 7,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "An ideal gas expands isothermally. The change in its internal energy (\u0394U) is:",
+        "options": [
+          "A) Zero",
+          "B) Positive",
+          "C) Negative",
+          "D) Infinite"
+        ],
+        "ans": "A",
+        "explanation": "Internal energy depends solely on temperature for ideal gas. Since T is constant, \u0394U = 0.",
+        "concept": "Thermodynamics",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 8,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "A step-up transformer increases:",
+        "options": [
+          "A) Voltage",
+          "B) Power",
+          "C) Current",
+          "D) Frequency"
+        ],
+        "ans": "A",
+        "explanation": "A step-up transformer increases secondary voltage while decreasing current proportionally.",
+        "concept": "AC Circuits",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 9,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Which of the following is an intensive thermodynamic property?",
+        "options": [
+          "A) Density",
+          "B) Mass",
+          "C) Volume",
+          "D) Enthalpy"
+        ],
+        "ans": "A",
+        "explanation": "Density does not depend on system mass or size (intensive property).",
+        "concept": "Thermodynamics",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 10,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Monomers of nylon-6,6 are hexamethylenediamine and:",
+        "options": [
+          "A) Adipic acid",
+          "B) Phthalic acid",
+          "C) Maleic acid",
+          "D) Sebacic acid"
+        ],
+        "ans": "A",
+        "explanation": "Nylon-6,6 is condensation polymer of adipic acid and hexamethylenediamine.",
+        "concept": "Polymers",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 11,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Which inert gas is used in beacon lights for airports?",
+        "options": [
+          "A) Neon (Ne)",
+          "B) Helium",
+          "C) Argon",
+          "D) Krypton"
+        ],
+        "ans": "A",
+        "explanation": "Neon warning lights have high fog-penetrating power used in airport beacons.",
+        "concept": "p-Block Elements",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 12,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Formula of rust is chemically written as:",
+        "options": [
+          "A) Fe2O3 \u00b7 x H2O",
+          "B) Fe3O4",
+          "C) FeO",
+          "D) FeCO3"
+        ],
+        "ans": "A",
+        "explanation": "Rust is hydrated ferric oxide Fe2O3 \u00b7 x H2O.",
+        "concept": "Electrochemistry & Corrosion",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      }
+    ],
+    "tierRank": 17,
+    "planTier": "super",
+    "isSuperBatchOnly": true,
+    "planLabel": "Included in 20-Test All-Access"
+  },
+  {
+    "id": "cbse_board_12_physics_2",
+    "title": "CBSE Class 12 Physics Board Mock #2",
+    "exam": "CBSE Board",
+    "durationMinutes": 180,
+    "totalMarks": 70,
+    "questionsCount": 10,
+    "markingScheme": "+1 correct, 0 wrong",
+    "sections": [
+      "Physics"
+    ],
+    "questions": [
+      {
+        "id": 1,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "SI unit of electric permittivity of free space (\u03b50) is:",
+        "options": [
+          "A) C\u00b2 N^-1 m^-2",
+          "B) N m\u00b2 C^-2",
+          "C) C N^-1 m^-1",
+          "D) N m C^-1"
+        ],
+        "ans": "A",
+        "explanation": "From Coulomb's law: \u03b50 = q1 q2 / (4\u03c0 F r\u00b2) = C\u00b2 / (N m\u00b2).",
+        "concept": "Electrostatics",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 2,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Core of an electromagnet is made of soft iron because soft iron has:",
+        "options": [
+          "A) High permeability & low retentivity",
+          "B) High retentivity & high coercivity",
+          "C) Low permeability",
+          "D) High resistivity"
+        ],
+        "ans": "A",
+        "explanation": "Soft iron magnetizes easily and loses magnetism rapidly when current stops.",
+        "concept": "Magnetism and Matter",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 3,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Working principle of optical fiber communication is:",
+        "options": [
+          "A) Total internal reflection",
+          "B) Scattering",
+          "C) Dispersion",
+          "D) Diffraction"
+        ],
+        "ans": "A",
+        "explanation": "Light signals are guided through fiber core by successive total internal reflections.",
+        "concept": "Ray Optics",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 4,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "What is the phase difference between electric and magnetic fields in an EM wave?",
+        "options": [
+          "A) Zero",
+          "B) \u03c0/2",
+          "C) \u03c0",
+          "D) \u03c0/4"
+        ],
+        "ans": "A",
+        "explanation": "E and B oscillate in phase with same frequency and wavelength.",
+        "concept": "Electromagnetic Waves",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 5,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Kinetic energy of photoelectrons depends on:",
+        "options": [
+          "A) Frequency of incident radiation",
+          "B) Intensity of radiation",
+          "C) Time of exposure",
+          "D) Distance of source"
+        ],
+        "ans": "A",
+        "explanation": "K_max = h\u03bd - W0; depends strictly on frequency \u03bd.",
+        "concept": "Dual Nature of Radiation",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 6,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "In a nuclear fusion reaction, two light nuclei combine to form a heavier nucleus with:",
+        "options": [
+          "A) Higher binding energy per nucleon",
+          "B) Lower binding energy per nucleon",
+          "C) Loss of charge",
+          "D) Absorption of energy"
+        ],
+        "ans": "A",
+        "explanation": "Product nucleus moves higher on binding energy curve, releasing massive energy.",
+        "concept": "Nuclei",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 7,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Energy band gap of diamond is approximately:",
+        "options": [
+          "A) 5.4 eV",
+          "B) 1.1 eV",
+          "C) 0.7 eV",
+          "D) 0 eV"
+        ],
+        "ans": "A",
+        "explanation": "Diamond has very large band gap (~5.4 eV), making it an electrical insulator.",
+        "concept": "Semiconductors",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 8,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "A copper wire is stretched to double its length. Its new resistance will be:",
+        "options": [
+          "A) 4 times",
+          "B) 2 times",
+          "C) Halved",
+          "D) Unchanged"
+        ],
+        "ans": "A",
+        "explanation": "Volume is constant. When length doubles, area halves: R' = \u03c1(2L)/(A/2) = 4R.",
+        "concept": "Current Electricity",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 9,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Color of sky appears blue due to:",
+        "options": [
+          "A) Rayleigh scattering (I \u221d 1/\u03bb\u2074)",
+          "B) Refraction",
+          "C) Dispersion",
+          "D) Reflection"
+        ],
+        "ans": "A",
+        "explanation": "Shorter blue wavelengths scatter much more strongly by air molecules.",
+        "concept": "Ray Optics",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 10,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Magnetic dipole moment of a current carrying loop of area A and current I is:",
+        "options": [
+          "A) I A",
+          "B) I / A",
+          "C) I\u00b2 A",
+          "D) I A\u00b2"
+        ],
+        "ans": "A",
+        "explanation": "M = I * A.",
+        "concept": "Magnetic Effects of Current",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      }
+    ],
+    "tierRank": 18,
+    "planTier": "super",
+    "isSuperBatchOnly": true,
+    "planLabel": "Included in 20-Test All-Access"
+  },
+  {
+    "id": "cbse_board_12_math_2",
+    "title": "CBSE Class 12 Mathematics Board Mock #2",
+    "exam": "CBSE Board",
+    "durationMinutes": 180,
+    "totalMarks": 80,
+    "questionsCount": 10,
+    "markingScheme": "+1 correct, 0 wrong",
+    "sections": [
+      "Mathematics"
+    ],
+    "questions": [
+      {
+        "id": 1,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "If f(x) = x\u00b2 is defined from R to R, the function f is:",
+        "options": [
+          "A) Neither one-one nor onto",
+          "B) One-one and onto",
+          "C) One-one but not onto",
+          "D) Onto but not one-one"
+        ],
+        "ans": "A",
+        "explanation": "f(-1) = f(1) = 1 (not one-one). Negative reals have no preimage (not onto).",
+        "concept": "Relations & Functions",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 2,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "The value of cos^-1(cos 7\u03c0/6) is:",
+        "options": [
+          "A) 5\u03c0/6",
+          "B) 7\u03c0/6",
+          "C) \u03c0/6",
+          "D) \u03c0/3"
+        ],
+        "ans": "A",
+        "explanation": "Range of cos^-1 is [0, \u03c0]. cos(7\u03c0/6) = cos(2\u03c0 - 5\u03c0/6) = cos(5\u03c0/6).",
+        "concept": "Inverse Trigonometric Functions",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 3,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "Derivative of e^(x\u00b2) with respect to x is:",
+        "options": [
+          "A) 2x e^(x\u00b2)",
+          "B) x e^(x\u00b2)",
+          "C) e^(x\u00b2)",
+          "D) 2 e^(x\u00b2)"
+        ],
+        "ans": "A",
+        "explanation": "Chain rule: d/dx[e^(x\u00b2)] = e^(x\u00b2) * d/dx(x\u00b2) = 2x e^(x\u00b2).",
+        "concept": "Differentiation",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 4,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "Point of inflection for curve y = x\u00b3 is:",
+        "options": [
+          "A) (0, 0)",
+          "B) (1, 1)",
+          "C) (-1, -1)",
+          "D) No inflection point"
+        ],
+        "ans": "A",
+        "explanation": "d\u00b2y/dx\u00b2 = 6x = 0 at x = 0, and second derivative changes sign across x = 0.",
+        "concept": "Application of Derivatives",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 5,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "The value of \u222b [1 / (1 + x\u00b2)] dx is:",
+        "options": [
+          "A) tan^-1(x) + C",
+          "B) sin^-1(x) + C",
+          "C) log(1 + x\u00b2) + C",
+          "D) sec^-1(x) + C"
+        ],
+        "ans": "A",
+        "explanation": "Standard derivative formula gives tan^-1(x) + C.",
+        "concept": "Indefinite Integrals",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 6,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "Integrating factor of linear differential equation dy/dx + y = e^(-x) is:",
+        "options": [
+          "A) e^x",
+          "B) e^(-x)",
+          "C) x",
+          "D) e^(2x)"
+        ],
+        "ans": "A",
+        "explanation": "IF = e^(\u222b 1 dx) = e^x.",
+        "concept": "Differential Equations",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 7,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "If a and b are unit vectors and \u03b8 is angle between them, then |a - b| = 2 sin(\u03b8/2). Value of a \u00b7 b is:",
+        "options": [
+          "A) cos \u03b8",
+          "B) sin \u03b8",
+          "C) tan \u03b8",
+          "D) 1"
+        ],
+        "ans": "A",
+        "explanation": "By definition of dot product for unit vectors: a \u00b7 b = 1 * 1 * cos \u03b8 = cos \u03b8.",
+        "concept": "Vector Algebra",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 8,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "Distance between two parallel planes 2x + y + 2z = 8 and 4x + 2y + 4z + 5 = 0 is:",
+        "options": [
+          "A) 7/2 units",
+          "B) 3 units",
+          "C) 21/6 units",
+          "D) 1 unit"
+        ],
+        "ans": "A",
+        "explanation": "Rewrite second plane: 2x + y + 2z = -5/2. d = |8 - (-5/2)| / \u221a(4+1+4) = (21/2)/3 = 7/2.",
+        "concept": "3D Geometry",
+        "difficulty": "Medium",
+        "idealTimeSec": 40
+      },
+      {
+        "id": 9,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "Two events A and B are independent if and only if:",
+        "options": [
+          "A) P(A \u2229 B) = P(A) \u00b7 P(B)",
+          "B) P(A \u222a B) = P(A) + P(B)",
+          "C) P(A|B) = 0",
+          "D) A \u2229 B = \u2205"
+        ],
+        "ans": "A",
+        "explanation": "Definition of independent events.",
+        "concept": "Probability",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 10,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "Feasible region in a Linear Programming Problem (LPP) is always a:",
+        "options": [
+          "A) Convex polygon",
+          "B) Concave polygon",
+          "C) Circle",
+          "D) Parabola"
+        ],
+        "ans": "A",
+        "explanation": "Intersection of linear half-planes forms a convex set.",
+        "concept": "Linear Programming",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      }
+    ],
+    "tierRank": 19,
+    "planTier": "super",
+    "isSuperBatchOnly": true,
+    "planLabel": "Included in 20-Test All-Access"
+  },
+  {
+    "id": "jee_main_full_3",
+    "title": "JEE Main 2026 Grand Mock #3 (NTA Final Rank Booster)",
+    "exam": "JEE Main",
+    "durationMinutes": 180,
+    "totalMarks": 300,
+    "questionsCount": 12,
+    "markingScheme": "+4 correct, -1 wrong",
+    "sections": [
+      "Physics",
+      "Chemistry",
+      "Mathematics"
+    ],
+    "questions": [
+      {
+        "id": 1,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "A simple harmonic oscillator has amplitude A and period T. Time taken to travel from x = 0 to x = A/2 is:",
+        "options": [
+          "A) T / 12",
+          "B) T / 6",
+          "C) T / 8",
+          "D) T / 4"
+        ],
+        "ans": "A",
+        "explanation": "x = A sin(\u03c9t) => A/2 = A sin(2\u03c0 t / T) => 2\u03c0 t / T = \u03c0/6 => t = T / 12.",
+        "concept": "SHM",
+        "difficulty": "Easy",
+        "idealTimeSec": 35
+      },
+      {
+        "id": 2,
+        "section": "Physics",
+        "type": "MCQ",
+        "q": "Wavelength of Lyman limit of Hydrogen spectrum is 912 \u00c5. The wavelength of Balmer limit is:",
+        "options": [
+          "A) 3648 \u00c5",
+          "B) 1824 \u00c5",
+          "C) 912 \u00c5",
+          "D) 456 \u00c5"
+        ],
+        "ans": "A",
+        "explanation": "1/\u03bb_Balmer = R(1/2\u00b2 - 0) = R/4. 1/\u03bb_Lyman = R. Therefore \u03bb_Balmer = 4 * 912 \u00c5 = 3648 \u00c5.",
+        "concept": "Atomic Physics",
+        "difficulty": "Easy",
+        "idealTimeSec": 40
+      },
+      {
+        "id": 3,
+        "section": "Physics",
+        "type": "NUMERICAL",
+        "q": "Power of a convex lens in air is +5 D. When immersed in water (\u03bc_w = 4/3, \u03bc_g = 3/2), its power in Diopters is:",
+        "options": [],
+        "ans": "1.25",
+        "explanation": "f_w / f_a = (\u03bc_g - 1)/(\u03bc_g/\u03bc_w - 1) = (0.5)/(9/8 - 1) = 0.5 / (1/8) = 4. P_w = P_a / 4 = 5 / 4 = 1.25 D.",
+        "concept": "Ray Optics",
+        "difficulty": "Medium",
+        "idealTimeSec": 60
+      },
+      {
+        "id": 4,
+        "section": "Physics",
+        "type": "NUMERICAL",
+        "q": "Two vectors A and B have magnitudes 3 and 4 with dot product 6. Magnitude of their cross product |A \u00d7 B| is:",
+        "options": [],
+        "ans": "10.4",
+        "explanation": "|A||B| cos \u03b8 = 12 cos \u03b8 = 6 => cos \u03b8 = 0.5 => sin \u03b8 = \u221a3/2. |A\u00d7B| = 12 * (\u221a3/2) = 6\u221a3 \u2248 10.39 \u2248 10.4.",
+        "concept": "Vectors",
+        "difficulty": "Medium",
+        "idealTimeSec": 45
+      },
+      {
+        "id": 5,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Which of the following complex ions has the highest molar conductivity in aqueous solution?",
+        "options": [
+          "A) [Co(NH3)6]Cl3",
+          "B) [Co(NH3)5Cl]Cl2",
+          "C) [Co(NH3)4Cl2]Cl",
+          "D) [Co(NH3)3Cl3]"
+        ],
+        "ans": "A",
+        "explanation": "[Co(NH3)6]Cl3 gives 4 ions in solution (1 cation + 3 anions), maximum conductivity.",
+        "concept": "Coordination Chemistry",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 6,
+        "section": "Chemistry",
+        "type": "MCQ",
+        "q": "Hydrolysis of sucrose gives equimolar mixture of:",
+        "options": [
+          "A) D-(+)-glucose and D-(-)-fructose",
+          "B) Two molecules of D-glucose",
+          "C) Glucose and Galactose",
+          "D) Maltose and Glucose"
+        ],
+        "ans": "A",
+        "explanation": "Sucrose is dextrorotatory, hydrolysate is laevorotatory ('invert sugar').",
+        "concept": "Biomolecules",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 7,
+        "section": "Chemistry",
+        "type": "NUMERICAL",
+        "q": "Number of P-O-P bonds in solid phosphorus pentoxide (P4O10) is:",
+        "options": [],
+        "ans": "6",
+        "explanation": "P4O10 consists of 4 P atoms at tetrahedron vertices with 6 bridging P-O-P oxygen atoms.",
+        "concept": "p-Block Elements",
+        "difficulty": "Medium",
+        "idealTimeSec": 40
+      },
+      {
+        "id": 8,
+        "section": "Chemistry",
+        "type": "NUMERICAL",
+        "q": "Standard electrode potential of Daniell cell in Volts is:",
+        "options": [],
+        "ans": "1.1",
+        "explanation": "E\u00b0_cell = E\u00b0_cathode - E\u00b0_anode = 0.34 - (-0.76) = 1.10 V.",
+        "concept": "Electrochemistry",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 9,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "If matrix A is symmetric as well as skew-symmetric, then A is necessarily:",
+        "options": [
+          "A) Zero matrix",
+          "B) Identity matrix",
+          "C) Diagonal matrix",
+          "D) Triangular matrix"
+        ],
+        "ans": "A",
+        "explanation": "A = A^T and A = -A^T => A = -A => 2A = 0 => A is a zero matrix.",
+        "concept": "Matrices",
+        "difficulty": "Easy",
+        "idealTimeSec": 20
+      },
+      {
+        "id": 10,
+        "section": "Mathematics",
+        "type": "MCQ",
+        "q": "The eccentricity of rectangular hyperbola x\u00b2 - y\u00b2 = a\u00b2 is:",
+        "options": [
+          "A) \u221a2",
+          "B) 2",
+          "C) 1 / \u221a2",
+          "D) \u221a3"
+        ],
+        "ans": "A",
+        "explanation": "e = \u221a(1 + b\u00b2/a\u00b2). For rectangular hyperbola a = b, so e = \u221a(1 + 1) = \u221a2.",
+        "concept": "Conic Sections",
+        "difficulty": "Easy",
+        "idealTimeSec": 25
+      },
+      {
+        "id": 11,
+        "section": "Mathematics",
+        "type": "NUMERICAL",
+        "q": "Area of triangle formed by lines y = x, y = -x, and y = 2 is:",
+        "options": [],
+        "ans": "4",
+        "explanation": "Base along y = 2 extends from x = -2 to x = 2 (length = 4). Height = 2. Area = 1/2 * 4 * 2 = 4.",
+        "concept": "Coordinate Geometry",
+        "difficulty": "Easy",
+        "idealTimeSec": 30
+      },
+      {
+        "id": 12,
+        "section": "Mathematics",
+        "type": "NUMERICAL",
+        "q": "The value of limit as x->0 of (tan x - sin x) / x\u00b3 is equal to 1 / k. Value of k is:",
+        "options": [],
+        "ans": "2",
+        "explanation": "lim (tan x - sin x)/x\u00b3 = lim tan x(1 - cos x)/x\u00b3 = 1 * (1/2) = 1/2. Thus k = 2.",
+        "concept": "Limits & Derivatives",
+        "difficulty": "Medium",
+        "idealTimeSec": 45
+      }
+    ],
+    "tierRank": 20,
+    "planTier": "super",
+    "isSuperBatchOnly": true,
+    "planLabel": "Included in 20-Test All-Access"
   }
 ];
