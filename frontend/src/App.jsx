@@ -89,90 +89,352 @@ function CameraModal({ onCapture, onClose }) {
   )
 }
 
-// ── Onboarding Screen ──
-function Onboarding({ onComplete }) {
-  const [step, setStep] = useState(0), [name, setName] = useState(''), [cls, setCls] = useState('10'), [goal, setGoal] = useState('board')
-  const finish = () => { if (!name.trim()) return; onComplete({ name: name.trim(), classNum: cls, goal }) }
+// ── TARGET EXAM & STANDARDS CONFIGURATION ──
+export const TRACKS_CONFIG = {
+  jee: {
+    id: 'jee',
+    name: 'JEE Main & Advanced 2026',
+    shortName: 'JEE Main & Adv',
+    icon: '🎯',
+    badge: 'IIT JEE',
+    classNum: '12',
+    subjects: ['Physics', 'Chemistry', 'Mathematics'],
+    category: 'Engineering Entrance',
+    desc: '180m NTA CBT Tests • Physics, Chem, Math • Rank Predictor'
+  },
+  neet: {
+    id: 'neet',
+    name: 'NEET UG 2026 (Medical)',
+    shortName: 'NEET UG',
+    icon: '🩺',
+    badge: 'NEET UG',
+    classNum: '12',
+    subjects: ['Biology', 'Physics', 'Chemistry'],
+    category: 'Medical Entrance',
+    desc: '720M Full Mocks • NCERT High-Yield • Bio, Phy, Chem'
+  },
+  cbse_12: {
+    id: 'cbse_12',
+    name: 'CBSE Class 12 Boards',
+    shortName: 'Class 12 Boards',
+    icon: '🎓',
+    badge: 'Class 12',
+    classNum: '12',
+    subjects: ['Physics', 'Chemistry', 'Mathematics', 'Biology'],
+    category: 'Senior Secondary',
+    desc: '2026 Board Pattern • 1M-5M Model Answers • Phy, Chem, Math, Bio'
+  },
+  cbse_10: {
+    id: 'cbse_10',
+    name: 'CBSE Class 10 Boards',
+    shortName: 'Class 10 Boards',
+    icon: '📚',
+    badge: 'Class 10',
+    classNum: '10',
+    subjects: ['Science', 'Mathematics', 'Social Science', 'English'],
+    category: 'High School',
+    desc: '2026 Board Pattern • 1M-5M Model Answers • Science, Math, SST, English'
+  },
+  cbse_9: {
+    id: 'cbse_9',
+    name: 'CBSE Class 9',
+    shortName: 'Class 9',
+    icon: '🏫',
+    badge: 'Class 9',
+    classNum: '9',
+    subjects: ['Science', 'Mathematics', 'Social Science', 'English'],
+    category: 'Secondary',
+    desc: 'NCERT Foundation • 1M-5M Questions & Quizzes'
+  },
+  cbse_8: {
+    id: 'cbse_8',
+    name: 'CBSE Class 8',
+    shortName: 'Class 8',
+    icon: '📖',
+    badge: 'Class 8',
+    classNum: '8',
+    subjects: ['Mathematics', 'Science', 'Social Science'],
+    category: 'Middle School',
+    desc: 'Core Concepts & Daily Speed Quizzes'
+  },
+  cbse_7: {
+    id: 'cbse_7',
+    name: 'CBSE Class 7',
+    shortName: 'Class 7',
+    icon: '📖',
+    badge: 'Class 7',
+    classNum: '7',
+    subjects: ['Mathematics', 'Science', 'Social Science'],
+    category: 'Middle School',
+    desc: 'Core Concepts & Daily Speed Quizzes'
+  },
+  cbse_6: {
+    id: 'cbse_6',
+    name: 'CBSE Class 6',
+    shortName: 'Class 6',
+    icon: '📖',
+    badge: 'Class 6',
+    classNum: '6',
+    subjects: ['Mathematics', 'Science', 'Social Science'],
+    category: 'Middle School',
+    desc: 'Core Concepts & Daily Speed Quizzes'
+  }
+}
+
+// ── Track Switcher Modal (Allows changing target anytime) ──
+function TrackSwitcherModal({ isOpen, onClose, currentTrack, onSelectTrack }) {
+  if (!isOpen) return null
+
+  const mainTracks = [
+    TRACKS_CONFIG.jee,
+    TRACKS_CONFIG.neet,
+    TRACKS_CONFIG.cbse_12,
+    TRACKS_CONFIG.cbse_10,
+    TRACKS_CONFIG.cbse_9
+  ]
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-5">
-      <div className="max-w-sm w-full bg-white p-6 rounded-3xl shadow-xl border border-slate-100">
-        <div className="flex items-center gap-2 mb-6">
-          <div className="w-10 h-10 rounded-2xl bg-blue-600 flex items-center justify-center text-white font-black text-xl shadow-md shadow-blue-500/30">S</div>
+    <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <div className="w-full max-w-md bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh] animate-slide-up">
+        {/* Header */}
+        <div className="p-4 bg-gradient-to-r from-blue-700 to-indigo-800 text-white flex justify-between items-center">
           <div>
-            <h2 className="text-base font-extrabold text-slate-900">Study Buddy</h2>
-            <p className="text-[11px] text-blue-600 font-semibold">AI Personal Tutor</p>
+            <h3 className="text-sm font-black flex items-center gap-1.5">
+              <span>🎯</span>
+              <span>Switch Target Standard / Exam</span>
+            </h3>
+            <p className="text-[11px] text-blue-100 mt-0.5">
+              Dedicated UI will immediately adapt to your chosen curriculum.
+            </p>
+          </div>
+          <button
+            onClick={onClose}
+            className="w-7 h-7 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center text-xs font-bold"
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* Tracks List */}
+        <div className="p-4 space-y-2.5 overflow-y-auto max-h-[70vh]">
+          {mainTracks.map(trk => {
+            const isSelected = currentTrack === trk.id
+            return (
+              <button
+                key={trk.id}
+                onClick={() => onSelectTrack(trk.id)}
+                className={`w-full p-3.5 rounded-2xl border text-left transition-all btn-press flex items-start justify-between gap-2 ${
+                  isSelected
+                    ? 'border-blue-600 bg-blue-50/80 shadow-xs'
+                    : 'border-slate-200 bg-slate-50/50 hover:border-blue-300'
+                }`}
+              >
+                <div className="flex items-start gap-3">
+                  <span className="text-2xl mt-0.5">{trk.icon}</span>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h4 className="text-xs font-black text-slate-900">{trk.name}</h4>
+                      {isSelected && (
+                        <span className="text-[9px] font-black bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
+                          ✓ Active Target
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">{trk.desc}</p>
+                    <p className="text-[10px] font-bold text-blue-700 mt-1">
+                      Subjects: {trk.subjects.join(' • ')}
+                    </p>
+                  </div>
+                </div>
+              </button>
+            )
+          })}
+
+          {/* Junior Standards Row */}
+          <div className="pt-2 border-t border-slate-100">
+            <p className="text-[11px] font-bold text-slate-500 mb-1.5">Other Junior CBSE Standards:</p>
+            <div className="grid grid-cols-3 gap-2">
+              {['cbse_8', 'cbse_7', 'cbse_6'].map(cid => {
+                const trk = TRACKS_CONFIG[cid]
+                const isSelected = currentTrack === cid
+                return (
+                  <button
+                    key={cid}
+                    onClick={() => onSelectTrack(cid)}
+                    className={`py-2 rounded-xl text-xs font-bold border transition-all ${
+                      isSelected
+                        ? 'border-blue-600 bg-blue-600 text-white shadow-xs'
+                        : 'border-slate-200 bg-slate-50 text-slate-700 hover:border-slate-300'
+                    }`}
+                  >
+                    Class {trk.classNum}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ── Dedicated Exam & Standard Onboarding Screen ──
+function Onboarding({ onComplete }) {
+  const [step, setStep] = useState(0)
+  const [name, setName] = useState('')
+  const [selectedTrack, setSelectedTrack] = useState('jee')
+
+  const handleFinish = (trackToUse = selectedTrack) => {
+    if (!name.trim()) return
+    const cfg = TRACKS_CONFIG[trackToUse] || TRACKS_CONFIG.cbse_10
+    onComplete({
+      name: name.trim(),
+      track: trackToUse,
+      classNum: cfg.classNum,
+      goal: trackToUse === 'jee' ? 'jee_rank' : trackToUse === 'neet' ? 'neet_rank' : 'board_rank'
+    })
+  }
+
+  return (
+    <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4">
+      <div className="max-w-md w-full bg-white p-6 rounded-3xl shadow-xl border border-slate-200">
+        <div className="flex items-center gap-2.5 mb-5">
+          <div className="w-10 h-10 rounded-2xl bg-blue-600 flex items-center justify-center text-white font-black text-xl shadow-md shadow-blue-500/30">
+            S
+          </div>
+          <div>
+            <h2 className="text-base font-extrabold text-slate-900 leading-tight">Study Buddy AI</h2>
+            <p className="text-[11px] text-blue-600 font-semibold">Dedicated IIT-JEE, NEET & CBSE Classrooms</p>
           </div>
         </div>
 
-        <div className="flex gap-1.5 mb-6">
-          {[0, 1, 2].map(i => (
+        {/* Progress Bar */}
+        <div className="flex gap-1.5 mb-5">
+          {[0, 1].map(i => (
             <div key={i} className={`h-1.5 flex-1 rounded-full ${i <= step ? 'bg-blue-600' : 'bg-slate-200'}`} />
           ))}
         </div>
 
+        {/* STEP 0: NAME */}
         {step === 0 && (
-          <div className="animate-slide-up">
-            <h1 className="text-xl font-bold text-slate-900 mb-1">What is your name?</h1>
-            <p className="text-xs text-slate-500 mb-5">Your AI tutor will customize your daily plan.</p>
+          <div className="animate-slide-up space-y-4">
+            <div>
+              <h1 className="text-xl font-black text-slate-900">What is your name?</h1>
+              <p className="text-xs text-slate-500 mt-1">Your AI personal tutor will personalize your daily study plan & tests.</p>
+            </div>
             <input
               value={name}
               onChange={e => setName(e.target.value)}
               onKeyDown={e => { if (e.key === 'Enter' && name.trim()) setStep(1) }}
               placeholder="e.g. Rahul Sharma"
               autoFocus
-              className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-slate-900 text-sm font-medium mb-4 focus:bg-white focus:border-blue-600 outline-none"
+              className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 text-slate-900 text-sm font-semibold outline-none focus:bg-white focus:border-blue-600 transition-all shadow-xs"
             />
-            <button onClick={() => name.trim() && setStep(1)} disabled={!name.trim()} className="w-full py-3 rounded-2xl bg-blue-600 text-white text-sm font-bold shadow-md shadow-blue-500/25 disabled:opacity-40 btn-press">
-              Continue →
+            <button
+              onClick={() => name.trim() && setStep(1)}
+              disabled={!name.trim()}
+              className="w-full py-3.5 rounded-2xl bg-blue-600 text-white text-sm font-bold shadow-md shadow-blue-500/25 disabled:opacity-40 btn-press"
+            >
+              Continue to Select Exam / Standard →
             </button>
           </div>
         )}
 
+        {/* STEP 1: DEDICATED CLASS / EXAM SELECTION (RIGHT AFTER NAME) */}
         {step === 1 && (
-          <div className="animate-slide-up">
-            <h1 className="text-xl font-bold text-slate-900 mb-1">Select your class</h1>
-            <p className="text-xs text-slate-500 mb-4">Content will be aligned to your exact CBSE syllabus.</p>
-            <div className="grid grid-cols-4 gap-2 mb-5">
-              {['6', '7', '8', '9', '10', '11', '12'].map(c => (
-                <button
-                  key={c}
-                  onClick={() => setCls(c)}
-                  className={`py-3 rounded-2xl text-xs font-bold border transition-all btn-press ${cls === c ? 'bg-blue-600 border-blue-600 text-white shadow-md shadow-blue-500/25' : 'bg-slate-50 border-slate-200 text-slate-700 hover:border-blue-400'}`}
-                >
-                  Class {c}
-                </button>
-              ))}
+          <div className="animate-slide-up space-y-3.5">
+            <div>
+              <h1 className="text-lg font-black text-slate-900">Select Your Target Exam / Standard</h1>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Your entire app will be 100% dedicated to this path with <b>zero clutter</b> from other exams.
+              </p>
             </div>
-            <button onClick={() => setStep(2)} className="w-full py-3 rounded-2xl bg-blue-600 text-white text-sm font-bold shadow-md shadow-blue-500/25 btn-press">
-              Continue →
-            </button>
-          </div>
-        )}
 
-        {step === 2 && (
-          <div className="animate-slide-up">
-            <h1 className="text-xl font-bold text-slate-900 mb-1">Your learning goal</h1>
-            <p className="text-xs text-slate-500 mb-4">We will tailor your practice difficulty.</p>
-            <div className="space-y-2 mb-5">
+            <div className="space-y-2 max-h-[60vh] overflow-y-auto no-scrollbar pr-0.5">
               {[
-                { id: 'board', t: '🎯 CBSE Board Exam Top Rank', d: 'Master step-by-step scoring & key terms' },
-                { id: 'concept', t: '💡 Complete Concept Clarity', d: 'Clear fundamental doubts with zero fear' },
-                { id: 'speed', t: '⚡ Fast Revision & Quiz Battles', d: 'Bite-sized revision before tests' }
-              ].map(g => (
-                <button
-                  key={g.id}
-                  onClick={() => setGoal(g.id)}
-                  className={`w-full p-3.5 rounded-2xl text-left border transition-all btn-press ${goal === g.id ? 'bg-blue-50 border-blue-600 shadow-sm' : 'bg-slate-50 border-slate-200'}`}
-                >
-                  <p className="text-xs font-bold text-slate-900">{g.t}</p>
-                  <p className="text-[10px] text-slate-500 mt-0.5">{g.d}</p>
-                </button>
-              ))}
+                TRACKS_CONFIG.jee,
+                TRACKS_CONFIG.neet,
+                TRACKS_CONFIG.cbse_12,
+                TRACKS_CONFIG.cbse_10
+              ].map(trk => {
+                const isSelected = selectedTrack === trk.id
+                return (
+                  <button
+                    key={trk.id}
+                    onClick={() => setSelectedTrack(trk.id)}
+                    className={`w-full p-3 rounded-2xl border text-left transition-all btn-press flex items-start gap-3 ${
+                      isSelected
+                        ? 'border-blue-600 bg-blue-50/80 shadow-sm'
+                        : 'border-slate-200 bg-slate-50/50 hover:border-slate-300'
+                    }`}
+                  >
+                    <span className="text-2xl mt-0.5">{trk.icon}</span>
+                    <div className="flex-1">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs font-black text-slate-900">{trk.name}</span>
+                        <span className={`text-[10px] font-black px-2 py-0.5 rounded-full ${
+                          isSelected ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-700'
+                        }`}>
+                          {trk.badge}
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">{trk.desc}</p>
+                      <div className="flex flex-wrap gap-1 mt-1.5">
+                        {trk.subjects.map(s => (
+                          <span key={s} className="text-[9px] font-bold bg-white text-blue-700 px-1.5 py-0.5 rounded border border-blue-200">
+                            {s}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </button>
+                )
+              })}
+
+              {/* Junior Class Option */}
+              <div className="p-3 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">🏫</span>
+                  <div>
+                    <p className="text-xs font-black text-slate-900">Junior CBSE Standards (Class 6-9)</p>
+                    <p className="text-[10px] text-slate-500">Foundation syllabus and chapter quizzes</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-4 gap-1.5">
+                  {['cbse_9', 'cbse_8', 'cbse_7', 'cbse_6'].map(cid => {
+                    const trk = TRACKS_CONFIG[cid]
+                    const isSelected = selectedTrack === cid
+                    return (
+                      <button
+                        key={cid}
+                        onClick={() => setSelectedTrack(cid)}
+                        className={`py-1.5 rounded-xl text-xs font-bold border transition-all ${
+                          isSelected ? 'bg-blue-600 text-white border-blue-600 shadow-xs' : 'bg-white text-slate-700 border-slate-200'
+                        }`}
+                      >
+                        Class {trk.classNum}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
             </div>
-            <button onClick={finish} className="w-full py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-bold shadow-lg shadow-blue-500/30 btn-press">
-              Enter Study Buddy App 🚀
-            </button>
+
+            <div className="flex gap-2 pt-1">
+              <button
+                onClick={() => setStep(0)}
+                className="py-3 px-4 rounded-2xl bg-slate-100 text-slate-600 text-xs font-bold"
+              >
+                ← Back
+              </button>
+              <button
+                onClick={() => handleFinish(selectedTrack)}
+                className="flex-1 py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs font-black shadow-lg shadow-blue-500/30 btn-press"
+              >
+                Enter My Dedicated Classroom 🚀
+              </button>
+            </div>
           </div>
         )}
       </div>
@@ -607,8 +869,29 @@ export default function App() {
   const [profile, setProfile] = useState(() => {
     try { return JSON.parse(localStorage.getItem('sb_profile')) } catch { return null }
   })
+  const [studentTrack, setStudentTrack] = useState(() => {
+    try {
+      const p = JSON.parse(localStorage.getItem('sb_profile'))
+      if (p?.track && TRACKS_CONFIG[p.track]) return p.track
+      if (p?.goal === 'jee' || p?.goal?.includes('jee')) return 'jee'
+      if (p?.goal === 'neet' || p?.goal?.includes('neet')) return 'neet'
+      if (p?.classNum === '12') return 'cbse_12'
+      if (p?.classNum === '10') return 'cbse_10'
+      if (p?.classNum === '9') return 'cbse_9'
+    } catch {}
+    return 'jee'
+  })
+  const [showTrackModal, setShowTrackModal] = useState(false)
   const [activeTab, setActiveTab] = useState('home') // home | plan | doubt | battle | report
-  const [classNum, setClassNum] = useState(profile?.classNum || '10')
+  const [classNum, setClassNum] = useState(() => {
+    try {
+      const p = JSON.parse(localStorage.getItem('sb_profile'))
+      const trk = p?.track || 'jee'
+      return TRACKS_CONFIG[trk]?.classNum || p?.classNum || '12'
+    } catch {
+      return '12'
+    }
+  })
   const [subjects, setSubjects] = useState([])
   const [subject, setSubject] = useState('')
   const [chapters, setChapters] = useState([])
@@ -780,15 +1063,32 @@ export default function App() {
   }
 
   // ── Exam Portals State (Separate JEE/NEET from CBSE Boards) ──
-  const [mainExamPortal, setMainExamPortal] = useState('cbse_boards') // 'jee_neet' | 'cbse_boards'
   const [boardSubTab, setBoardSubTab] = useState('tests') // 'tests' | 'qa' | 'battle'
   const [boardTestFilter, setBoardTestFilter] = useState('All') // 'All' | 'Class 10' | 'Class 12'
-  const [jeeSubTab, setJeeSubTab] = useState('tests') // 'tests' | 'summary' | 'weightage'
-  const [jeeTestFilter, setJeeTestFilter] = useState('All') // 'All' | 'JEE Main' | 'NEET UG'
+  const [jeeSubTab, setJeeSubTab] = useState('tests') // 'tests' | 'summary' | 'weightage' | 'battle'
+  const [neetSubTab, setNeetSubTab] = useState('tests') // 'tests' | 'summary' | 'weightage' | 'battle'
+  const [jeeTestFilter, setJeeTestFilter] = useState('All') // 'All' | 'JEE Main'
+  const [neetTestFilter, setNeetTestFilter] = useState('All') // 'All' | 'NEET UG'
   const [jeeSummarySub, setJeeSummarySub] = useState('Physics')
+  const [neetSummarySub, setNeetSummarySub] = useState('Biology')
   const [qaMarksFilter, setQaMarksFilter] = useState('All') // 'All' | 1 | 2 | 3 | 5
   const [expandedQa, setExpandedQa] = useState({})
   const [qaUserNotes, setQaUserNotes] = useState({})
+
+  const changeStudentTrack = (newTrackId) => {
+    const cfg = TRACKS_CONFIG[newTrackId] || TRACKS_CONFIG.cbse_10
+    setStudentTrack(newTrackId)
+    setClassNum(cfg.classNum)
+    setSubjects(cfg.subjects)
+    setSubject(cfg.subjects[0])
+    setActiveMockTest(null)
+    setTestSubmitted(false)
+    setTestAnalytics(null)
+    const updated = { ...(profile || {}), track: newTrackId, classNum: cfg.classNum }
+    setProfile(updated)
+    try { localStorage.setItem('sb_profile', JSON.stringify(updated)) } catch {}
+    setShowTrackModal(false)
+  }
 
   // ── Exam Goal, NTA Weightage & CBT Mock Test Series State ──
   const [examTrack, setExamTrack] = useState('JEE') // 'JEE' | 'NEET' | 'CBSE'
@@ -1370,7 +1670,17 @@ Report verified by Study Buddy AI.`
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank')
   }
 
-  if (!profile) return <Onboarding onComplete={p => { setProfile(p); setClassNum(p.classNum) }} />
+  if (!profile) {
+    return (
+      <Onboarding
+        onComplete={p => {
+          setProfile(p)
+          if (p.track) changeStudentTrack(p.track)
+          else setClassNum(p.classNum || '12')
+        }}
+      />
+    )
+  }
 
   // Subject icon mappings
   const subjectIcons = {
@@ -1383,10 +1693,20 @@ Report verified by Study Buddy AI.`
     'Biology': '🧬'
   }
 
+  const currentTrackConfig = TRACKS_CONFIG[studentTrack] || TRACKS_CONFIG.cbse_10
+
   return (
     <div className="min-h-screen bg-[#F1F5F9] flex justify-center selection:bg-blue-100">
       {showCam && <CameraModal onCapture={handleCamCapture} onClose={() => setShowCam(false)} />}
       
+      {/* ── TRACK SWITCHER MODAL ── */}
+      <TrackSwitcherModal
+        isOpen={showTrackModal}
+        onClose={() => setShowTrackModal(false)}
+        currentTrack={studentTrack}
+        onSelectTrack={changeStudentTrack}
+      />
+
       {/* ── SUBSCRIPTION / PAYWALL MODAL (5-Day Trial Funnel) ── */}
       <SubscriptionModal
         isOpen={showSubModal}
@@ -1406,7 +1726,7 @@ Report verified by Study Buddy AI.`
         {!activeMockTest && (
           <header className="sticky top-0 z-30 bg-white border-b border-slate-200 px-4 pt-3 pb-3 shadow-xs">
             <div className="flex items-center justify-between">
-              {/* Left: Avatar + Greeting */}
+              {/* Left: Avatar + Greeting + Dedicated Target Badge */}
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-xl bg-blue-600 text-white font-extrabold flex items-center justify-center text-xs shadow-xs">
                   {name.charAt(0).toUpperCase()}
@@ -1414,11 +1734,17 @@ Report verified by Study Buddy AI.`
                 <div>
                   <div className="flex items-center gap-1.5">
                     <span className="text-xs font-bold text-slate-900 leading-none">Hi, {name}</span>
-                    <span className="text-[10px] bg-blue-50 text-blue-700 font-bold px-1.5 py-0.5 rounded-md border border-blue-200/60">
-                      Class {classNum}
-                    </span>
+                    <button
+                      onClick={() => setShowTrackModal(true)}
+                      className="flex items-center gap-1 text-[10px] bg-blue-50 hover:bg-blue-100 text-blue-700 font-black px-2 py-0.5 rounded-md border border-blue-200 transition-all btn-press shadow-xs"
+                      title="Tap to switch target standard / exam"
+                    >
+                      <span>{currentTrackConfig.icon}</span>
+                      <span>{currentTrackConfig.badge}</span>
+                      <span className="text-[9px] text-blue-500">▾</span>
+                    </button>
                   </div>
-                  <p className="text-[10px] text-slate-400 font-medium mt-0.5">CBSE 2026-27</p>
+                  <p className="text-[10px] text-slate-400 font-medium mt-0.5">{currentTrackConfig.name}</p>
                 </div>
               </div>
 
@@ -2206,111 +2532,98 @@ Report verified by Study Buddy AI.`
                 </div>
               )}
 
-              {/* ── 3. DUAL EXAM PORTAL: JEE/NEET vs CBSE BOARDS ── */}
+              {/* ── 3. DEDICATED EXAM TRACK ARENA (100% TAILORED TO STUDENT'S CHOSEN PATH) ── */}
               {!activeMockTest && (
-                <>
-                  {/* Primary Portal Switcher: JEE & NEET vs CBSE Boards */}
-                  <div className="grid grid-cols-2 gap-2 bg-slate-100 p-1.5 rounded-2xl border border-slate-200 shadow-xs">
-                    <button
-                      onClick={() => setMainExamPortal('jee_neet')}
-                      className={`py-2.5 px-3 rounded-xl text-xs font-black transition-all flex flex-col items-center justify-center gap-0.5 ${
-                        mainExamPortal === 'jee_neet'
-                          ? 'bg-gradient-to-r from-blue-700 to-indigo-800 text-white shadow-md'
-                          : 'text-slate-600 hover:text-slate-900 bg-white/70'
-                      }`}
-                    >
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-sm">🎯</span>
-                        <span>JEE & NEET Portal</span>
-                      </div>
-                      <span className={`text-[10px] font-medium ${mainExamPortal === 'jee_neet' ? 'text-blue-200' : 'text-slate-500'}`}>
-                        NTA CBT Mock Tests & Summaries
+                <div className="space-y-3.5 animate-slide-up">
+                  {/* Dedicated Target Banner with 1-Click Track Switcher */}
+                  <div className="allen-card p-3.5 bg-gradient-to-r from-slate-900 via-blue-950 to-indigo-950 text-white shadow-md">
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-[10px] font-black uppercase tracking-wider bg-white/20 text-blue-200 px-2.5 py-0.5 rounded-full border border-white/20 flex items-center gap-1">
+                        <span>{currentTrackConfig.icon}</span>
+                        <span>Dedicated {currentTrackConfig.name}</span>
                       </span>
-                    </button>
-
-                    <button
-                      onClick={() => setMainExamPortal('cbse_boards')}
-                      className={`py-2.5 px-3 rounded-xl text-xs font-black transition-all flex flex-col items-center justify-center gap-0.5 ${
-                        mainExamPortal === 'cbse_boards'
-                          ? 'bg-gradient-to-r from-blue-700 to-indigo-800 text-white shadow-md'
-                          : 'text-slate-600 hover:text-slate-900 bg-white/70'
-                      }`}
-                    >
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-sm">📚</span>
-                        <span>CBSE Board Exams</span>
-                      </div>
-                      <span className={`text-[10px] font-medium ${mainExamPortal === 'cbse_boards' ? 'text-blue-200' : 'text-slate-500'}`}>
-                        Class 10 & 12 • 1M-5M Q&A • Quizzes
-                      </span>
-                    </button>
+                      <button
+                        onClick={() => setShowTrackModal(true)}
+                        className="text-[10px] font-bold text-amber-300 hover:text-white flex items-center gap-1 underline btn-press"
+                        title="Change your target standard or exam"
+                      >
+                        <span>Switch Target</span>
+                        <span>▾</span>
+                      </button>
+                    </div>
+                    <h3 className="text-sm font-black text-white">
+                      {studentTrack === 'jee' && 'JEE Main & Advanced CBT Simulator Arena'}
+                      {studentTrack === 'neet' && 'NEET UG 2026 Medical Prep Arena'}
+                      {studentTrack === 'cbse_12' && 'CBSE Class 12 Senior Boards Portal'}
+                      {studentTrack === 'cbse_10' && 'CBSE Class 10 High School Boards Portal'}
+                      {!['jee', 'neet', 'cbse_12', 'cbse_10'].includes(studentTrack) && `CBSE Class ${classNum} Foundation Practice`}
+                    </h3>
+                    <p className="text-[11px] text-slate-300 mt-0.5">
+                      {studentTrack === 'jee' && '180 Mins • NTA Marking (+4 / -1) • Physics, Chem, Math • AIR Predictor'}
+                      {studentTrack === 'neet' && '180 Mins • 720 Marks • NTA Marking (+4 / -1) • Biology, Physics, Chem'}
+                      {studentTrack === 'cbse_12' && 'Official Board Marking Scheme • 1M-5M Model Answers • Class 12 Papers'}
+                      {studentTrack === 'cbse_10' && 'Official Board Marking Scheme • 1M-5M Model Answers • Class 10 Papers'}
+                      {!['jee', 'neet', 'cbse_12', 'cbse_10'].includes(studentTrack) && `Curriculum aligned to Class ${classNum} syllabus`}
+                    </p>
                   </div>
 
                   {/* ══════════════════════════════════════════════════════════
-                      PORTAL 1: 🎯 JEE & NEET (COMPETITIVE PORTAL)
+                      1. DEDICATED JEE MAIN & ADVANCED ARENA
                      ══════════════════════════════════════════════════════════ */}
-                  {mainExamPortal === 'jee_neet' && (
-                    <div className="space-y-3.5 animate-slide-up">
-                      {/* JEE/NEET Sub-Tabs */}
-                      <div className="grid grid-cols-3 gap-1.5 bg-slate-200/80 p-1 rounded-2xl">
+                  {studentTrack === 'jee' && (
+                    <div className="space-y-3.5">
+                      {/* Sub-Tabs: Tests, Summaries, Weightage, Quiz */}
+                      <div className="grid grid-cols-4 gap-1 bg-slate-200/80 p-1 rounded-2xl">
                         <button
                           onClick={() => setJeeSubTab('tests')}
-                          className={`py-2 rounded-xl text-xs font-extrabold transition-all btn-press ${
+                          className={`py-2 rounded-xl text-xs font-black transition-all btn-press ${
                             jeeSubTab === 'tests' ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600'
                           }`}
                         >
-                          📝 CBT Mock Tests
+                          📝 CBT Tests
                         </button>
                         <button
                           onClick={() => setJeeSubTab('summary')}
-                          className={`py-2 rounded-xl text-xs font-extrabold transition-all btn-press ${
+                          className={`py-2 rounded-xl text-xs font-black transition-all btn-press ${
                             jeeSubTab === 'summary' ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600'
                           }`}
                         >
-                          📖 Formulas & Traps
+                          📖 Formulas
                         </button>
                         <button
                           onClick={() => setJeeSubTab('weightage')}
-                          className={`py-2 rounded-xl text-xs font-extrabold transition-all btn-press ${
+                          className={`py-2 rounded-xl text-xs font-black transition-all btn-press ${
                             jeeSubTab === 'weightage' ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600'
                           }`}
                         >
-                          🎯 NTA Weightage
+                          🎯 Weightage
+                        </button>
+                        <button
+                          onClick={() => setJeeSubTab('battle')}
+                          className={`py-2 rounded-xl text-xs font-black transition-all btn-press ${
+                            jeeSubTab === 'battle' ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600'
+                          }`}
+                        >
+                          ⚔️ Quiz Battle
                         </button>
                       </div>
 
-                      {/* SUB-VIEW 1A: 📝 JEE & NEET CBT TESTS */}
+                      {/* JEE SUB-VIEW A: CBT MOCK TESTS */}
                       {jeeSubTab === 'tests' && (
                         <div className="space-y-3 animate-slide-up">
                           <div className="flex justify-between items-center">
                             <div>
-                              <h3 className="text-sm font-bold text-slate-900">JEE & NEET CBT Test Series</h3>
-                              <p className="text-[11px] text-slate-500">180 Mins • NTA Marking (+4 / -1) • All-India Rank Predictor</p>
+                              <h4 className="text-xs font-black text-slate-900">JEE Main 2026 Full CBT Mock Tests</h4>
+                              <p className="text-[10px] text-slate-500">180 Mins • 300 Marks • +4 / -1 Marking • Official Shift Papers</p>
                             </div>
-                            <span className="text-[11px] font-black bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-lg">
+                            <span className="text-[10px] font-black bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-lg">
                               {getTestsAllowedForUser()} of 20 Unlocked
                             </span>
                           </div>
 
-                          {/* Filter Pills */}
-                          <div className="flex gap-1.5">
-                            {['All', 'JEE Main', 'NEET UG'].map(f => (
-                              <button
-                                key={f}
-                                onClick={() => setJeeTestFilter(f)}
-                                className={`px-3 py-1 rounded-lg text-[11px] font-semibold border ${
-                                  jeeTestFilter === f ? 'bg-slate-800 text-white border-slate-800' : 'bg-white text-slate-600 border-slate-200'
-                                }`}
-                              >
-                                {f === 'All' ? 'All JEE & NEET' : f}
-                              </button>
-                            ))}
-                          </div>
-
-                          {/* Test Cards */}
                           <div className="space-y-2">
                             {MOCK_TESTS_CATALOG
-                              .filter(t => t.exam !== 'CBSE Board' && (jeeTestFilter === 'All' || t.exam === jeeTestFilter))
+                              .filter(t => t.exam === 'JEE Main')
                               .map(t => {
                                 const allowed = getTestsAllowedForUser()
                                 const isUnlocked = (t.tierRank || 1) <= allowed
@@ -2326,15 +2639,11 @@ Report verified by Study Buddy AI.`
                                   <div key={t.id} className="bg-white rounded-xl border border-slate-200 p-3 hover:border-blue-300 transition-all shadow-xs">
                                     <div className="flex justify-between items-start mb-1.5">
                                       <div className="flex items-center gap-1.5">
-                                        <span className={`text-[10px] font-black px-2 py-0.5 rounded ${
-                                          t.exam === 'JEE Main' ? 'bg-blue-50 text-blue-700 border border-blue-200' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                                        }`}>
-                                          {t.exam}
+                                        <span className="text-[10px] font-black px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">
+                                          JEE Main CBT
                                         </span>
                                         <span className="text-[10px] text-slate-400 font-medium">Test #{t.tierRank}</span>
                                       </div>
-
-                                      {/* Plan requirement tag */}
                                       <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                                         (t.tierRank || 1) <= 2
                                           ? 'bg-emerald-100 text-emerald-800'
@@ -2357,7 +2666,7 @@ Report verified by Study Buddy AI.`
                                       <span>•</span>
                                       <span>{t.questionsCount} Questions</span>
                                       <span>•</span>
-                                      <span className="text-slate-600 font-medium">Sections: {t.sections.join(', ')}</span>
+                                      <span className="text-blue-700 font-medium">{t.sections.join(' • ')}</span>
                                     </div>
 
                                     <div className="flex gap-2">
@@ -2387,17 +2696,11 @@ Report verified by Study Buddy AI.`
                         </div>
                       )}
 
-                      {/* SUB-VIEW 1B: 📖 CHAPTERWISE FORMULAS, TRAPS & NTA PYQ TRENDS */}
+                      {/* JEE SUB-VIEW B: FORMULAS & NTA TRAPS */}
                       {jeeSubTab === 'summary' && (
                         <div className="space-y-3 animate-slide-up">
-                          <div>
-                            <h3 className="text-sm font-bold text-slate-900">JEE & NEET Chapterwise High-Yield Summaries</h3>
-                            <p className="text-[11px] text-slate-500">Formulas, NTA traps, and must-know PYQ trends.</p>
-                          </div>
-
-                          {/* Subject Switcher */}
                           <div className="flex gap-1.5 overflow-x-auto no-scrollbar">
-                            {['Physics', 'Chemistry', 'Mathematics', 'Biology'].map(s => (
+                            {['Physics', 'Chemistry', 'Mathematics'].map(s => (
                               <button
                                 key={s}
                                 onClick={() => setJeeSummarySub(s)}
@@ -2410,24 +2713,22 @@ Report verified by Study Buddy AI.`
                             ))}
                           </div>
 
-                          {/* Summary Cards */}
                           <div className="space-y-3">
                             {(JEE_NEET_CHAPTER_SUMMARIES[jeeSummarySub] || []).map((ch, idx) => (
                               <div key={idx} className="bg-white rounded-2xl border border-slate-200 p-4 space-y-3 shadow-xs">
                                 <div className="flex justify-between items-start">
                                   <div>
                                     <h4 className="text-xs font-black text-slate-900">{ch.chapter}</h4>
-                                    <p className="text-[10px] text-blue-600 font-bold mt-0.5">PYQ Frequency: {ch.pyqCount}</p>
+                                    <p className="text-[10px] text-blue-600 font-bold mt-0.5">NTA Shift Frequency: {ch.pyqCount}</p>
                                   </div>
                                   <span className="text-[10px] font-extrabold bg-rose-50 text-rose-700 border border-rose-200 px-2 py-0.5 rounded-full">
                                     Weightage {ch.weightage}
                                   </span>
                                 </div>
 
-                                {/* Key Formulas */}
                                 <div className="p-3 bg-slate-50 border border-slate-100 rounded-xl space-y-1.5">
                                   <p className="text-[11px] font-extrabold text-slate-800 flex items-center gap-1">
-                                    <span>📐</span> <span>Key Formulas & Governing Laws:</span>
+                                    <span>📐</span> <span>Key Formulas & Relations:</span>
                                   </p>
                                   <div className="space-y-1 pl-1">
                                     {ch.keyFormulas.map((f, i) => (
@@ -2438,20 +2739,18 @@ Report verified by Study Buddy AI.`
                                   </div>
                                 </div>
 
-                                {/* Common NTA Traps */}
                                 <div className="p-3 bg-amber-50/80 border border-amber-200/80 rounded-xl space-y-1">
                                   <p className="text-[11px] font-extrabold text-amber-900 flex items-center gap-1">
-                                    <span>⚠️</span> <span>Common NTA Traps & Mistakes to Avoid:</span>
+                                    <span>⚠️</span> <span>Common NTA Traps & Mistakes:</span>
                                   </p>
                                   <p className="text-xs text-amber-800 leading-relaxed font-medium">
                                     {ch.commonTraps}
                                   </p>
                                 </div>
 
-                                {/* Repeated PYQ Topics */}
                                 <div>
                                   <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
-                                    Frequently Tested NTA PYQ Topics:
+                                    Repeated NTA Shift Topics:
                                   </p>
                                   <div className="flex flex-wrap gap-1.5">
                                     {ch.repeatedTopics.map((top, i) => (
@@ -2467,35 +2766,11 @@ Report verified by Study Buddy AI.`
                         </div>
                       )}
 
-                      {/* SUB-VIEW 1C: 🎯 NTA CHAPTER WEIGHTAGE */}
+                      {/* JEE SUB-VIEW C: NTA WEIGHTAGE */}
                       {jeeSubTab === 'weightage' && (
                         <div className="space-y-3 animate-slide-up">
-                          <div className="flex justify-between items-center">
-                            <div>
-                              <h3 className="text-sm font-bold text-slate-900">Official NTA Weightage Matrix</h3>
-                              <p className="text-[11px] text-slate-500">Based on past 10-year shift-by-shift paper analysis.</p>
-                            </div>
-                            <div className="flex gap-1 bg-slate-100 p-1 rounded-xl">
-                              {['JEE', 'NEET'].map(ex => (
-                                <button
-                                  key={ex}
-                                  onClick={() => {
-                                    setExamTrack(ex)
-                                    setWeightageSub(ex === 'NEET' ? 'Biology' : 'Physics')
-                                  }}
-                                  className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
-                                    examTrack === ex ? 'bg-blue-600 text-white' : 'text-slate-500'
-                                  }`}
-                                >
-                                  {ex}
-                                </button>
-                              ))}
-                            </div>
-                          </div>
-
-                          {/* Subject Pills */}
                           <div className="flex gap-1.5 overflow-x-auto no-scrollbar">
-                            {Object.keys(NTA_WEIGHTAGE_DATA[examTrack] || {}).map(subName => (
+                            {['Physics', 'Chemistry', 'Mathematics'].map(subName => (
                               <button
                                 key={subName}
                                 onClick={() => setWeightageSub(subName)}
@@ -2508,24 +2783,20 @@ Report verified by Study Buddy AI.`
                             ))}
                           </div>
 
-                          {/* Chapter List */}
                           <div className="space-y-1.5">
-                            {(NTA_WEIGHTAGE_DATA[examTrack]?.[weightageSub] || []).map((ch, idx) => (
+                            {(NTA_WEIGHTAGE_DATA['JEE']?.[weightageSub] || []).map((ch, idx) => (
                               <div key={idx} className="bg-white rounded-xl border border-slate-200 p-3">
                                 <div className="flex justify-between items-start gap-2 mb-1">
                                   <h4 className="text-xs font-bold text-slate-900 leading-snug flex-1">{ch.chapter}</h4>
                                   <span className="text-[10px] font-bold text-rose-600 whitespace-nowrap">{ch.weightage}</span>
                                 </div>
-
                                 <div className="flex items-center gap-2 text-[10px] mb-1.5">
                                   <span className="font-semibold text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded">{ch.priority}</span>
                                   {ch.avgQuestions && <span className="text-blue-600 font-medium">{ch.avgQuestions}</span>}
                                 </div>
-
                                 <p className="text-[11px] text-slate-500 leading-relaxed mb-1.5">
                                   <span className="font-semibold text-slate-600">Trend:</span> {ch.trend}
                                 </p>
-
                                 {ch.topTopics && (
                                   <div className="flex flex-wrap gap-1">
                                     {ch.topTopics.map((top, i) => (
@@ -2540,35 +2811,434 @@ Report verified by Study Buddy AI.`
                           </div>
                         </div>
                       )}
+
+                      {/* JEE SUB-VIEW D: SPEED QUIZ BATTLE */}
+                      {jeeSubTab === 'battle' && (
+                        <div className="space-y-3.5 animate-slide-up">
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => setBtActive(false)}
+                              className="flex-1 py-2 rounded-xl bg-blue-600 text-white font-bold text-xs shadow-xs"
+                            >
+                              ⚔️ 60s Speed Battle
+                            </button>
+                            <button
+                              onClick={() => handleGenLesson()}
+                              className="flex-1 py-2 rounded-xl bg-white text-slate-700 font-bold text-xs border border-slate-200"
+                            >
+                              🎬 AI Video Lesson
+                            </button>
+                          </div>
+
+                          {!btActive ? (
+                            <div className="allen-card p-5 text-center">
+                              <div className="w-14 h-14 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center text-3xl mx-auto mb-2.5">⚔️</div>
+                              <h3 className="text-base font-extrabold text-slate-900 mb-1">JEE 60-Second Speed Battle</h3>
+                              <p className="text-xs text-slate-500 mb-4">Topic: <b>{chapter}</b>. 5 rapid JEE MCQs against the clock.</p>
+                              <button
+                                onClick={handleStartBattle}
+                                disabled={btLoad}
+                                className="w-full py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs font-extrabold shadow-md btn-press"
+                              >
+                                {btLoad ? 'Preparing Questions...' : '🚀 Start JEE Battle (+30 XP)'}
+                              </button>
+                            </div>
+                          ) : btDone ? (
+                            <div className="allen-card p-5 text-center animate-slide-up">
+                              <p className="text-3xl mb-1">{btScore >= 4 ? '🏆' : btScore >= 2 ? '⭐' : '📝'}</p>
+                              <h4 className="text-base font-extrabold text-slate-900">Battle Complete!</h4>
+                              <p className="text-2xl font-black text-blue-600 my-1">{btScore} / {btQs.length}</p>
+                              <p className="text-xs text-slate-500 mb-4">{btScore === btQs.length ? '100% Accuracy! Outstanding JEE Speed.' : 'Good effort! Review weak questions.'}</p>
+                              <button
+                                onClick={() => { setBtActive(false); setBtDone(false) }}
+                                className="w-full py-2.5 rounded-xl bg-blue-600 text-white text-xs font-bold btn-press shadow-xs"
+                              >
+                                Play Again
+                              </button>
+                            </div>
+                          ) : (
+                            <div className="allen-card p-4 animate-slide-up">
+                              <div className="flex justify-between items-center mb-2">
+                                <span className="text-xs font-bold text-slate-500">Q {btIdx + 1} / {btQs.length}</span>
+                                <span className={`text-xs font-extrabold px-2.5 py-1 rounded-full ${btTimer <= 15 ? 'bg-rose-100 text-rose-700 animate-pulse' : 'bg-amber-100 text-amber-800'}`}>
+                                  ⏱️ {btTimer}s
+                                </span>
+                                <span className="text-xs font-bold text-blue-600">Score: {btScore}</span>
+                              </div>
+                              <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden mb-3">
+                                <div className="bg-blue-600 h-full transition-all" style={{ width: `${((btIdx + 1) / btQs.length) * 100}%` }} />
+                              </div>
+                              <p className="text-xs font-bold text-slate-900 mb-3">{btQs[btIdx]?.q}</p>
+                              <div className="space-y-1.5">
+                                {btQs[btIdx]?.opts.map((o, i) => {
+                                  const letter = o.match(/^([A-D])\)/)?.[1] || ''
+                                  return (
+                                    <button
+                                      key={i}
+                                      onClick={() => handleAnswerBattle(letter)}
+                                      className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-xs font-medium text-left hover:border-blue-500 btn-press"
+                                    >
+                                      {o}
+                                    </button>
+                                  )
+                                })}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
                   )}
 
                   {/* ══════════════════════════════════════════════════════════
-                      PORTAL 2: 📚 CBSE BOARD EXAMS (CLASS 10 & CLASS 12)
+                      2. DEDICATED NEET UG 2026 MEDICAL ARENA
                      ══════════════════════════════════════════════════════════ */}
-                  {mainExamPortal === 'cbse_boards' && (
-                    <div className="space-y-3.5 animate-slide-up">
-                      {/* CBSE Sub-Tabs */}
+                  {studentTrack === 'neet' && (
+                    <div className="space-y-3.5">
+                      {/* Sub-Tabs: Tests, Summaries, Weightage, Quiz */}
+                      <div className="grid grid-cols-4 gap-1 bg-slate-200/80 p-1 rounded-2xl">
+                        <button
+                          onClick={() => setNeetSubTab('tests')}
+                          className={`py-2 rounded-xl text-xs font-black transition-all btn-press ${
+                            neetSubTab === 'tests' ? 'bg-white text-emerald-700 shadow-xs' : 'text-slate-600'
+                          }`}
+                        >
+                          📝 CBT Tests
+                        </button>
+                        <button
+                          onClick={() => setNeetSubTab('summary')}
+                          className={`py-2 rounded-xl text-xs font-black transition-all btn-press ${
+                            neetSubTab === 'summary' ? 'bg-white text-emerald-700 shadow-xs' : 'text-slate-600'
+                          }`}
+                        >
+                          📖 NCERT
+                        </button>
+                        <button
+                          onClick={() => setNeetSubTab('weightage')}
+                          className={`py-2 rounded-xl text-xs font-black transition-all btn-press ${
+                            neetSubTab === 'weightage' ? 'bg-white text-emerald-700 shadow-xs' : 'text-slate-600'
+                          }`}
+                        >
+                          🎯 Weightage
+                        </button>
+                        <button
+                          onClick={() => setNeetSubTab('battle')}
+                          className={`py-2 rounded-xl text-xs font-black transition-all btn-press ${
+                            neetSubTab === 'battle' ? 'bg-white text-emerald-700 shadow-xs' : 'text-slate-600'
+                          }`}
+                        >
+                          ⚔️ Quiz Battle
+                        </button>
+                      </div>
+
+                      {/* NEET SUB-VIEW A: CBT MOCK TESTS */}
+                      {neetSubTab === 'tests' && (
+                        <div className="space-y-3 animate-slide-up">
+                          <div className="flex justify-between items-center">
+                            <div>
+                              <h4 className="text-xs font-black text-slate-900">NEET UG 2026 All-India 720M Mock Tests</h4>
+                              <p className="text-[10px] text-slate-500">180 Mins • 720 Marks • Biology, Physics, Chemistry • NTA Pattern</p>
+                            </div>
+                            <span className="text-[10px] font-black bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-lg">
+                              {getTestsAllowedForUser()} of 20 Unlocked
+                            </span>
+                          </div>
+
+                          <div className="space-y-2">
+                            {MOCK_TESTS_CATALOG
+                              .filter(t => t.exam === 'NEET UG')
+                              .map(t => {
+                                const allowed = getTestsAllowedForUser()
+                                const isUnlocked = (t.tierRank || 1) <= allowed
+                                const planNeeded = (t.tierRank || 1) <= 2 
+                                  ? 'Free Trial' 
+                                  : (t.tierRank || 1) <= 5 
+                                    ? 'Starter Plan (5 Tests)' 
+                                    : (t.tierRank || 1) <= 10 
+                                      ? 'Board & Prep Pass (10 Tests)' 
+                                      : 'All-Access Pass (20 Tests)'
+
+                                return (
+                                  <div key={t.id} className="bg-white rounded-xl border border-slate-200 p-3 hover:border-emerald-300 transition-all shadow-xs">
+                                    <div className="flex justify-between items-start mb-1.5">
+                                      <div className="flex items-center gap-1.5">
+                                        <span className="text-[10px] font-black px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                          NEET UG CBT
+                                        </span>
+                                        <span className="text-[10px] text-slate-400 font-medium">Test #{t.tierRank}</span>
+                                      </div>
+                                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                                        (t.tierRank || 1) <= 2
+                                          ? 'bg-emerald-100 text-emerald-800'
+                                          : (t.tierRank || 1) <= 5
+                                            ? 'bg-blue-100 text-blue-800'
+                                            : (t.tierRank || 1) <= 10
+                                              ? 'bg-indigo-100 text-indigo-800'
+                                              : 'bg-amber-100 text-amber-800'
+                                      }`}>
+                                        {(t.tierRank || 1) <= 2 ? '🎁 Free Sample' : planNeeded}
+                                      </span>
+                                    </div>
+
+                                    <h4 className="text-xs font-bold text-slate-900 mb-1 leading-snug">{t.title}</h4>
+                                    
+                                    <div className="flex items-center gap-2 text-[10px] text-slate-500 mb-2.5">
+                                      <span>⏱ {t.durationMinutes} mins</span>
+                                      <span>•</span>
+                                      <span>{t.totalMarks} Marks</span>
+                                      <span>•</span>
+                                      <span>{t.questionsCount} Questions</span>
+                                      <span>•</span>
+                                      <span className="text-emerald-700 font-medium">{t.sections.join(' • ')}</span>
+                                    </div>
+
+                                    <div className="flex gap-2">
+                                      <button
+                                        onClick={() => handleStartMockTest(t)}
+                                        className={`flex-1 py-2 rounded-xl text-xs font-bold btn-press flex items-center justify-center gap-1.5 ${
+                                          isUnlocked || !isTrialExpired
+                                            ? 'bg-emerald-600 text-white shadow-xs'
+                                            : 'bg-slate-100 text-slate-700 border border-slate-300'
+                                        }`}
+                                      >
+                                        <span>{isUnlocked || !isTrialExpired ? '▶ Start NEET Simulator' : '🔒 Unlock in Plan'}</span>
+                                      </button>
+                                      <button
+                                        onClick={() => downloadTestPaperAndAnswerSheet(t)}
+                                        className="py-2 px-3 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 btn-press shrink-0 flex items-center gap-1"
+                                        title="Download Question Paper + Separate Answer Sheet PDF"
+                                      >
+                                        <span>📄</span>
+                                        <span>PDF + Key</span>
+                                      </button>
+                                    </div>
+                                  </div>
+                                )
+                              })}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* NEET SUB-VIEW B: NCERT HIGH-YIELD POINTS */}
+                      {neetSubTab === 'summary' && (
+                        <div className="space-y-3 animate-slide-up">
+                          <div className="flex gap-1.5 overflow-x-auto no-scrollbar">
+                            {['Biology', 'Physics', 'Chemistry'].map(s => (
+                              <button
+                                key={s}
+                                onClick={() => setNeetSummarySub(s)}
+                                className={`px-3 py-1.5 rounded-xl text-xs font-bold shrink-0 border transition-all ${
+                                  neetSummarySub === s ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs' : 'bg-white text-slate-600 border-slate-200'
+                                }`}
+                              >
+                                {s}
+                              </button>
+                            ))}
+                          </div>
+
+                          <div className="space-y-3">
+                            {(JEE_NEET_CHAPTER_SUMMARIES[neetSummarySub] || []).map((ch, idx) => (
+                              <div key={idx} className="bg-white rounded-2xl border border-slate-200 p-4 space-y-3 shadow-xs">
+                                <div className="flex justify-between items-start">
+                                  <div>
+                                    <h4 className="text-xs font-black text-slate-900">{ch.chapter}</h4>
+                                    <p className="text-[10px] text-emerald-700 font-bold mt-0.5">NTA Paper Frequency: {ch.pyqCount}</p>
+                                  </div>
+                                  <span className="text-[10px] font-extrabold bg-rose-50 text-rose-700 border border-rose-200 px-2 py-0.5 rounded-full">
+                                    Weightage {ch.weightage}
+                                  </span>
+                                </div>
+
+                                <div className="p-3 bg-slate-50 border border-slate-100 rounded-xl space-y-1.5">
+                                  <p className="text-[11px] font-extrabold text-slate-800 flex items-center gap-1">
+                                    <span>📐</span> <span>Key NCERT Principles & Relations:</span>
+                                  </p>
+                                  <div className="space-y-1 pl-1">
+                                    {ch.keyFormulas.map((f, i) => (
+                                      <p key={i} className="text-xs font-mono text-slate-700 bg-white p-1.5 rounded-lg border border-slate-200/60">
+                                        • {f}
+                                      </p>
+                                    ))}
+                                  </div>
+                                </div>
+
+                                <div className="p-3 bg-amber-50/80 border border-amber-200/80 rounded-xl space-y-1">
+                                  <p className="text-[11px] font-extrabold text-amber-900 flex items-center gap-1">
+                                    <span>⚠️</span> <span>Common NCERT Confusions & Traps:</span>
+                                  </p>
+                                  <p className="text-xs text-amber-800 leading-relaxed font-medium">
+                                    {ch.commonTraps}
+                                  </p>
+                                </div>
+
+                                <div>
+                                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                                    Frequently Tested NCERT Diagrams & Topics:
+                                  </p>
+                                  <div className="flex flex-wrap gap-1.5">
+                                    {ch.repeatedTopics.map((top, i) => (
+                                      <span key={i} className="text-[10px] font-semibold text-slate-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md">
+                                        ⭐ {top}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* NEET SUB-VIEW C: NTA WEIGHTAGE */}
+                      {neetSubTab === 'weightage' && (
+                        <div className="space-y-3 animate-slide-up">
+                          <div className="flex gap-1.5 overflow-x-auto no-scrollbar">
+                            {['Biology', 'Physics', 'Chemistry'].map(subName => (
+                              <button
+                                key={subName}
+                                onClick={() => setWeightageSub(subName)}
+                                className={`px-3 py-1 rounded-lg text-xs font-semibold shrink-0 border ${
+                                  weightageSub === subName ? 'bg-slate-800 text-white border-slate-800' : 'bg-white text-slate-600 border-slate-200'
+                                }`}
+                              >
+                                {subName}
+                              </button>
+                            ))}
+                          </div>
+
+                          <div className="space-y-1.5">
+                            {(NTA_WEIGHTAGE_DATA['NEET']?.[weightageSub] || []).map((ch, idx) => (
+                              <div key={idx} className="bg-white rounded-xl border border-slate-200 p-3">
+                                <div className="flex justify-between items-start gap-2 mb-1">
+                                  <h4 className="text-xs font-bold text-slate-900 leading-snug flex-1">{ch.chapter}</h4>
+                                  <span className="text-[10px] font-bold text-rose-600 whitespace-nowrap">{ch.weightage}</span>
+                                </div>
+                                <div className="flex items-center gap-2 text-[10px] mb-1.5">
+                                  <span className="font-semibold text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded">{ch.priority}</span>
+                                  {ch.avgQuestions && <span className="text-emerald-700 font-medium">{ch.avgQuestions}</span>}
+                                </div>
+                                <p className="text-[11px] text-slate-500 leading-relaxed mb-1.5">
+                                  <span className="font-semibold text-slate-600">Trend:</span> {ch.trend}
+                                </p>
+                                {ch.topTopics && (
+                                  <div className="flex flex-wrap gap-1">
+                                    {ch.topTopics.map((top, i) => (
+                                      <span key={i} className="text-[10px] text-slate-600 bg-slate-50 border border-slate-100 px-1.5 py-0.5 rounded">
+                                        {top}
+                                      </span>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* NEET SUB-VIEW D: SPEED QUIZ BATTLE */}
+                      {neetSubTab === 'battle' && (
+                        <div className="space-y-3.5 animate-slide-up">
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => setBtActive(false)}
+                              className="flex-1 py-2 rounded-xl bg-emerald-600 text-white font-bold text-xs shadow-xs"
+                            >
+                              ⚔️ 60s Speed Battle
+                            </button>
+                            <button
+                              onClick={() => handleGenLesson()}
+                              className="flex-1 py-2 rounded-xl bg-white text-slate-700 font-bold text-xs border border-slate-200"
+                            >
+                              🎬 AI Video Lesson
+                            </button>
+                          </div>
+
+                          {!btActive ? (
+                            <div className="allen-card p-5 text-center">
+                              <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-3xl mx-auto mb-2.5">🩺</div>
+                              <h3 className="text-base font-extrabold text-slate-900 mb-1">NEET 60-Second Speed Battle</h3>
+                              <p className="text-xs text-slate-500 mb-4">Topic: <b>{chapter}</b>. Rapid NEET NCERT questions against the clock.</p>
+                              <button
+                                onClick={handleStartBattle}
+                                disabled={btLoad}
+                                className="w-full py-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-xs font-extrabold shadow-md btn-press"
+                              >
+                                {btLoad ? 'Preparing Questions...' : '🚀 Start NEET Battle (+30 XP)'}
+                              </button>
+                            </div>
+                          ) : btDone ? (
+                            <div className="allen-card p-5 text-center animate-slide-up">
+                              <p className="text-3xl mb-1">{btScore >= 4 ? '🏆' : btScore >= 2 ? '⭐' : '📝'}</p>
+                              <h4 className="text-base font-extrabold text-slate-900">Battle Complete!</h4>
+                              <p className="text-2xl font-black text-emerald-600 my-1">{btScore} / {btQs.length}</p>
+                              <p className="text-xs text-slate-500 mb-4">{btScore === btQs.length ? '100% Accuracy! Outstanding NEET preparation.' : 'Great effort! Review missed questions.'}</p>
+                              <button
+                                onClick={() => { setBtActive(false); setBtDone(false) }}
+                                className="w-full py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-bold btn-press shadow-xs"
+                              >
+                                Play Again
+                              </button>
+                            </div>
+                          ) : (
+                            <div className="allen-card p-4 animate-slide-up">
+                              <div className="flex justify-between items-center mb-2">
+                                <span className="text-xs font-bold text-slate-500">Q {btIdx + 1} / {btQs.length}</span>
+                                <span className={`text-xs font-extrabold px-2.5 py-1 rounded-full ${btTimer <= 15 ? 'bg-rose-100 text-rose-700 animate-pulse' : 'bg-emerald-100 text-emerald-800'}`}>
+                                  ⏱️ {btTimer}s
+                                </span>
+                                <span className="text-xs font-bold text-emerald-700">Score: {btScore}</span>
+                              </div>
+                              <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden mb-3">
+                                <div className="bg-emerald-600 h-full transition-all" style={{ width: `${((btIdx + 1) / btQs.length) * 100}%` }} />
+                              </div>
+                              <p className="text-xs font-bold text-slate-900 mb-3">{btQs[btIdx]?.q}</p>
+                              <div className="space-y-1.5">
+                                {btQs[btIdx]?.opts.map((o, i) => {
+                                  const letter = o.match(/^([A-D])\)/)?.[1] || ''
+                                  return (
+                                    <button
+                                      key={i}
+                                      onClick={() => handleAnswerBattle(letter)}
+                                      className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-xs font-medium text-left hover:border-emerald-500 btn-press"
+                                    >
+                                      {o}
+                                    </button>
+                                  )
+                                })}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* ══════════════════════════════════════════════════════════
+                      3. DEDICATED CBSE CLASS 12 BOARDS ARENA
+                     ══════════════════════════════════════════════════════════ */}
+                  {studentTrack === 'cbse_12' && (
+                    <div className="space-y-3.5">
+                      {/* Sub-Tabs: Tests, 1M-5M Questions, Speed Quiz */}
                       <div className="grid grid-cols-3 gap-1.5 bg-slate-200/80 p-1 rounded-2xl">
                         <button
                           onClick={() => setBoardSubTab('tests')}
-                          className={`py-2 rounded-xl text-xs font-extrabold transition-all btn-press ${
+                          className={`py-2 rounded-xl text-xs font-black transition-all btn-press ${
                             boardSubTab === 'tests' ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600'
                           }`}
                         >
-                          📝 Board Mock Tests
+                          📝 Board Papers
                         </button>
                         <button
                           onClick={() => setBoardSubTab('qa')}
-                          className={`py-2 rounded-xl text-xs font-extrabold transition-all btn-press ${
+                          className={`py-2 rounded-xl text-xs font-black transition-all btn-press ${
                             boardSubTab === 'qa' ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600'
                           }`}
                         >
-                          ⭐ 1M-5M Questions
+                          ⭐ 1M-5M Q&A
                         </button>
                         <button
                           onClick={() => setBoardSubTab('battle')}
-                          className={`py-2 rounded-xl text-xs font-extrabold transition-all btn-press ${
+                          className={`py-2 rounded-xl text-xs font-black transition-all btn-press ${
                             boardSubTab === 'battle' ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600'
                           }`}
                         >
@@ -2576,38 +3246,22 @@ Report verified by Study Buddy AI.`
                         </button>
                       </div>
 
-                      {/* SUB-VIEW 2A: 📝 BOARD MOCK TESTS */}
+                      {/* CLASS 12 SUB-VIEW A: BOARD PAPERS */}
                       {boardSubTab === 'tests' && (
                         <div className="space-y-3 animate-slide-up">
                           <div className="flex justify-between items-center">
                             <div>
-                              <h3 className="text-sm font-bold text-slate-900">CBSE Board Exam Papers (2026 Pattern)</h3>
-                              <p className="text-[11px] text-slate-500">Official Board Marking Scheme • Step-by-Step Solutions</p>
+                              <h4 className="text-xs font-black text-slate-900">CBSE Class 12 Board Exam Papers (2026 Pattern)</h4>
+                              <p className="text-[10px] text-slate-500">Official Board Marking Scheme • Physics, Chemistry, Maths & Biology</p>
                             </div>
-                            <span className="text-[11px] font-black bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-lg">
+                            <span className="text-[10px] font-black bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-lg">
                               {getTestsAllowedForUser()} of 20 Unlocked
                             </span>
                           </div>
 
-                          {/* Filter Pills */}
-                          <div className="flex gap-1.5">
-                            {['All', 'Class 10', 'Class 12'].map(f => (
-                              <button
-                                key={f}
-                                onClick={() => setBoardTestFilter(f)}
-                                className={`px-3 py-1 rounded-lg text-[11px] font-semibold border ${
-                                  boardTestFilter === f ? 'bg-slate-800 text-white border-slate-800' : 'bg-white text-slate-600 border-slate-200'
-                                }`}
-                              >
-                                {f === 'All' ? 'All Boards' : f}
-                              </button>
-                            ))}
-                          </div>
-
-                          {/* Test Cards */}
                           <div className="space-y-2">
                             {MOCK_TESTS_CATALOG
-                              .filter(t => t.exam === 'CBSE Board' && (boardTestFilter === 'All' || t.title.includes(boardTestFilter)))
+                              .filter(t => t.exam === 'CBSE Board' && t.title.includes('Class 12'))
                               .map(t => {
                                 const allowed = getTestsAllowedForUser()
                                 const isUnlocked = (t.tierRank || 1) <= allowed
@@ -2623,13 +3277,11 @@ Report verified by Study Buddy AI.`
                                   <div key={t.id} className="bg-white rounded-xl border border-slate-200 p-3 hover:border-blue-300 transition-all shadow-xs">
                                     <div className="flex justify-between items-start mb-1.5">
                                       <div className="flex items-center gap-1.5">
-                                        <span className="text-[10px] font-black px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">
-                                          {t.title.includes('Class 10') ? 'Class 10 Board' : 'Class 12 Board'}
+                                        <span className="text-[10px] font-black px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200">
+                                          Class 12 Board
                                         </span>
                                         <span className="text-[10px] text-slate-400 font-medium">Test #{t.tierRank}</span>
                                       </div>
-
-                                      {/* Plan requirement tag */}
                                       <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                                         (t.tierRank || 1) <= 2
                                           ? 'bg-emerald-100 text-emerald-800'
@@ -2664,7 +3316,7 @@ Report verified by Study Buddy AI.`
                                             : 'bg-slate-100 text-slate-700 border border-slate-300'
                                         }`}
                                       >
-                                        <span>{isUnlocked || !isTrialExpired ? '▶ Start Board Mock' : '🔒 Unlock in Plan'}</span>
+                                        <span>{isUnlocked || !isTrialExpired ? '▶ Start Board Exam' : '🔒 Unlock in Plan'}</span>
                                       </button>
                                       <button
                                         onClick={() => downloadTestPaperAndAnswerSheet(t)}
@@ -2682,47 +3334,15 @@ Report verified by Study Buddy AI.`
                         </div>
                       )}
 
-                      {/* SUB-VIEW 2B: ⭐ 1M, 2M, 3M, 5M REPEATED BOARD QUESTIONS & MODEL ANSWERS */}
+                      {/* CLASS 12 SUB-VIEW B: 1M, 2M, 3M, 5M QUESTIONS */}
                       {boardSubTab === 'qa' && (
                         <div className="space-y-3 animate-slide-up">
-                          <div className="flex justify-between items-center">
-                            <div>
-                              <h3 className="text-sm font-bold text-slate-900">CBSE Chapterwise Repeated Question Bank</h3>
-                              <p className="text-[11px] text-slate-500">1M, 2M, 3M & 5M Questions with Official Step-by-Step Marking</p>
-                            </div>
-                            <div className="flex items-center gap-1 bg-blue-50 border border-blue-200 px-2.5 py-1 rounded-xl">
-                              <span className="text-xs">📚</span>
-                              <span className="text-xs font-extrabold text-blue-800">Class {classNum}</span>
-                            </div>
-                          </div>
-
-                          {/* Class Switcher (Class 10 vs Class 12) */}
-                          <div className="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-xl">
-                            <button
-                              onClick={() => setClassNum('10')}
-                              className={`py-1.5 rounded-lg text-xs font-bold transition-all ${
-                                classNum === '10' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600'
-                              }`}
-                            >
-                              Class 10 Boards
-                            </button>
-                            <button
-                              onClick={() => setClassNum('12')}
-                              className={`py-1.5 rounded-lg text-xs font-bold transition-all ${
-                                classNum === '12' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600'
-                              }`}
-                            >
-                              Class 12 Boards
-                            </button>
-                          </div>
-
-                          {/* Subject Selector Pills */}
                           <div className="flex gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
-                            {subjects.map(s => (
+                            {['Physics', 'Chemistry', 'Mathematics', 'Biology'].map(s => (
                               <button
                                 key={s}
                                 onClick={() => setSubject(s)}
-                                className={`shrink-0 px-3 py-1 rounded-xl text-xs font-semibold border transition-all ${
+                                className={`shrink-0 px-3 py-1 rounded-xl text-xs font-bold border transition-all ${
                                   subject === s ? 'bg-slate-800 text-white border-slate-800' : 'bg-white text-slate-600 border-slate-200'
                                 }`}
                               >
@@ -2731,7 +3351,6 @@ Report verified by Study Buddy AI.`
                             ))}
                           </div>
 
-                          {/* Chapter Selector Dropdown */}
                           <div className="bg-white p-2.5 rounded-xl border border-slate-200 flex items-center justify-between gap-2 shadow-xs">
                             <span className="text-[11px] font-bold text-slate-500 shrink-0">Chapter:</span>
                             <select
@@ -2766,65 +3385,44 @@ Report verified by Study Buddy AI.`
                             ))}
                           </div>
 
-                          {/* Question Cards List */}
+                          {/* Questions List */}
                           {(() => {
-                            const rawList = getChapterImportantQuestions(classNum, subject, chapter) || []
+                            const rawList = getChapterImportantQuestions('12', subject, chapter) || []
                             const filteredList = qaMarksFilter === 'All' 
                               ? rawList 
                               : rawList.filter(item => item.marks === Number(qaMarksFilter))
 
-                            if (filteredList.length === 0) {
-                              return (
-                                <div className="allen-card p-6 text-center text-slate-500 text-xs">
-                                  No questions found for {qaMarksFilter} Marks in this chapter.
-                                </div>
-                              )
-                            }
-
                             return (
                               <div className="space-y-3">
                                 {filteredList.map((item, qIdx) => {
-                                  const qKey = `${chapter}_${item.marks}_${qIdx}`
+                                  const qKey = `12_${chapter}_${item.marks}_${qIdx}`
                                   const isExpanded = !!expandedQa[qKey]
 
                                   return (
                                     <div key={qKey} className="bg-white rounded-2xl border border-slate-200 p-4 space-y-3 shadow-xs">
-                                      {/* Header with Marks & Frequency */}
                                       <div className="flex justify-between items-center">
                                         <span className={`text-[10px] font-black px-2.5 py-0.5 rounded-full ${
-                                          item.marks === 1
-                                            ? 'bg-sky-100 text-sky-800'
-                                            : item.marks === 2
-                                              ? 'bg-emerald-100 text-emerald-800'
-                                              : item.marks === 3
-                                                ? 'bg-amber-100 text-amber-800'
-                                                : 'bg-purple-100 text-purple-800'
+                                          item.marks === 1 ? 'bg-sky-100 text-sky-800' :
+                                          item.marks === 2 ? 'bg-emerald-100 text-emerald-800' :
+                                          item.marks === 3 ? 'bg-amber-100 text-amber-800' : 'bg-purple-100 text-purple-800'
                                         }`}>
                                           {item.marks} MARK{item.marks > 1 ? 'S' : ''} • {item.type}
                                         </span>
-
                                         <span className="text-[10px] font-extrabold text-rose-600 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-md">
-                                          ⭐ Repeated {item.repeatedCount}x in Boards
+                                          ⭐ Repeated {item.repeatedCount}x in CBSE
                                         </span>
                                       </div>
 
-                                      {/* Question Statement */}
-                                      <p className="text-xs font-bold text-slate-900 leading-relaxed">
-                                        {item.q}
-                                      </p>
+                                      <p className="text-xs font-bold text-slate-900 leading-relaxed">{item.q}</p>
 
-                                      {/* Optional Self-Practice Textarea */}
-                                      <div className="space-y-1">
-                                        <textarea
-                                          value={qaUserNotes[qKey] || ''}
-                                          onChange={e => setQaUserNotes(prev => ({ ...prev, [qKey]: e.target.value }))}
-                                          placeholder="Self-Quiz: Write key points or rough answer before revealing model solution..."
-                                          rows={2}
-                                          className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder:text-slate-400 outline-none focus:bg-white focus:border-blue-500"
-                                        />
-                                      </div>
+                                      <textarea
+                                        value={qaUserNotes[qKey] || ''}
+                                        onChange={e => setQaUserNotes(prev => ({ ...prev, [qKey]: e.target.value }))}
+                                        placeholder="Self-Quiz: Write key steps or rough answer before revealing model solution..."
+                                        rows={2}
+                                        className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:bg-white focus:border-blue-500"
+                                      />
 
-                                      {/* Model Answer Toggle */}
                                       <div>
                                         <button
                                           onClick={() => setExpandedQa(prev => ({ ...prev, [qKey]: !prev[qKey] }))}
@@ -2836,14 +3434,12 @@ Report verified by Study Buddy AI.`
 
                                         {isExpanded && (
                                           <div className="mt-2.5 p-3.5 bg-blue-50/50 border border-blue-100 rounded-xl space-y-2 animate-slide-up">
-                                            <p className="text-[11px] font-extrabold text-blue-900">
-                                              Official CBSE Marking Scheme Solution:
-                                            </p>
+                                            <p className="text-[11px] font-extrabold text-blue-900">Official CBSE Marking Scheme Solution:</p>
                                             <div className="text-xs text-slate-800 leading-relaxed whitespace-pre-line bg-white p-3 rounded-lg border border-slate-200">
                                               {item.ans}
                                             </div>
                                             <div className="p-2 bg-emerald-50 border border-emerald-200 rounded-lg text-[10px] text-emerald-800 font-medium">
-                                              💡 <b>CBSE Examiner Tip:</b> High-scoring answers clearly state principles, define all variables with SI units, and highlight final values inside a rectangular box.
+                                              💡 <b>CBSE Examiner Tip:</b> Highlight final boxed values with standard SI units.
                                             </div>
                                           </div>
                                         )}
@@ -2857,7 +3453,7 @@ Report verified by Study Buddy AI.`
                         </div>
                       )}
 
-                      {/* SUB-VIEW 2C: ⚔️ SPEED QUIZ & LESSONS */}
+                      {/* CLASS 12 SUB-VIEW C: SPEED QUIZ */}
                       {boardSubTab === 'battle' && (
                         <div className="space-y-3.5 animate-slide-up">
                           <div className="flex gap-2">
@@ -2881,18 +3477,17 @@ Report verified by Study Buddy AI.`
                             </button>
                           </div>
 
-                          {/* Quiz Battle Arena */}
                           {!btActive ? (
                             <div className="allen-card p-5 text-center">
-                              <div className="w-14 h-14 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center text-3xl mx-auto mb-2.5">⚔️</div>
-                              <h3 className="text-base font-extrabold text-slate-900 mb-1">60-Second Speed Battle</h3>
-                              <p className="text-xs text-slate-500 mb-4">Topic: <b>{chapter}</b>. 5 MCQs against the clock. Boost your accuracy under pressure!</p>
+                              <div className="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-3xl mx-auto mb-2.5">🎓</div>
+                              <h3 className="text-base font-extrabold text-slate-900 mb-1">Class 12 Board Speed Battle</h3>
+                              <p className="text-xs text-slate-500 mb-4">Topic: <b>{chapter}</b>. 5 MCQs against the clock.</p>
                               <button
                                 onClick={handleStartBattle}
                                 disabled={btLoad}
-                                className="w-full py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-extrabold shadow-md shadow-orange-500/25 btn-press"
+                                className="w-full py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs font-extrabold shadow-md btn-press"
                               >
-                                {btLoad ? 'Preparing Questions...' : '🚀 Start Battle (+30 XP)'}
+                                {btLoad ? 'Preparing Questions...' : '🚀 Start Class 12 Battle (+30 XP)'}
                               </button>
                             </div>
                           ) : btDone ? (
@@ -2900,8 +3495,7 @@ Report verified by Study Buddy AI.`
                               <p className="text-3xl mb-1">{btScore >= 4 ? '🏆' : btScore >= 2 ? '⭐' : '📝'}</p>
                               <h4 className="text-base font-extrabold text-slate-900">Battle Complete!</h4>
                               <p className="text-2xl font-black text-blue-600 my-1">{btScore} / {btQs.length}</p>
-                              <p className="text-xs text-slate-500 mb-4">{btScore === btQs.length ? 'Outstanding! 100% Accuracy.' : 'Great effort! Review missed questions.'}</p>
-                              <div className="flex gap-2">
+                              <div className="flex gap-2 mt-4">
                                 <button
                                   onClick={() => { setBtActive(false); setBtDone(false) }}
                                   className="flex-1 py-2.5 rounded-xl bg-blue-600 text-white text-xs font-bold btn-press shadow-xs"
@@ -2920,7 +3514,7 @@ Report verified by Study Buddy AI.`
                             <div className="allen-card p-4 animate-slide-up">
                               <div className="flex justify-between items-center mb-2">
                                 <span className="text-xs font-bold text-slate-500">Q {btIdx + 1} / {btQs.length}</span>
-                                <span className={`text-xs font-extrabold px-2.5 py-1 rounded-full ${btTimer <= 15 ? 'bg-rose-100 text-rose-700 animate-pulse' : 'bg-amber-100 text-amber-800'}`}>
+                                <span className={`text-xs font-extrabold px-2.5 py-1 rounded-full ${btTimer <= 15 ? 'bg-rose-100 text-rose-700 animate-pulse' : 'bg-indigo-100 text-indigo-800'}`}>
                                   ⏱️ {btTimer}s
                                 </span>
                                 <span className="text-xs font-bold text-blue-600">Score: {btScore}</span>
@@ -2945,36 +3539,334 @@ Report verified by Study Buddy AI.`
                               </div>
                             </div>
                           )}
+                        </div>
+                      )}
+                    </div>
+                  )}
 
-                          {/* Video Lesson */}
-                          {lsSlides.length > 0 && (
-                            <div className="allen-card overflow-hidden shadow-md animate-slide-up">
-                              <div className="h-1 bg-slate-100">
-                                <div className="h-full bg-blue-600 transition-all" style={{ width: `${((lsIdx + 1) / lsSlides.length) * 100}%` }} />
-                              </div>
-                              <div className="p-6 bg-gradient-to-br from-blue-900 to-indigo-950 text-white min-h-[220px] flex flex-col justify-center text-center">
-                                {(() => {
-                                  const s = lsSlides[lsIdx] || {}
+                  {/* ══════════════════════════════════════════════════════════
+                      4. DEDICATED CBSE CLASS 10 BOARDS ARENA
+                     ══════════════════════════════════════════════════════════ */}
+                  {studentTrack === 'cbse_10' && (
+                    <div className="space-y-3.5">
+                      {/* Sub-Tabs: Tests, 1M-5M Questions, Speed Quiz */}
+                      <div className="grid grid-cols-3 gap-1.5 bg-slate-200/80 p-1 rounded-2xl">
+                        <button
+                          onClick={() => setBoardSubTab('tests')}
+                          className={`py-2 rounded-xl text-xs font-black transition-all btn-press ${
+                            boardSubTab === 'tests' ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600'
+                          }`}
+                        >
+                          📝 Board Papers
+                        </button>
+                        <button
+                          onClick={() => setBoardSubTab('qa')}
+                          className={`py-2 rounded-xl text-xs font-black transition-all btn-press ${
+                            boardSubTab === 'qa' ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600'
+                          }`}
+                        >
+                          ⭐ 1M-5M Q&A
+                        </button>
+                        <button
+                          onClick={() => setBoardSubTab('battle')}
+                          className={`py-2 rounded-xl text-xs font-black transition-all btn-press ${
+                            boardSubTab === 'battle' ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600'
+                          }`}
+                        >
+                          ⚔️ Speed Quiz
+                        </button>
+                      </div>
+
+                      {/* CLASS 10 SUB-VIEW A: BOARD PAPERS */}
+                      {boardSubTab === 'tests' && (
+                        <div className="space-y-3 animate-slide-up">
+                          <div className="flex justify-between items-center">
+                            <div>
+                              <h4 className="text-xs font-black text-slate-900">CBSE Class 10 Board Exam Papers (2026 Pattern)</h4>
+                              <p className="text-[10px] text-slate-500">Official Board Marking Scheme • Science, Math, Social Science & English</p>
+                            </div>
+                            <span className="text-[10px] font-black bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-lg">
+                              {getTestsAllowedForUser()} of 20 Unlocked
+                            </span>
+                          </div>
+
+                          <div className="space-y-2">
+                            {MOCK_TESTS_CATALOG
+                              .filter(t => t.exam === 'CBSE Board' && t.title.includes('Class 10'))
+                              .map(t => {
+                                const allowed = getTestsAllowedForUser()
+                                const isUnlocked = (t.tierRank || 1) <= allowed
+                                const planNeeded = (t.tierRank || 1) <= 2 
+                                  ? 'Free Trial' 
+                                  : (t.tierRank || 1) <= 5 
+                                    ? 'Starter Plan (5 Tests)' 
+                                    : (t.tierRank || 1) <= 10 
+                                      ? 'Board & Prep Pass (10 Tests)' 
+                                      : 'All-Access Pass (20 Tests)'
+
+                                return (
+                                  <div key={t.id} className="bg-white rounded-xl border border-slate-200 p-3 hover:border-blue-300 transition-all shadow-xs">
+                                    <div className="flex justify-between items-start mb-1.5">
+                                      <div className="flex items-center gap-1.5">
+                                        <span className="text-[10px] font-black px-2 py-0.5 rounded bg-sky-50 text-sky-700 border border-sky-200">
+                                          Class 10 Board
+                                        </span>
+                                        <span className="text-[10px] text-slate-400 font-medium">Test #{t.tierRank}</span>
+                                      </div>
+                                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                                        (t.tierRank || 1) <= 2
+                                          ? 'bg-emerald-100 text-emerald-800'
+                                          : (t.tierRank || 1) <= 5
+                                            ? 'bg-blue-100 text-blue-800'
+                                            : (t.tierRank || 1) <= 10
+                                              ? 'bg-indigo-100 text-indigo-800'
+                                              : 'bg-amber-100 text-amber-800'
+                                      }`}>
+                                        {(t.tierRank || 1) <= 2 ? '🎁 Free Sample' : planNeeded}
+                                      </span>
+                                    </div>
+
+                                    <h4 className="text-xs font-bold text-slate-900 mb-1 leading-snug">{t.title}</h4>
+                                    
+                                    <div className="flex items-center gap-2 text-[10px] text-slate-500 mb-2.5">
+                                      <span>⏱ {t.durationMinutes} mins</span>
+                                      <span>•</span>
+                                      <span>{t.totalMarks} Marks</span>
+                                      <span>•</span>
+                                      <span>{t.questionsCount} Questions</span>
+                                      <span>•</span>
+                                      <span className="text-slate-600 font-medium">Marking: {t.markingScheme}</span>
+                                    </div>
+
+                                    <div className="flex gap-2">
+                                      <button
+                                        onClick={() => handleStartMockTest(t)}
+                                        className={`flex-1 py-2 rounded-xl text-xs font-bold btn-press flex items-center justify-center gap-1.5 ${
+                                          isUnlocked || !isTrialExpired
+                                            ? 'bg-blue-600 text-white shadow-xs'
+                                            : 'bg-slate-100 text-slate-700 border border-slate-300'
+                                        }`}
+                                      >
+                                        <span>{isUnlocked || !isTrialExpired ? '▶ Start Board Exam' : '🔒 Unlock in Plan'}</span>
+                                      </button>
+                                      <button
+                                        onClick={() => downloadTestPaperAndAnswerSheet(t)}
+                                        className="py-2 px-3 rounded-xl text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 btn-press shrink-0 flex items-center gap-1"
+                                        title="Download Question Paper + Separate Answer Sheet PDF"
+                                      >
+                                        <span>📄</span>
+                                        <span>PDF + Key</span>
+                                      </button>
+                                    </div>
+                                  </div>
+                                )
+                              })}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* CLASS 10 SUB-VIEW B: 1M, 2M, 3M, 5M QUESTIONS */}
+                      {boardSubTab === 'qa' && (
+                        <div className="space-y-3 animate-slide-up">
+                          <div className="flex gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
+                            {['Science', 'Mathematics', 'Social Science', 'English'].map(s => (
+                              <button
+                                key={s}
+                                onClick={() => setSubject(s)}
+                                className={`shrink-0 px-3 py-1 rounded-xl text-xs font-bold border transition-all ${
+                                  subject === s ? 'bg-slate-800 text-white border-slate-800' : 'bg-white text-slate-600 border-slate-200'
+                                }`}
+                              >
+                                {s}
+                              </button>
+                            ))}
+                          </div>
+
+                          <div className="bg-white p-2.5 rounded-xl border border-slate-200 flex items-center justify-between gap-2 shadow-xs">
+                            <span className="text-[11px] font-bold text-slate-500 shrink-0">Chapter:</span>
+                            <select
+                              value={chapter}
+                              onChange={e => setChapter(e.target.value)}
+                              className="w-full bg-slate-50 text-xs font-bold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 outline-none truncate"
+                            >
+                              {chapters.map(c => <option key={c} value={c}>{c}</option>)}
+                            </select>
+                          </div>
+
+                          {/* Marks Filter Pills */}
+                          <div className="flex gap-1.5 overflow-x-auto no-scrollbar">
+                            {[
+                              { label: 'All Marks', val: 'All' },
+                              { label: '1 Mark (MCQ/VSA)', val: 1 },
+                              { label: '2 Marks (SA I)', val: 2 },
+                              { label: '3 Marks (SA II)', val: 3 },
+                              { label: '5 Marks (Long Answer)', val: 5 }
+                            ].map(item => (
+                              <button
+                                key={item.val}
+                                onClick={() => setQaMarksFilter(item.val)}
+                                className={`shrink-0 px-3 py-1 rounded-xl text-[11px] font-bold border transition-all ${
+                                  qaMarksFilter === item.val
+                                    ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                                    : 'bg-white text-slate-600 border-slate-200'
+                                }`}
+                              >
+                                {item.label}
+                              </button>
+                            ))}
+                          </div>
+
+                          {/* Questions List */}
+                          {(() => {
+                            const rawList = getChapterImportantQuestions('10', subject, chapter) || []
+                            const filteredList = qaMarksFilter === 'All' 
+                              ? rawList 
+                              : rawList.filter(item => item.marks === Number(qaMarksFilter))
+
+                            return (
+                              <div className="space-y-3">
+                                {filteredList.map((item, qIdx) => {
+                                  const qKey = `10_${chapter}_${item.marks}_${qIdx}`
+                                  const isExpanded = !!expandedQa[qKey]
+
                                   return (
-                                    <div>
-                                      <p className="text-3xl mb-2">{s.emoji || '📖'}</p>
-                                      <h4 className="text-sm font-black mb-1 text-blue-200">{s.title}</h4>
-                                      {s.content && <p className="text-xs text-slate-200 leading-relaxed">{s.content}</p>}
-                                      {s.explanation && <p className="text-[11px] text-blue-300 mt-1">{s.explanation}</p>}
+                                    <div key={qKey} className="bg-white rounded-2xl border border-slate-200 p-4 space-y-3 shadow-xs">
+                                      <div className="flex justify-between items-center">
+                                        <span className={`text-[10px] font-black px-2.5 py-0.5 rounded-full ${
+                                          item.marks === 1 ? 'bg-sky-100 text-sky-800' :
+                                          item.marks === 2 ? 'bg-emerald-100 text-emerald-800' :
+                                          item.marks === 3 ? 'bg-amber-100 text-amber-800' : 'bg-purple-100 text-purple-800'
+                                        }`}>
+                                          {item.marks} MARK{item.marks > 1 ? 'S' : ''} • {item.type}
+                                        </span>
+                                        <span className="text-[10px] font-extrabold text-rose-600 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-md">
+                                          ⭐ Repeated {item.repeatedCount}x in CBSE
+                                        </span>
+                                      </div>
+
+                                      <p className="text-xs font-bold text-slate-900 leading-relaxed">{item.q}</p>
+
+                                      <textarea
+                                        value={qaUserNotes[qKey] || ''}
+                                        onChange={e => setQaUserNotes(prev => ({ ...prev, [qKey]: e.target.value }))}
+                                        placeholder="Self-Quiz: Write key points or rough answer before revealing model solution..."
+                                        rows={2}
+                                        className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:bg-white focus:border-blue-500"
+                                      />
+
+                                      <div>
+                                        <button
+                                          onClick={() => setExpandedQa(prev => ({ ...prev, [qKey]: !prev[qKey] }))}
+                                          className="w-full py-2 px-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold flex items-center justify-between hover:bg-blue-100 transition-all btn-press"
+                                        >
+                                          <span>👁️ {isExpanded ? 'Hide Model Answer' : 'View CBSE Step-by-Step Model Answer'}</span>
+                                          <span>{isExpanded ? '▲' : '▼'}</span>
+                                        </button>
+
+                                        {isExpanded && (
+                                          <div className="mt-2.5 p-3.5 bg-blue-50/50 border border-blue-100 rounded-xl space-y-2 animate-slide-up">
+                                            <p className="text-[11px] font-extrabold text-blue-900">Official CBSE Marking Scheme Solution:</p>
+                                            <div className="text-xs text-slate-800 leading-relaxed whitespace-pre-line bg-white p-3 rounded-lg border border-slate-200">
+                                              {item.ans}
+                                            </div>
+                                            <div className="p-2 bg-emerald-50 border border-emerald-200 rounded-lg text-[10px] text-emerald-800 font-medium">
+                                              💡 <b>CBSE Examiner Tip:</b> Structure points clearly and underline key scientific keywords.
+                                            </div>
+                                          </div>
+                                        )}
+                                      </div>
                                     </div>
                                   )
-                                })()}
+                                })}
                               </div>
-                              <div className="p-3 bg-white border-t border-slate-200 flex items-center justify-between">
-                                <div className="flex items-center gap-1">
-                                  <button onClick={() => { setLsIdx(p => Math.max(0, p - 1)); setLsPlay(false); window?.speechSynthesis?.cancel?.() }} disabled={lsIdx === 0} className="p-1.5 rounded-lg bg-slate-100 text-xs disabled:opacity-30">⏮</button>
-                                  <button onClick={() => { if (lsPlay) { setLsPlay(false); window?.speechSynthesis?.cancel?.() } else setLsPlay(true) }} className="px-3 py-1 rounded-lg bg-blue-600 text-white text-xs font-bold shadow-xs">
-                                    {lsPlay ? 'Pause' : '▶ Play'}
-                                  </button>
-                                  <button onClick={() => { setLsIdx(p => Math.min(lsSlides.length - 1, p + 1)); setLsPlay(false); window?.speechSynthesis?.cancel?.() }} disabled={lsIdx >= lsSlides.length - 1} className="p-1.5 rounded-lg bg-slate-100 text-xs disabled:opacity-30">⏭</button>
-                                </div>
-                                <span className="text-[11px] font-bold text-slate-500">{lsIdx + 1} / {lsSlides.length}</span>
-                                <button onClick={() => { setLsSlides([]); window?.speechSynthesis?.cancel?.() }} className="text-xs text-slate-400 font-bold hover:text-slate-600">Close</button>
+                            )
+                          })()}
+                        </div>
+                      )}
+
+                      {/* CLASS 10 SUB-VIEW C: SPEED QUIZ */}
+                      {boardSubTab === 'battle' && (
+                        <div className="space-y-3.5 animate-slide-up">
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => setBtActive(false)}
+                              className="flex-1 py-2 rounded-xl bg-blue-600 text-white font-bold text-xs shadow-xs"
+                            >
+                              ⚔️ 60s Speed Quiz
+                            </button>
+                            <button
+                              onClick={() => setBoardSubTab('qa')}
+                              className="flex-1 py-2 rounded-xl bg-indigo-50 text-indigo-700 font-bold text-xs border border-indigo-200"
+                            >
+                              ⭐ Practice 1M-5M Q&A
+                            </button>
+                            <button
+                              onClick={() => handleGenLesson()}
+                              className="flex-1 py-2 rounded-xl bg-white text-slate-700 font-bold text-xs border border-slate-200"
+                            >
+                              🎬 AI Video Lesson
+                            </button>
+                          </div>
+
+                          {!btActive ? (
+                            <div className="allen-card p-5 text-center">
+                              <div className="w-14 h-14 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-3xl mx-auto mb-2.5">📚</div>
+                              <h3 className="text-base font-extrabold text-slate-900 mb-1">Class 10 Board Speed Battle</h3>
+                              <p className="text-xs text-slate-500 mb-4">Topic: <b>{chapter}</b>. 5 MCQs against the clock.</p>
+                              <button
+                                onClick={handleStartBattle}
+                                disabled={btLoad}
+                                className="w-full py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-sky-600 text-white text-xs font-extrabold shadow-md btn-press"
+                              >
+                                {btLoad ? 'Preparing Questions...' : '🚀 Start Class 10 Battle (+30 XP)'}
+                              </button>
+                            </div>
+                          ) : btDone ? (
+                            <div className="allen-card p-5 text-center animate-slide-up">
+                              <p className="text-3xl mb-1">{btScore >= 4 ? '🏆' : btScore >= 2 ? '⭐' : '📝'}</p>
+                              <h4 className="text-base font-extrabold text-slate-900">Battle Complete!</h4>
+                              <p className="text-2xl font-black text-blue-600 my-1">{btScore} / {btQs.length}</p>
+                              <div className="flex gap-2 mt-4">
+                                <button
+                                  onClick={() => { setBtActive(false); setBtDone(false) }}
+                                  className="flex-1 py-2.5 rounded-xl bg-blue-600 text-white text-xs font-bold btn-press shadow-xs"
+                                >
+                                  Play Again
+                                </button>
+                                <button
+                                  onClick={() => setBoardSubTab('qa')}
+                                  className="flex-1 py-2.5 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-bold btn-press"
+                                >
+                                  Review 1M-5M Q&A →
+                                </button>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="allen-card p-4 animate-slide-up">
+                              <div className="flex justify-between items-center mb-2">
+                                <span className="text-xs font-bold text-slate-500">Q {btIdx + 1} / {btQs.length}</span>
+                                <span className={`text-xs font-extrabold px-2.5 py-1 rounded-full ${btTimer <= 15 ? 'bg-rose-100 text-rose-700 animate-pulse' : 'bg-sky-100 text-sky-800'}`}>
+                                  ⏱️ {btTimer}s
+                                </span>
+                                <span className="text-xs font-bold text-blue-600">Score: {btScore}</span>
+                              </div>
+                              <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden mb-3">
+                                <div className="bg-blue-600 h-full transition-all" style={{ width: `${((btIdx + 1) / btQs.length) * 100}%` }} />
+                              </div>
+                              <p className="text-xs font-bold text-slate-900 mb-3">{btQs[btIdx]?.q}</p>
+                              <div className="space-y-1.5">
+                                {btQs[btIdx]?.opts.map((o, i) => {
+                                  const letter = o.match(/^([A-D])\)/)?.[1] || ''
+                                  return (
+                                    <button
+                                      key={i}
+                                      onClick={() => handleAnswerBattle(letter)}
+                                      className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-xs font-medium text-left hover:border-blue-500 btn-press"
+                                    >
+                                      {o}
+                                    </button>
+                                  )
+                                })}
                               </div>
                             </div>
                           )}
@@ -2982,7 +3874,134 @@ Report verified by Study Buddy AI.`
                       )}
                     </div>
                   )}
-                </>
+
+                  {/* ══════════════════════════════════════════════════════════
+                      5. DEDICATED JUNIOR CBSE STANDARDS (CLASS 6-9)
+                     ══════════════════════════════════════════════════════════ */}
+                  {!['jee', 'neet', 'cbse_12', 'cbse_10'].includes(studentTrack) && (
+                    <div className="space-y-3.5">
+                      <div className="grid grid-cols-2 gap-2 bg-slate-200/80 p-1 rounded-2xl">
+                        <button
+                          onClick={() => setBoardSubTab('qa')}
+                          className={`py-2 rounded-xl text-xs font-black transition-all btn-press ${
+                            boardSubTab === 'qa' ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600'
+                          }`}
+                        >
+                          ⭐ 1M-5M Questions
+                        </button>
+                        <button
+                          onClick={() => setBoardSubTab('battle')}
+                          className={`py-2 rounded-xl text-xs font-black transition-all btn-press ${
+                            boardSubTab === 'battle' ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600'
+                          }`}
+                        >
+                          ⚔️ Speed Quiz & Lessons
+                        </button>
+                      </div>
+
+                      {boardSubTab === 'qa' && (
+                        <div className="space-y-3 animate-slide-up">
+                          <div className="flex gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
+                            {subjects.map(s => (
+                              <button
+                                key={s}
+                                onClick={() => setSubject(s)}
+                                className={`shrink-0 px-3 py-1 rounded-xl text-xs font-bold border transition-all ${
+                                  subject === s ? 'bg-slate-800 text-white border-slate-800' : 'bg-white text-slate-600 border-slate-200'
+                                }`}
+                              >
+                                {s}
+                              </button>
+                            ))}
+                          </div>
+
+                          <div className="bg-white p-2.5 rounded-xl border border-slate-200 flex items-center justify-between gap-2 shadow-xs">
+                            <span className="text-[11px] font-bold text-slate-500 shrink-0">Chapter:</span>
+                            <select
+                              value={chapter}
+                              onChange={e => setChapter(e.target.value)}
+                              className="w-full bg-slate-50 text-xs font-bold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 outline-none truncate"
+                            >
+                              {chapters.map(c => <option key={c} value={c}>{c}</option>)}
+                            </select>
+                          </div>
+
+                          {(() => {
+                            const rawList = getChapterImportantQuestions(classNum, subject, chapter) || []
+                            return (
+                              <div className="space-y-3">
+                                {rawList.map((item, qIdx) => {
+                                  const qKey = `jr_${chapter}_${item.marks}_${qIdx}`
+                                  const isExpanded = !!expandedQa[qKey]
+
+                                  return (
+                                    <div key={qKey} className="bg-white rounded-2xl border border-slate-200 p-4 space-y-3 shadow-xs">
+                                      <div className="flex justify-between items-center">
+                                        <span className="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800">
+                                          {item.marks} MARK{item.marks > 1 ? 'S' : ''} • {item.type}
+                                        </span>
+                                      </div>
+                                      <p className="text-xs font-bold text-slate-900 leading-relaxed">{item.q}</p>
+                                      <div>
+                                        <button
+                                          onClick={() => setExpandedQa(prev => ({ ...prev, [qKey]: !prev[qKey] }))}
+                                          className="w-full py-2 px-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold flex items-center justify-between hover:bg-blue-100 btn-press"
+                                        >
+                                          <span>👁️ {isExpanded ? 'Hide Model Answer' : 'View Model Answer'}</span>
+                                          <span>{isExpanded ? '▲' : '▼'}</span>
+                                        </button>
+                                        {isExpanded && (
+                                          <div className="mt-2.5 p-3.5 bg-blue-50/50 border border-blue-100 rounded-xl text-xs text-slate-800 whitespace-pre-line">
+                                            {item.ans}
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
+                                  )
+                                })}
+                              </div>
+                            )
+                          })()}
+                        </div>
+                      )}
+
+                      {boardSubTab === 'battle' && (
+                        <div className="space-y-3.5 animate-slide-up">
+                          {!btActive ? (
+                            <div className="allen-card p-5 text-center">
+                              <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-3xl mx-auto mb-2.5">📖</div>
+                              <h3 className="text-base font-extrabold text-slate-900 mb-1">Class {classNum} Speed Battle</h3>
+                              <p className="text-xs text-slate-500 mb-4">Topic: <b>{chapter}</b>. 5 MCQs against the clock.</p>
+                              <button
+                                onClick={handleStartBattle}
+                                disabled={btLoad}
+                                className="w-full py-3 rounded-2xl bg-blue-600 text-white text-xs font-extrabold shadow-md btn-press"
+                              >
+                                {btLoad ? 'Preparing Questions...' : '🚀 Start Battle (+30 XP)'}
+                              </button>
+                            </div>
+                          ) : (
+                            <div className="allen-card p-4 animate-slide-up">
+                              <p className="text-xs font-bold text-slate-900 mb-3">{btQs[btIdx]?.q}</p>
+                              <div className="space-y-1.5">
+                                {btQs[btIdx]?.opts.map((o, i) => (
+                                  <button
+                                    key={i}
+                                    onClick={() => handleAnswerBattle(o.match(/^([A-D])\)/)?.[1] || '')}
+                                    className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-xs font-medium text-left hover:border-blue-500 btn-press"
+                                  >
+                                    {o}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                </div>
               )}
 
             </div>
