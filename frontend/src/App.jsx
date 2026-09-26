@@ -949,18 +949,186 @@ export default function App() {
     try {
       const s = JSON.parse(localStorage.getItem('sb_s') || '{}')
       return {
-        xp: s.xp || 120,
-        totalQ: s.totalQ || 8,
-        quizzes: s.quizzes || 2,
-        checks: s.checks || 1,
-        streak: s.streak || 4,
-        subjectsList: s.subjectsList || ['Mathematics', 'Science'],
-        todayQ: s.todayQ || 3
+        xp: s.xp || 0,
+        totalQ: s.totalQ || 0,
+        quizzes: s.quizzes || 0,
+        checks: s.checks || 0,
+        streak: s.streak || 0,
+        subjectsList: s.subjectsList || [],
+        todayQ: s.todayQ || 0
       }
     } catch {
-      return { xp: 120, totalQ: 8, quizzes: 2, checks: 1, streak: 4, subjectsList: ['Mathematics', 'Science'], todayQ: 3 }
+      return { xp: 0, totalQ: 0, quizzes: 0, checks: 0, streak: 0, subjectsList: [], todayQ: 0 }
     }
   })
+
+  // ── 🔥 Streak Engine (Duolingo-style daily streak tracking) ──
+  const [streakData, setStreakData] = useState(() => {
+    try {
+      const s = JSON.parse(localStorage.getItem('sb_streak') || '{}')
+      if (s && s.currentStreak !== undefined) return s
+    } catch {}
+    return { currentStreak: 0, longestStreak: 0, lastActiveDate: null, freezesAvailable: 1, totalActiveDays: 0, calendarDots: [] }
+  })
+
+  // ── ⭐ XP & Level System ──
+  const [xpData, setXpData] = useState(() => {
+    try {
+      const x = JSON.parse(localStorage.getItem('sb_xp') || '{}')
+      if (x && x.totalXP !== undefined) return x
+    } catch {}
+    return { totalXP: 0, todayXP: 0, lastXPDate: null, level: 1, badges: [] }
+  })
+
+  const [showStreakModal, setShowStreakModal] = useState(false)
+  const [streakCelebrate, setStreakCelebrate] = useState(false)
+  const [showBadgeUnlock, setShowBadgeUnlock] = useState(null)
+  const [showShareCard, setShowShareCard] = useState(false)
+  const [shareCardData, setShareCardData] = useState(null)
+
+  // ── 📲 Referral System ──
+  const [referralCode] = useState(() => {
+    try { const c = localStorage.getItem('sb_ref_code'); if (c) return c } catch {}
+    const code = 'SB-' + Math.random().toString(36).substring(2, 8).toUpperCase()
+    try { localStorage.setItem('sb_ref_code', code) } catch {}
+    return code
+  })
+  const [referralCount, setReferralCount] = useState(() => {
+    try { return parseInt(localStorage.getItem('sb_ref_count') || '0') } catch { return 0 }
+  })
+
+  // ── Gamification Constants ──
+  const LEVELS = [
+    { level: 1, name: 'Beginner', minXP: 0, icon: '🌱', color: 'bg-slate-500' },
+    { level: 2, name: 'Scholar', minXP: 500, icon: '📚', color: 'bg-blue-500' },
+    { level: 3, name: 'Topper', minXP: 1500, icon: '🏆', color: 'bg-amber-500' },
+    { level: 4, name: 'Ranker', minXP: 3000, icon: '⚡', color: 'bg-purple-500' },
+    { level: 5, name: 'Legend', minXP: 6000, icon: '👑', color: 'bg-rose-500' }
+  ]
+
+  const BADGES_DEF = [
+    { id: 'streak_7', name: '7-Day Warrior', icon: '🔥', desc: 'Maintain a 7-day streak' },
+    { id: 'streak_30', name: 'Monthly Champion', icon: '💪', desc: '30-day streak' },
+    { id: 'century', name: 'Century Club', icon: '💯', desc: 'Answer 100 questions' },
+    { id: 'xp1000', name: 'XP Hunter', icon: '⭐', desc: 'Earn 1,000 XP' },
+    { id: 'xp5000', name: 'XP Legend', icon: '🌟', desc: 'Earn 5,000 XP' },
+    { id: 'first_test', name: 'Test Taker', icon: '📝', desc: 'Complete first mock test' },
+    { id: 'first_doubt', name: 'Curious Mind', icon: '🧠', desc: 'Ask your first doubt' },
+    { id: 'snap5', name: 'Snap Learner', icon: '📸', desc: 'Scan 5 questions' }
+  ]
+
+  const getCurrentLevel = (xp) => {
+    let lvl = LEVELS[0]
+    for (const l of LEVELS) { if (xp >= l.minXP) lvl = l }
+    return lvl
+  }
+  const getNextLevel = (xp) => {
+    for (const l of LEVELS) { if (xp < l.minXP) return l }
+    return null
+  }
+  const getXPProgress = (xp) => {
+    const cur = getCurrentLevel(xp), nxt = getNextLevel(xp)
+    if (!nxt) return 100
+    return Math.min(100, Math.round(((xp - cur.minXP) / (nxt.minXP - cur.minXP)) * 100))
+  }
+
+  // Persist streak + XP
+  useEffect(() => {
+    try { localStorage.setItem('sb_streak', JSON.stringify(streakData)) } catch {}
+  }, [streakData])
+  useEffect(() => {
+    try { localStorage.setItem('sb_xp', JSON.stringify(xpData)) } catch {}
+  }, [xpData])
+
+  // Check streak on app load — show celebration or warning
+  useEffect(() => {
+    const today = new Date().toDateString()
+    const yesterday = new Date(Date.now() - 86400000).toDateString()
+    if (streakData.lastActiveDate && streakData.lastActiveDate !== today && streakData.lastActiveDate !== yesterday) {
+      if (streakData.currentStreak > 3 && streakData.freezesAvailable <= 0) {
+        setShowStreakModal(true) // streak about to break!
+      }
+    }
+  }, [])
+
+  const updateStreak = useCallback(() => {
+    const today = new Date().toDateString()
+    setStreakData(prev => {
+      if (prev.lastActiveDate === today) return prev
+      const yesterday = new Date(Date.now() - 86400000).toDateString()
+      let newStreak = prev.lastActiveDate === yesterday
+        ? (prev.currentStreak || 0) + 1
+        : prev.lastActiveDate ? 1 : 1
+      const dots = [...(prev.calendarDots || [])]
+      if (!dots.includes(today)) dots.push(today)
+      if (dots.length > 90) dots.shift()
+      const updated = {
+        ...prev,
+        currentStreak: newStreak,
+        longestStreak: Math.max(prev.longestStreak || 0, newStreak),
+        lastActiveDate: today,
+        totalActiveDays: (prev.totalActiveDays || 0) + 1,
+        calendarDots: dots
+      }
+      // Update old stats.streak too for backward compat
+      setStats(s => ({ ...s, streak: newStreak }))
+      if (newStreak > 1) { setStreakCelebrate(true); setTimeout(() => setStreakCelebrate(false), 2500) }
+      return updated
+    })
+  }, [])
+
+  const earnXP = useCallback((amount, reason) => {
+    const today = new Date().toDateString()
+    setXpData(prev => {
+      const updated = {
+        ...prev,
+        totalXP: (prev.totalXP || 0) + amount,
+        todayXP: prev.lastXPDate === today ? (prev.todayXP || 0) + amount : amount,
+        lastXPDate: today,
+        level: 1
+      }
+      updated.level = getCurrentLevel(updated.totalXP).level
+
+      // Check badge unlocks
+      const badges = [...(updated.badges || [])]
+      let newBadge = null
+      for (const b of BADGES_DEF) {
+        if (badges.includes(b.id)) continue
+        let earned = false
+        if (b.id === 'xp1000' && updated.totalXP >= 1000) earned = true
+        if (b.id === 'xp5000' && updated.totalXP >= 5000) earned = true
+        if (b.id === 'streak_7' && (streakData.currentStreak || 0) >= 7) earned = true
+        if (b.id === 'streak_30' && (streakData.currentStreak || 0) >= 30) earned = true
+        if (b.id === 'century' && (stats.totalQ || 0) >= 100) earned = true
+        if (b.id === 'first_test' && reason === 'mock_test') earned = true
+        if (b.id === 'first_doubt' && reason === 'doubt') earned = true
+        if (b.id === 'snap5' && (stats.checks || 0) >= 5) earned = true
+        if (earned) { badges.push(b.id); newBadge = b; break }
+      }
+      updated.badges = badges
+      if (newBadge) { setShowBadgeUnlock(newBadge); setTimeout(() => setShowBadgeUnlock(null), 3500) }
+      return updated
+    })
+    updateStreak()
+    setStats(s => ({ ...s, xp: (s.xp || 0) + amount }))
+  }, [streakData, stats, updateStreak])
+
+  // Share score card after test
+  const generateShareCard = (test, analytics) => {
+    setShareCardData({ testTitle: test.title, score: analytics.score, total: analytics.totalPossibleMarks, accuracy: analytics.accuracy, rank: analytics.predictedRank, percentile: analytics.predictedPercentile, streak: streakData.currentStreak, xp: xpData.totalXP, level: getCurrentLevel(xpData.totalXP) })
+    setShowShareCard(true)
+  }
+
+  const handleShareScore = async () => {
+    if (!shareCardData) return
+    const text = `🎯 I scored ${shareCardData.score}/${shareCardData.total} on "${shareCardData.testTitle}" on Study Buddy!\n📊 Accuracy: ${shareCardData.accuracy}%\n🔥 Streak: ${shareCardData.streak} days\n⭐ Level: ${shareCardData.level.icon} ${shareCardData.level.name}\n\n📱 Try it free → https://dhyeybhoniya0411-cloud.github.io/study-buddy-/?ref=${referralCode}`
+    if (navigator.share) {
+      try { await navigator.share({ title: 'Study Buddy Score', text }) } catch {}
+    } else {
+      const wa = `https://wa.me/?text=${encodeURIComponent(text)}`
+      window.open(wa, '_blank')
+    }
+  }
 
   // ── Subscription & 5-Day Free Trial State ──
   const [subscription, setSubscription] = useState(() => {
@@ -1212,7 +1380,8 @@ export default function App() {
     }
 
     setTestAnalytics(analytics)
-    addXP(Math.max(30, score * 5))
+    addXP(Math.max(30, score * 5), 'mock_test')
+    generateShareCard(activeMockTest, analytics)
   }
 
   // Download Question Paper with Separate Answer Sheet & Detailed Solutions PDF
@@ -1457,7 +1626,7 @@ export default function App() {
     } catch (e) {}
   }
 
-  const addXP = (amt) => {
+  const addXP = (amt, reason) => {
     setStats(p => ({
       ...p,
       xp: p.xp + amt,
@@ -1465,6 +1634,7 @@ export default function App() {
       todayQ: p.todayQ + 1,
       subjectsList: p.subjectsList.includes(subject) ? p.subjectsList : [...p.subjectsList, subject]
     }))
+    earnXP(amt, reason || 'general')
   }
 
   const handleCamCapture = async b64 => {
@@ -1718,6 +1888,126 @@ Report verified by Study Buddy AI.`
         onSubscribe={handleSubscribe}
         onSimulateState={handleSimulateState}
       />
+      {/* ── 🔥 STREAK INFO MODAL ── */}
+      {showStreakModal && (
+        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-sm bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden animate-slide-up">
+            <div className="p-5 bg-gradient-to-br from-amber-500 to-orange-600 text-white text-center">
+              <div className="text-5xl mb-2">🔥</div>
+              <h3 className="text-2xl font-black">{streakData.currentStreak || stats.streak} Day Streak!</h3>
+              <p className="text-sm opacity-90 mt-1">Longest: {streakData.longestStreak || 0} days</p>
+            </div>
+            <div className="p-5 space-y-4">
+              <div className="grid grid-cols-3 gap-3">
+                <div className="text-center p-3 bg-amber-50 rounded-2xl">
+                  <p className="text-xl font-black text-amber-600">{streakData.totalActiveDays || 0}</p>
+                  <p className="text-[10px] text-slate-500 font-bold">Total Days</p>
+                </div>
+                <div className="text-center p-3 bg-blue-50 rounded-2xl">
+                  <p className="text-xl font-black text-blue-600">{xpData.totalXP || 0}</p>
+                  <p className="text-[10px] text-slate-500 font-bold">Total XP</p>
+                </div>
+                <div className="text-center p-3 bg-emerald-50 rounded-2xl">
+                  <p className="text-xl font-black text-emerald-600">{streakData.freezesAvailable || 0}</p>
+                  <p className="text-[10px] text-slate-500 font-bold">Freezes Left</p>
+                </div>
+              </div>
+              {/* Streak Calendar (last 21 days) */}
+              <div>
+                <p className="text-[11px] font-bold text-slate-500 mb-2">Last 21 Days Activity</p>
+                <div className="grid grid-cols-7 gap-1.5">
+                  {Array.from({ length: 21 }, (_, i) => {
+                    const d = new Date(Date.now() - (20 - i) * 86400000).toDateString()
+                    const isActive = (streakData.calendarDots || []).includes(d)
+                    const isToday = d === new Date().toDateString()
+                    return (
+                      <div key={i} className={`w-7 h-7 rounded-lg flex items-center justify-center text-[9px] font-bold ${isToday ? 'ring-2 ring-blue-500' : ''} ${isActive ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-400'}`}>
+                        {new Date(Date.now() - (20 - i) * 86400000).getDate()}
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+              {/* Earned Badges */}
+              {(xpData.badges || []).length > 0 && (
+                <div>
+                  <p className="text-[11px] font-bold text-slate-500 mb-2">🏅 Earned Badges</p>
+                  <div className="flex flex-wrap gap-2">
+                    {BADGES_DEF.filter(b => (xpData.badges || []).includes(b.id)).map(b => (
+                      <span key={b.id} className="text-[10px] font-bold bg-amber-50 text-amber-800 px-2 py-1 rounded-lg border border-amber-200">
+                        {b.icon} {b.name}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              <button onClick={() => setShowStreakModal(false)} className="w-full py-3 rounded-2xl bg-blue-600 text-white text-sm font-black shadow-md btn-press">
+                Keep Studying! 💪
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── 🏅 BADGE UNLOCK TOAST (Animated) ── */}
+      {showBadgeUnlock && (
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[60] animate-slide-up">
+          <div className="bg-white border-2 border-amber-400 shadow-2xl rounded-2xl px-5 py-3 flex items-center gap-3 min-w-[280px]">
+            <span className="text-3xl animate-bounce">{showBadgeUnlock.icon}</span>
+            <div>
+              <p className="text-[10px] font-bold text-amber-600 uppercase tracking-wider">Badge Unlocked!</p>
+              <p className="text-sm font-black text-slate-900">{showBadgeUnlock.name}</p>
+              <p className="text-[11px] text-slate-500">{showBadgeUnlock.desc}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── 📲 SHARE SCORE CARD MODAL (Viral Growth Engine) ── */}
+      {showShareCard && shareCardData && (
+        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+          <div className="w-full max-w-sm bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl border border-slate-200 overflow-hidden animate-slide-up">
+            <div className="p-5 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 text-white text-center">
+              <p className="text-[11px] font-bold uppercase tracking-widest opacity-80 mb-1">Study Buddy Score Card</p>
+              <h3 className="text-3xl font-black">{shareCardData.score}/{shareCardData.total}</h3>
+              <p className="text-base font-bold opacity-90 mt-1">{shareCardData.testTitle}</p>
+              <div className="flex justify-center gap-4 mt-3 text-sm">
+                <span>📊 {shareCardData.accuracy}%</span>
+                <span>🔥 {shareCardData.streak}d</span>
+                <span>{shareCardData.level?.icon} Lv{shareCardData.level?.level}</span>
+              </div>
+              {shareCardData.rank && (
+                <p className="text-xs mt-2 opacity-80">Predicted AIR: ~{shareCardData.rank} ({shareCardData.percentile}%ile)</p>
+              )}
+            </div>
+            <div className="p-4 space-y-3">
+              <button
+                onClick={handleShareScore}
+                className="w-full py-3 rounded-2xl bg-emerald-600 text-white text-sm font-black shadow-md btn-press flex items-center justify-center gap-2"
+              >
+                <span>📲</span> Share on WhatsApp / Instagram
+              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => { navigator.clipboard?.writeText(`I scored ${shareCardData.score}/${shareCardData.total} on Study Buddy! Try it → https://dhyeybhoniya0411-cloud.github.io/study-buddy-/?ref=${referralCode}`) }}
+                  className="flex-1 py-2.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold btn-press"
+                >
+                  📋 Copy Link
+                </button>
+                <button
+                  onClick={() => setShowShareCard(false)}
+                  className="flex-1 py-2.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold btn-press"
+                >
+                  ✕ Close
+                </button>
+              </div>
+              <p className="text-center text-[10px] text-slate-400">
+                Your referral code: <b className="text-blue-600">{referralCode}</b> • Earn +7 trial days per referral!
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Mobile App Device Shell (clean Allen app interface) */}
       <div className="w-full max-w-md bg-[#F8FAFC] min-h-screen flex flex-col shadow-2xl relative border-x border-slate-200">
@@ -1779,9 +2069,20 @@ Report verified by Study Buddy AI.`
                   </button>
                 )}
 
-                <div className="flex items-center gap-1 bg-amber-50 text-amber-700 border border-amber-200 px-2 py-1 rounded-lg text-[11px] font-bold">
+                <button
+                  onClick={() => setShowStreakModal(true)}
+                  className={`flex items-center gap-1 bg-amber-50 text-amber-700 border border-amber-200 px-2 py-1 rounded-lg text-[11px] font-black btn-press transition-all ${streakCelebrate ? 'animate-bounce ring-2 ring-amber-400' : ''}`}
+                  title={`${streakData.currentStreak}-day streak! Longest: ${streakData.longestStreak}d`}
+                >
                   <span>🔥</span>
-                  <span>{stats.streak}d</span>
+                  <span>{streakData.currentStreak || stats.streak}d</span>
+                </button>
+                <div
+                  className={`flex items-center gap-1 ${getCurrentLevel(xpData.totalXP).color} text-white px-2 py-1 rounded-lg text-[10px] font-black shadow-xs`}
+                  title={`${xpData.totalXP} XP • Level ${getCurrentLevel(xpData.totalXP).level}: ${getCurrentLevel(xpData.totalXP).name}`}
+                >
+                  <span>{getCurrentLevel(xpData.totalXP).icon}</span>
+                  <span>Lv{getCurrentLevel(xpData.totalXP).level}</span>
                 </div>
                 <select
                   value={language}
@@ -1860,7 +2161,7 @@ Report verified by Study Buddy AI.`
                         <span className="text-[10px] font-black uppercase tracking-wider bg-rose-200 text-rose-800 px-2 py-0.5 rounded-full border border-rose-300">
                           5-Day Free Trial Ended
                         </span>
-                        <span className="text-[11px] font-black text-rose-600">Save {stats.streak}d Streak 🔥</span>
+                        <span className="text-[11px] font-black text-rose-600">Save {streakData.currentStreak || stats.streak}d Streak 🔥</span>
                       </div>
                       <h4 className="text-sm font-black text-slate-900 leading-snug">
                         Unlock Unlimited AI Doubts & Examiner Reviews
@@ -1902,19 +2203,26 @@ Report verified by Study Buddy AI.`
                 </div>
               ) : null}
 
-              {/* Daily Target Progress Banner */}
+              {/* Daily Target Progress Banner with XP Level Progress */}
               <div className="allen-card-gradient p-4 relative overflow-hidden">
                 <div className="relative z-10">
                   <div className="flex justify-between items-center mb-1">
-                    <span className="text-xs font-bold tracking-wide uppercase opacity-90">Daily Board Target</span>
-                    <span className="text-xs bg-white/20 px-2 py-0.5 rounded-full font-extrabold">{stats.todayQ}/5 Solved</span>
+                    <span className="text-xs font-bold tracking-wide uppercase opacity-90">
+                      {getCurrentLevel(xpData.totalXP).icon} Level {getCurrentLevel(xpData.totalXP).level}: {getCurrentLevel(xpData.totalXP).name}
+                    </span>
+                    <span className="text-xs bg-white/20 px-2 py-0.5 rounded-full font-extrabold">🔥 {streakData.currentStreak || stats.streak}d Streak</span>
                   </div>
-                  <h3 className="text-lg font-black leading-tight mb-2">Keep your streak alive!</h3>
-                  <div className="w-full bg-black/20 rounded-full h-2 overflow-hidden mb-3">
-                    <div className="bg-amber-400 h-full rounded-full transition-all" style={{ width: `${Math.min(100, (stats.todayQ / 5) * 100)}%` }} />
+                  <h3 className="text-lg font-black leading-tight mb-1">
+                    {xpData.todayXP > 0 ? `+${xpData.todayXP} XP Today!` : 'Start earning XP!'}
+                  </h3>
+                  <p className="text-[11px] opacity-80 mb-2">
+                    {getNextLevel(xpData.totalXP) ? `${getNextLevel(xpData.totalXP).minXP - xpData.totalXP} XP to ${getNextLevel(xpData.totalXP).icon} ${getNextLevel(xpData.totalXP).name}` : '🏆 Max Level Reached!'}
+                  </p>
+                  <div className="w-full bg-black/20 rounded-full h-2.5 overflow-hidden mb-3">
+                    <div className="bg-amber-400 h-full rounded-full transition-all duration-500" style={{ width: `${getXPProgress(xpData.totalXP)}%` }} />
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-[11px] opacity-80">⚡ {stats.xp} Total XP Earned</span>
+                    <span className="text-[11px] opacity-80">⚡ {xpData.totalXP} Total XP • {stats.todayQ} solved today</span>
                     <button
                       onClick={() => guardPro(() => setActiveTab('plan'), 'Unlock 45-Min Daily Study Schedules with Pro.')}
                       className="text-xs bg-white text-blue-700 font-bold px-3 py-1.5 rounded-xl shadow-xs btn-press"
@@ -4024,7 +4332,7 @@ Report verified by Study Buddy AI.`
               </div>
 
               {/* Top KPI Grid */}
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-4 gap-2">
                 <div className="allen-card p-3 text-center">
                   <p className="text-xs text-slate-500 font-medium">Questions</p>
                   <p className="text-lg font-black text-blue-700">{stats.totalQ}</p>
@@ -4032,13 +4340,18 @@ Report verified by Study Buddy AI.`
                 </div>
                 <div className="allen-card p-3 text-center">
                   <p className="text-xs text-slate-500 font-medium">Streak</p>
-                  <p className="text-lg font-black text-amber-600">{stats.streak}d</p>
+                  <p className="text-lg font-black text-amber-600">{streakData.currentStreak || stats.streak}d</p>
                   <p className="text-[9px] text-amber-600 font-bold">🔥 On Fire</p>
+                </div>
+                <div className="allen-card p-3 text-center">
+                  <p className="text-xs text-slate-500 font-medium">XP</p>
+                  <p className="text-lg font-black text-purple-600">{xpData.totalXP}</p>
+                  <p className="text-[9px] text-purple-500 font-bold">{getCurrentLevel(xpData.totalXP).icon} Lv{getCurrentLevel(xpData.totalXP).level}</p>
                 </div>
                 <div className="allen-card p-3 text-center">
                   <p className="text-xs text-slate-500 font-medium">Accuracy</p>
                   <p className="text-lg font-black text-emerald-600">
-                    {Math.min(96, Math.round((stats.totalQ / (stats.totalQ + mistakes.length || 1)) * 100))}%
+                    {stats.totalQ > 0 ? Math.min(96, Math.round((stats.totalQ / (stats.totalQ + mistakes.length || 1)) * 100)) : 0}%
                   </p>
                   <p className="text-[9px] text-slate-400 font-medium">CBSE Index</p>
                 </div>
@@ -4048,7 +4361,7 @@ Report verified by Study Buddy AI.`
               <div className="allen-card p-4 border-blue-200 bg-blue-50/50">
                 <h4 className="text-xs font-bold text-blue-950 uppercase tracking-wider mb-1">AI Examiner's Remarks</h4>
                 <p className="text-xs text-slate-700 leading-relaxed">
-                  <b>{name}</b> is maintaining a {stats.streak}-day consistent practice routine in Class {classNum}. 
+                  <b>{name}</b> is maintaining a {streakData.currentStreak || stats.streak}-day consistent practice routine in Class {classNum} with {xpData.totalXP} XP earned ({getCurrentLevel(xpData.totalXP).icon} {getCurrentLevel(xpData.totalXP).name} level). 
                   {mistakes.length === 0 
                     ? ' Conceptual grasp across explored chapters is exemplary.' 
                     : ` Attention is required on ${mistakes.length} identified weak question(s). Re-testing is scheduled.`}
@@ -4083,6 +4396,62 @@ Report verified by Study Buddy AI.`
                     ))}
                   </div>
                 )}
+              </div>
+
+              {/* 🏅 Achievement Badges Collection */}
+              <div className="allen-card p-4">
+                <h4 className="text-xs font-black text-slate-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                  <span>🏅</span> Achievement Badges
+                  <span className="text-[10px] font-bold bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full ml-auto">
+                    {(xpData.badges || []).length}/{BADGES_DEF.length} Earned
+                  </span>
+                </h4>
+                <div className="grid grid-cols-4 gap-2">
+                  {BADGES_DEF.map(b => {
+                    const earned = (xpData.badges || []).includes(b.id)
+                    return (
+                      <div key={b.id} className={`text-center p-2 rounded-xl border ${earned ? 'bg-amber-50 border-amber-200' : 'bg-slate-50 border-slate-100 opacity-50'}`}>
+                        <span className="text-xl">{b.icon}</span>
+                        <p className="text-[9px] font-bold text-slate-700 mt-1 leading-tight">{b.name}</p>
+                        {!earned && <p className="text-[8px] text-slate-400 mt-0.5">{b.desc}</p>}
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+
+              {/* 📲 Referral & Invite Friends */}
+              <div className="allen-card p-4 border-emerald-200 bg-gradient-to-br from-emerald-50/60 to-teal-50/40">
+                <h4 className="text-xs font-black text-slate-900 mb-2 flex items-center gap-1.5">
+                  <span>📲</span> Invite Friends & Earn Free Pro Days!
+                </h4>
+                <p className="text-[11px] text-slate-600 leading-relaxed mb-3">
+                  Share your referral code with friends. For each friend who joins, <b>both of you get +7 free trial days</b>. 3 referrals = 1 month Pro FREE!
+                </p>
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="flex-1 bg-white border-2 border-dashed border-emerald-300 rounded-xl px-3 py-2.5 text-center">
+                    <p className="text-[10px] text-slate-500 font-medium">Your Referral Code</p>
+                    <p className="text-base font-black text-emerald-700 tracking-wider">{referralCode}</p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      const text = `Hey! I'm using Study Buddy AI for my ${currentTrackConfig.name} prep. It has AI doubt solving, mock tests, and daily streaks! 🔥\n\nTry it free → https://dhyeybhoniya0411-cloud.github.io/study-buddy-/?ref=${referralCode}`
+                      if (navigator.share) {
+                        navigator.share({ title: 'Study Buddy AI', text }).catch(() => {})
+                      } else {
+                        window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank')
+                      }
+                    }}
+                    className="px-4 py-3 rounded-xl bg-emerald-600 text-white text-xs font-black shadow-md btn-press flex flex-col items-center gap-0.5"
+                  >
+                    <span className="text-lg">📲</span>
+                    <span>Share</span>
+                  </button>
+                </div>
+                <div className="flex items-center justify-between text-[11px]">
+                  <span className="text-slate-500">Friends referred: <b className="text-emerald-700">{referralCount}</b></span>
+                  <span className="text-slate-500">Bonus days earned: <b className="text-emerald-700">+{referralCount * 7}</b></span>
+                </div>
               </div>
 
               {/* Pro Membership & Subscription Status for Parents */}
