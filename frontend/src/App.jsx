@@ -16,6 +16,61 @@ function Md({ text }) {
   )
 }
 
+// ── Micro-Audio Feedback (Duolingo & Apple-style sound chimes) ──
+function playAudioFeedback(type = 'click') {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext
+    if (!AudioCtx) return
+    const ctx = new AudioCtx()
+    const now = ctx.currentTime
+
+    if (type === 'streak' || type === 'level_up') {
+      // Triumphant 3-note major chord (C5, E5, G5, C6)
+      const notes = [523.25, 659.25, 783.99, 1046.50]
+      notes.forEach((freq, idx) => {
+        const osc = ctx.createOscillator()
+        const gain = ctx.createGain()
+        osc.type = 'triangle'
+        osc.frequency.setValueAtTime(freq, now + idx * 0.08)
+        gain.gain.setValueAtTime(0.18, now + idx * 0.08)
+        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.35)
+        osc.connect(gain)
+        gain.connect(ctx.destination)
+        osc.start(now + idx * 0.08)
+        osc.stop(now + idx * 0.08 + 0.36)
+      })
+    } else if (type === 'correct') {
+      // Cheerful 2-tone chime
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.type = 'sine'
+      osc.frequency.setValueAtTime(587.33, now) // D5
+      osc.frequency.exponentialRampToValueAtTime(880.00, now + 0.12) // A5
+      gain.gain.setValueAtTime(0.15, now)
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3)
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+      osc.start(now)
+      osc.stop(now + 0.31)
+    } else {
+      // Soft modern click pop
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.type = 'sine'
+      osc.frequency.setValueAtTime(600, now)
+      osc.frequency.exponentialRampToValueAtTime(300, now + 0.05)
+      gain.gain.setValueAtTime(0.08, now)
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06)
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+      osc.start(now)
+      osc.stop(now + 0.07)
+    }
+  } catch (e) {
+    // Audio contexts might be blocked until user gesture, safely ignore
+  }
+}
+
 // ── Mobile Camera Modal ──
 function CameraModal({ onCapture, onClose }) {
   const vRef = useRef(null), cRef = useRef(null)
@@ -1072,7 +1127,11 @@ export default function App() {
       }
       // Update old stats.streak too for backward compat
       setStats(s => ({ ...s, streak: newStreak }))
-      if (newStreak > 1) { setStreakCelebrate(true); setTimeout(() => setStreakCelebrate(false), 2500) }
+      if (newStreak > 1) {
+        setStreakCelebrate(true)
+        playAudioFeedback('streak')
+        setTimeout(() => setStreakCelebrate(false), 2500)
+      }
       return updated
     })
   }, [])
@@ -1080,6 +1139,7 @@ export default function App() {
   const earnXP = useCallback((amount, reason) => {
     const today = new Date().toDateString()
     setXpData(prev => {
+      const prevLevel = prev.level || 1
       const updated = {
         ...prev,
         totalXP: (prev.totalXP || 0) + amount,
@@ -1088,6 +1148,12 @@ export default function App() {
         level: 1
       }
       updated.level = getCurrentLevel(updated.totalXP).level
+
+      if (updated.level > prevLevel) {
+        playAudioFeedback('level_up')
+      } else {
+        playAudioFeedback('correct')
+      }
 
       // Check badge unlocks
       const badges = [...(updated.badges || [])]
@@ -1106,7 +1172,11 @@ export default function App() {
         if (earned) { badges.push(b.id); newBadge = b; break }
       }
       updated.badges = badges
-      if (newBadge) { setShowBadgeUnlock(newBadge); setTimeout(() => setShowBadgeUnlock(null), 3500) }
+      if (newBadge) {
+        setShowBadgeUnlock(newBadge)
+        playAudioFeedback('level_up')
+        setTimeout(() => setShowBadgeUnlock(null), 3500)
+      }
       return updated
     })
     updateStreak()
@@ -2014,19 +2084,19 @@ Report verified by Study Buddy AI.`
         
         {/* ── TOP APP BAR (Hidden during full CBT exam) ── */}
         {!activeMockTest && (
-          <header className="sticky top-0 z-30 bg-white border-b border-slate-200 px-4 pt-3 pb-3 shadow-xs">
+          <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 pt-3 pb-3 shadow-xs">
             <div className="flex items-center justify-between">
               {/* Left: Avatar + Greeting + Dedicated Target Badge */}
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-blue-600 text-white font-extrabold flex items-center justify-center text-xs shadow-xs">
+                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white font-black flex items-center justify-center text-xs shadow-md shadow-blue-500/25">
                   {name.charAt(0).toUpperCase()}
                 </div>
                 <div>
                   <div className="flex items-center gap-1.5">
-                    <span className="text-xs font-bold text-slate-900 leading-none">Hi, {name}</span>
+                    <span className="text-xs font-black text-slate-900 leading-none">Hi, {name}</span>
                     <button
-                      onClick={() => setShowTrackModal(true)}
-                      className="flex items-center gap-1 text-[10px] bg-blue-50 hover:bg-blue-100 text-blue-700 font-black px-2 py-0.5 rounded-md border border-blue-200 transition-all btn-press shadow-xs"
+                      onClick={() => { playAudioFeedback('click'); setShowTrackModal(true) }}
+                      className="flex items-center gap-1 text-[10px] bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 text-blue-700 font-black px-2 py-0.5 rounded-lg border border-blue-200/80 transition-all btn-press shadow-xs"
                       title="Tap to switch target standard / exam"
                     >
                       <span>{currentTrackConfig.icon}</span>
@@ -2034,7 +2104,7 @@ Report verified by Study Buddy AI.`
                       <span className="text-[9px] text-blue-500">▾</span>
                     </button>
                   </div>
-                  <p className="text-[10px] text-slate-400 font-medium mt-0.5">{currentTrackConfig.name}</p>
+                  <p className="text-[10px] text-slate-400 font-semibold mt-0.5">{currentTrackConfig.name}</p>
                 </div>
               </div>
 
@@ -2042,8 +2112,8 @@ Report verified by Study Buddy AI.`
               <div className="flex items-center gap-1.5">
                 {subscription?.isPro ? (
                   <button
-                    onClick={() => { setSubReason(''); setShowSubModal(true) }}
-                    className="flex items-center gap-1 bg-amber-400 text-slate-900 px-2 py-1 rounded-lg text-[10px] font-black shadow-xs btn-press"
+                    onClick={() => { playAudioFeedback('click'); setSubReason(''); setShowSubModal(true) }}
+                    className="flex items-center gap-1 gold-badge btn-shine px-2.5 py-1 rounded-xl text-[10px] font-black shadow-md btn-press"
                     title="Study Buddy PRO Active"
                   >
                     <span>👑</span>
@@ -2051,8 +2121,8 @@ Report verified by Study Buddy AI.`
                   </button>
                 ) : isTrialExpired ? (
                   <button
-                    onClick={() => { setSubReason('Your 5-Day Free Trial has ended. Subscribe to Pro to continue unlimited access.'); setShowSubModal(true) }}
-                    className="flex items-center gap-1 bg-rose-600 text-white px-2 py-1 rounded-lg text-[10px] font-black animate-pulse shadow-xs btn-press"
+                    onClick={() => { playAudioFeedback('click'); setSubReason('Your 5-Day Free Trial has ended. Subscribe to Pro to continue unlimited access.'); setShowSubModal(true) }}
+                    className="flex items-center gap-1 bg-gradient-to-r from-rose-600 to-red-600 text-white px-2 py-1 rounded-xl text-[10px] font-black animate-pulse shadow-md shadow-rose-500/30 btn-press"
                     title="5-Day Trial Expired • Tap to Unlock"
                   >
                     <span>🔒</span>
@@ -2060,25 +2130,25 @@ Report verified by Study Buddy AI.`
                   </button>
                 ) : (
                   <button
-                    onClick={() => { setSubReason(''); setShowSubModal(true) }}
-                    className="flex items-center gap-1 bg-blue-50 text-blue-700 border border-blue-200 px-2 py-1 rounded-lg text-[10px] font-bold btn-press"
+                    onClick={() => { playAudioFeedback('click'); setSubReason(''); setShowSubModal(true) }}
+                    className="flex items-center gap-1 bg-gradient-to-r from-amber-50 to-orange-50 text-amber-800 border border-amber-300/80 px-2 py-1 rounded-xl text-[10px] font-black btn-press shadow-xs"
                     title="5-Day Free Trial Active"
                   >
-                    <span>👑</span>
+                    <span>🎁</span>
                     <span>{daysRemaining}d Left</span>
                   </button>
                 )}
 
                 <button
-                  onClick={() => setShowStreakModal(true)}
-                  className={`flex items-center gap-1 bg-amber-50 text-amber-700 border border-amber-200 px-2 py-1 rounded-lg text-[11px] font-black btn-press transition-all ${streakCelebrate ? 'animate-bounce ring-2 ring-amber-400' : ''}`}
+                  onClick={() => { playAudioFeedback('click'); setShowStreakModal(true) }}
+                  className={`flex items-center gap-1 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-300 text-amber-900 px-2.5 py-1 rounded-xl text-[11px] font-black btn-press transition-all ${streakData.currentStreak > 0 ? 'streak-glow' : ''} ${streakCelebrate ? 'animate-bounce ring-2 ring-amber-400' : ''}`}
                   title={`${streakData.currentStreak}-day streak! Longest: ${streakData.longestStreak}d`}
                 >
                   <span>🔥</span>
                   <span>{streakData.currentStreak || stats.streak}d</span>
                 </button>
                 <div
-                  className={`flex items-center gap-1 ${getCurrentLevel(xpData.totalXP).color} text-white px-2 py-1 rounded-lg text-[10px] font-black shadow-xs`}
+                  className={`flex items-center gap-1 ${getCurrentLevel(xpData.totalXP).color} text-white px-2 py-1 rounded-xl text-[10px] font-black shadow-xs`}
                   title={`${xpData.totalXP} XP • Level ${getCurrentLevel(xpData.totalXP).level}: ${getCurrentLevel(xpData.totalXP).name}`}
                 >
                   <span>{getCurrentLevel(xpData.totalXP).icon}</span>
@@ -2086,8 +2156,8 @@ Report verified by Study Buddy AI.`
                 </div>
                 <select
                   value={language}
-                  onChange={e => setLanguage(e.target.value)}
-                  className="text-[11px] font-bold bg-slate-100 text-slate-700 border border-slate-200 rounded-lg px-1.5 py-1 outline-none"
+                  onChange={e => { playAudioFeedback('click'); setLanguage(e.target.value) }}
+                  className="text-[11px] font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded-xl px-1.5 py-1 outline-none transition-all"
                 >
                   <option value="English">EN</option>
                   <option value="Hindi">हिंदी</option>
@@ -4501,27 +4571,45 @@ Report verified by Study Buddy AI.`
 
         </main>
 
-        {/* ── ALLEN-STYLE BOTTOM NAVIGATION BAR ── */}
-        <nav className="fixed bottom-0 max-w-md w-full bg-white border-t border-slate-200/90 z-40 bottom-nav-safe shadow-lg flex items-center justify-around py-1.5 px-2">
+        {/* ── ULTRA-MODERN BOTTOM NAVIGATION BAR (Floating Glass Aesthetic) ── */}
+        <nav className="fixed bottom-0 max-w-md w-full bg-white/95 backdrop-blur-xl border-t border-slate-200/80 z-40 bottom-nav-safe shadow-[0_-4px_20px_rgba(0,0,0,0.04)] flex items-center justify-around py-1.5 px-3">
           {[
             { id: 'home', l: 'Home', i: '🏠' },
             { id: 'plan', l: 'Routine', i: '📅' },
             { id: 'doubt', l: 'Doubt AI', i: '📸' },
             { id: 'battle', l: 'Practice', i: '⚔️' },
             { id: 'report', l: 'Report', i: '📊' }
-          ].map(tab => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex flex-col items-center justify-center py-1 px-3 rounded-2xl transition-all btn-press ${activeTab === tab.id ? 'text-blue-700 font-extrabold' : 'text-slate-400 font-medium'}`}
-            >
-              <span className="text-lg leading-none mb-0.5">{tab.i}</span>
-              <span className="text-[10px]">{tab.l}</span>
-              {tab.id === 'report' && mistakes.length > 0 && (
-                <span className="absolute top-1 right-3 w-2 h-2 bg-rose-500 rounded-full" />
-              )}
-            </button>
-          ))}
+          ].map(tab => {
+            const isActive = activeTab === tab.id
+            return (
+              <button
+                key={tab.id}
+                onClick={() => {
+                  playAudioFeedback('click')
+                  setActiveTab(tab.id)
+                }}
+                className={`relative flex flex-col items-center justify-center py-1.5 px-3 rounded-2xl transition-all duration-200 btn-press ${
+                  isActive
+                    ? 'text-blue-700 font-black scale-105'
+                    : 'text-slate-400 hover:text-slate-600 font-semibold'
+                }`}
+              >
+                {isActive && (
+                  <span className="absolute inset-0 bg-blue-50/80 rounded-2xl -z-10 animate-fade-in border border-blue-100" />
+                )}
+                <span className={`text-xl leading-none mb-1 transition-transform ${isActive ? 'scale-110' : ''}`}>
+                  {tab.i}
+                </span>
+                <span className="text-[10px] tracking-tight">{tab.l}</span>
+                {isActive && (
+                  <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mt-0.5 animate-pulse" />
+                )}
+                {tab.id === 'report' && mistakes.length > 0 && !isActive && (
+                  <span className="absolute top-1.5 right-2.5 w-2 h-2 bg-rose-500 rounded-full ring-2 ring-white animate-pulse" />
+                )}
+              </button>
+            )
+          })}
         </nav>
 
       </div>

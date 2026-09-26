@@ -1,80 +1,182 @@
 @import "tailwindcss";
 
-/* === ALLEN EDTECH DESIGN SYSTEM === */
+/* ═══════════════════════════════════════════════════════════
+   🌟 STUDY BUDDY ULTRA-MODERN EDTECH DESIGN SYSTEM (2026)
+   ═══════════════════════════════════════════════════════════ */
+
 :root {
   --bg-app: #F8FAFC;
   --surface: #FFFFFF;
   --border: #E2E8F0;
-  --navy: #0F172A;
-  --allen-blue: #1E40AF;
-  --allen-blue-light: #3B82F6;
+  --navy: #0B132B;
+  --primary: #2563EB;
+  --primary-glow: rgba(37, 99, 235, 0.25);
+  --electric-blue: #3B82F6;
+  --cyber-violet: #7C3AED;
   --emerald: #10B981;
   --amber: #F59E0B;
   --rose: #EF4444;
 }
 
 body {
-  background-color: #F1F5F9;
+  background: linear-gradient(180deg, #F1F5F9 0%, #E2E8F0 100%);
   color: #0F172A;
-  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Display', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
+  min-height: 100vh;
 }
 
 input, textarea {
   user-select: auto;
 }
 
-/* Touch active micro-animations */
+/* ── Micro-Interactions & Button Feedback ── */
 .btn-press {
-  transition: transform 0.1s ease, filter 0.1s ease;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
 }
 .btn-press:active {
-  transform: scale(0.97);
+  transform: scale(0.96);
   filter: brightness(0.95);
 }
 
-/* Custom card styling like Allen Digital */
+/* ── Glassmorphic & Elevated Cards ── */
 .allen-card {
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  border-radius: 16px;
-  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  border-radius: 20px;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 1px 3px 0 rgba(0, 0, 0, 0.02);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.allen-card:hover {
+  box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.08);
 }
 
+/* ── Hero Gradient Card (Electric Indigo & Cyber Violet) ── */
 .allen-card-gradient {
-  background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%);
+  background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 50%, #4F46E5 100%);
   color: #FFFFFF;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px -2px rgba(30, 64, 175, 0.25);
+  border-radius: 22px;
+  box-shadow: 0 10px 25px -3px rgba(37, 99, 235, 0.35), 0 4px 10px -2px rgba(79, 70, 229, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+.allen-card-gradient::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, transparent 60%);
+  pointer-events: none;
 }
 
-/* Animations */
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: translateY(0); }
+/* ── Radiant Glass Panel ── */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
 }
 
+/* ── VIP Metallic Gold Badge & Cards ── */
+.gold-sheen {
+  background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 50%, #FDE68A 100%);
+  border: 1px solid #F59E0B;
+  box-shadow: 0 4px 14px -2px rgba(245, 158, 11, 0.25);
+}
+
+.gold-badge {
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+  color: #FFFFFF;
+  font-weight: 900;
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.35);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* ── Streak Flame Aura Glow ── */
+@keyframes flameAura {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.4), 0 0 20px rgba(239, 68, 68, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 18px rgba(245, 158, 11, 0.7), 0 0 30px rgba(239, 68, 68, 0.35);
+    transform: scale(1.03);
+  }
+}
+.streak-glow {
+  animation: flameAura 2s infinite ease-in-out;
+}
+
+/* ── Shimmer & Shine Effect for High-Value CTAs ── */
+@keyframes shimmerPass {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transform: translateX(-100%);
+  animation: shimmerPass 3s infinite ease-in-out;
+}
+
+/* ── Smooth Spring Slide Up ── */
+@keyframes slideUpSmooth {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.animate-slide-up {
+  animation: slideUpSmooth 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ── Pulse Glow ── */
 @keyframes pulseGlow {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.85; transform: scale(1.03); }
+  50% { opacity: 0.9; transform: scale(1.02); }
 }
-
-.animate-slide-up {
-  animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
 .animate-pulse-glow {
-  animation: pulseGlow 2.5s infinite ease-in-out;
+  animation: pulseGlow 2.2s infinite ease-in-out;
 }
 
-/* Custom mobile bottom bar safe area */
+/* ── Floating XP Sparkle Animation ── */
+@keyframes floatGentle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+.animate-float {
+  animation: floatGentle 3s ease-in-out infinite;
+}
+
+/* ── Modern App Safe-Area & Nav ── */
 .bottom-nav-safe {
-  padding-bottom: calc(0.5rem + env(safe-area-inset-bottom, 0px));
+  padding-bottom: calc(0.6rem + env(safe-area-inset-bottom, 0px));
 }
 
-/* Custom scrollbars */
+/* ── Sleek Custom Scrollbars ── */
 ::-webkit-scrollbar {
   width: 4px;
   height: 4px;
@@ -84,5 +186,17 @@ input, textarea {
 }
 ::-webkit-scrollbar-thumb {
   background: #CBD5E1;
-  border-radius: 4px;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* ── Hide scrollbar for clean horizontal pill rows ── */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
