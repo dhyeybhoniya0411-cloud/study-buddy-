@@ -1312,6 +1312,22 @@ export default function App() {
   const [qaMarksFilter, setQaMarksFilter] = useState('All') // 'All' | 1 | 2 | 3 | 5
   const [expandedQa, setExpandedQa] = useState({})
   const [qaUserNotes, setQaUserNotes] = useState({})
+  const [masteredQa, setMasteredQa] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('sb_mastered_qa') || '{}') } catch { return {} }
+  })
+
+  const toggleMasterQuestion = (qKey) => {
+    setMasteredQa(prev => {
+      const isAlready = !!prev[qKey]
+      const updated = { ...prev, [qKey]: !isAlready }
+      try { localStorage.setItem('sb_mastered_qa', JSON.stringify(updated)) } catch {}
+      if (!isAlready) {
+        playAudioFeedback('correct')
+        addXP(10, 'mastered_question')
+      }
+      return updated
+    })
+  }
 
   const changeStudentTrack = (newTrackId) => {
     const cfg = TRACKS_CONFIG[newTrackId] || TRACKS_CONFIG.cbse_10
@@ -3772,20 +3788,37 @@ Report verified by Study Buddy AI.`
 
                             return (
                               <div className="space-y-3">
+                                <div className="flex justify-between items-center px-1">
+                                  <span className="text-[11px] font-bold text-slate-500">
+                                    📚 {filteredList.length} Questions for Practice
+                                  </span>
+                                  <span className="text-[11px] font-extrabold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                                    🏆 {Object.keys(masteredQa).filter(k => k.startsWith(`12_${chapter}`)).length}/{rawList.length} Mastered
+                                  </span>
+                                </div>
+
                                 {filteredList.map((item, qIdx) => {
                                   const qKey = `12_${chapter}_${item.marks}_${qIdx}`
                                   const isExpanded = !!expandedQa[qKey]
+                                  const isMastered = !!masteredQa[qKey]
 
                                   return (
-                                    <div key={qKey} className="bg-white rounded-2xl border border-slate-200 p-4 space-y-3 shadow-xs">
+                                    <div key={qKey} className={`bg-white rounded-2xl border p-4 space-y-3 shadow-xs transition-all ${isMastered ? 'border-emerald-300 ring-1 ring-emerald-300/50 bg-emerald-50/10' : 'border-slate-200'}`}>
                                       <div className="flex justify-between items-center">
-                                        <span className={`text-[10px] font-black px-2.5 py-0.5 rounded-full ${
-                                          item.marks === 1 ? 'bg-sky-100 text-sky-800' :
-                                          item.marks === 2 ? 'bg-emerald-100 text-emerald-800' :
-                                          item.marks === 3 ? 'bg-amber-100 text-amber-800' : 'bg-purple-100 text-purple-800'
-                                        }`}>
-                                          {item.marks} MARK{item.marks > 1 ? 'S' : ''} • {item.type}
-                                        </span>
+                                        <div className="flex items-center gap-1.5">
+                                          <span className={`text-[10px] font-black px-2.5 py-0.5 rounded-full ${
+                                            item.marks === 1 ? 'bg-sky-100 text-sky-800' :
+                                            item.marks === 2 ? 'bg-emerald-100 text-emerald-800' :
+                                            item.marks === 3 ? 'bg-amber-100 text-amber-800' : 'bg-purple-100 text-purple-800'
+                                          }`}>
+                                            {item.marks} MARK{item.marks > 1 ? 'S' : ''} • {item.type}
+                                          </span>
+                                          {isMastered && (
+                                            <span className="text-[9px] font-black text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-md">
+                                              ✅ Mastered
+                                            </span>
+                                          )}
+                                        </div>
                                         <span className="text-[10px] font-extrabold text-rose-600 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-md">
                                           ⭐ Repeated {item.repeatedCount}x in CBSE
                                         </span>
@@ -3801,14 +3834,28 @@ Report verified by Study Buddy AI.`
                                         className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:bg-white focus:border-blue-500"
                                       />
 
-                                      <div>
-                                        <button
-                                          onClick={() => setExpandedQa(prev => ({ ...prev, [qKey]: !prev[qKey] }))}
-                                          className="w-full py-2 px-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold flex items-center justify-between hover:bg-blue-100 transition-all btn-press"
-                                        >
-                                          <span>👁️ {isExpanded ? 'Hide Model Answer' : 'View CBSE Step-by-Step Model Answer'}</span>
-                                          <span>{isExpanded ? '▲' : '▼'}</span>
-                                        </button>
+                                      <div className="space-y-2">
+                                        <div className="flex gap-2">
+                                          <button
+                                            onClick={() => setExpandedQa(prev => ({ ...prev, [qKey]: !prev[qKey] }))}
+                                            className="flex-1 py-2 px-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold flex items-center justify-between hover:bg-blue-100 transition-all btn-press"
+                                          >
+                                            <span>👁️ {isExpanded ? 'Hide Model Answer' : 'View CBSE Step-by-Step Model Answer'}</span>
+                                            <span>{isExpanded ? '▲' : '▼'}</span>
+                                          </button>
+                                          <button
+                                            onClick={() => toggleMasterQuestion(qKey)}
+                                            className={`px-3 py-2 rounded-xl text-xs font-bold border transition-all btn-press flex items-center gap-1 ${
+                                              isMastered
+                                                ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
+                                                : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                                            }`}
+                                            title={isMastered ? 'Marked as Mastered' : 'Mark as Mastered to earn +10 XP'}
+                                          >
+                                            <span>{isMastered ? '✅' : '⭐'}</span>
+                                            <span className="text-[11px]">{isMastered ? 'Mastered' : '+10 XP'}</span>
+                                          </button>
+                                        </div>
 
                                         {isExpanded && (
                                           <div className="mt-2.5 p-3.5 bg-blue-50/50 border border-blue-100 rounded-xl space-y-2 animate-slide-up">
@@ -4103,20 +4150,37 @@ Report verified by Study Buddy AI.`
 
                             return (
                               <div className="space-y-3">
+                                <div className="flex justify-between items-center px-1">
+                                  <span className="text-[11px] font-bold text-slate-500">
+                                    📚 {filteredList.length} Questions for Practice
+                                  </span>
+                                  <span className="text-[11px] font-extrabold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                                    🏆 {Object.keys(masteredQa).filter(k => k.startsWith(`10_${chapter}`)).length}/{rawList.length} Mastered
+                                  </span>
+                                </div>
+
                                 {filteredList.map((item, qIdx) => {
                                   const qKey = `10_${chapter}_${item.marks}_${qIdx}`
                                   const isExpanded = !!expandedQa[qKey]
+                                  const isMastered = !!masteredQa[qKey]
 
                                   return (
-                                    <div key={qKey} className="bg-white rounded-2xl border border-slate-200 p-4 space-y-3 shadow-xs">
+                                    <div key={qKey} className={`bg-white rounded-2xl border p-4 space-y-3 shadow-xs transition-all ${isMastered ? 'border-emerald-300 ring-1 ring-emerald-300/50 bg-emerald-50/10' : 'border-slate-200'}`}>
                                       <div className="flex justify-between items-center">
-                                        <span className={`text-[10px] font-black px-2.5 py-0.5 rounded-full ${
-                                          item.marks === 1 ? 'bg-sky-100 text-sky-800' :
-                                          item.marks === 2 ? 'bg-emerald-100 text-emerald-800' :
-                                          item.marks === 3 ? 'bg-amber-100 text-amber-800' : 'bg-purple-100 text-purple-800'
-                                        }`}>
-                                          {item.marks} MARK{item.marks > 1 ? 'S' : ''} • {item.type}
-                                        </span>
+                                        <div className="flex items-center gap-1.5">
+                                          <span className={`text-[10px] font-black px-2.5 py-0.5 rounded-full ${
+                                            item.marks === 1 ? 'bg-sky-100 text-sky-800' :
+                                            item.marks === 2 ? 'bg-emerald-100 text-emerald-800' :
+                                            item.marks === 3 ? 'bg-amber-100 text-amber-800' : 'bg-purple-100 text-purple-800'
+                                          }`}>
+                                            {item.marks} MARK{item.marks > 1 ? 'S' : ''} • {item.type}
+                                          </span>
+                                          {isMastered && (
+                                            <span className="text-[9px] font-black text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-md">
+                                              ✅ Mastered
+                                            </span>
+                                          )}
+                                        </div>
                                         <span className="text-[10px] font-extrabold text-rose-600 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-md">
                                           ⭐ Repeated {item.repeatedCount}x in CBSE
                                         </span>
@@ -4132,14 +4196,28 @@ Report verified by Study Buddy AI.`
                                         className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 outline-none focus:bg-white focus:border-blue-500"
                                       />
 
-                                      <div>
-                                        <button
-                                          onClick={() => setExpandedQa(prev => ({ ...prev, [qKey]: !prev[qKey] }))}
-                                          className="w-full py-2 px-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold flex items-center justify-between hover:bg-blue-100 transition-all btn-press"
-                                        >
-                                          <span>👁️ {isExpanded ? 'Hide Model Answer' : 'View CBSE Step-by-Step Model Answer'}</span>
-                                          <span>{isExpanded ? '▲' : '▼'}</span>
-                                        </button>
+                                      <div className="space-y-2">
+                                        <div className="flex gap-2">
+                                          <button
+                                            onClick={() => setExpandedQa(prev => ({ ...prev, [qKey]: !prev[qKey] }))}
+                                            className="flex-1 py-2 px-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold flex items-center justify-between hover:bg-blue-100 transition-all btn-press"
+                                          >
+                                            <span>👁️ {isExpanded ? 'Hide Model Answer' : 'View CBSE Step-by-Step Model Answer'}</span>
+                                            <span>{isExpanded ? '▲' : '▼'}</span>
+                                          </button>
+                                          <button
+                                            onClick={() => toggleMasterQuestion(qKey)}
+                                            className={`px-3 py-2 rounded-xl text-xs font-bold border transition-all btn-press flex items-center gap-1 ${
+                                              isMastered
+                                                ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
+                                                : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                                            }`}
+                                            title={isMastered ? 'Marked as Mastered' : 'Mark as Mastered to earn +10 XP'}
+                                          >
+                                            <span>{isMastered ? '✅' : '⭐'}</span>
+                                            <span className="text-[11px]">{isMastered ? 'Mastered' : '+10 XP'}</span>
+                                          </button>
+                                        </div>
 
                                         {isExpanded && (
                                           <div className="mt-2.5 p-3.5 bg-blue-50/50 border border-blue-100 rounded-xl space-y-2 animate-slide-up">
