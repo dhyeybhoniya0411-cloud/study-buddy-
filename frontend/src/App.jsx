@@ -541,39 +541,80 @@ function SubscriptionModal({
   const plans = [
     {
       id: 'monthly',
-      name: 'Starter Plan (5 Full Tests)',
+      name: 'Starter (5 Tests)',
       price: 149,
-      origPrice: 399,
+      origPrice: 499,
       duration: '1 Month',
       perDay: '₹4.9/day',
-      tag: '5 Full Tests',
+      tag: 'STARTER',
       testsAllowed: 5,
       popular: false,
-      desc: '5 Full Mock Tests (JEE / NEET / Boards) + Unlimited 24/7 AI Doubt solving.'
+      analyticsTier: 'basic',
+      desc: '5 Full Mock Tests • Basic Score Report • AI Doubt Solving',
+      features: [
+        '5 full NTA CBT Mock Tests',
+        'Basic score after each test',
+        'Unlimited AI doubt solving',
+        '45-min daily study plan',
+      ],
+      locked: [
+        'Section-wise error breakdown',
+        'AIR Percentile Predictor',
+        'Competency Radar Analytics',
+        'Rank comparison heatmap',
+        'Printable PDF answer sheets',
+      ]
     },
     {
       id: 'quarterly',
-      name: 'Board & Prep Pass (10 Full Tests)',
+      name: 'Pro Pass (10 Tests)',
       price: 399,
-      origPrice: 1299,
+      origPrice: 1499,
       duration: '3 Months',
-      perDay: '₹4.4/day (₹133/mo)',
-      tag: '🔥 10 Full Tests',
+      perDay: '₹4.4/day',
+      tag: '🔥 BEST VALUE',
       testsAllowed: 10,
       popular: true,
-      desc: '10 Full Mock Tests (JEE / NEET / Boards) + Chapter Weightage & 1M/2M/3M/5M Model Answers.'
+      analyticsTier: 'pro',
+      desc: '10 Full Mock Tests • Section Analytics • Printable PDFs',
+      features: [
+        '10 full NTA CBT Mock Tests',
+        'Section-wise score breakdown',
+        'Correct / Wrong / Silly mistake split',
+        'Printable PDF question papers',
+        'CBSE Examiner answer evaluation',
+      ],
+      locked: [
+        'AIR Percentile Predictor',
+        'Competency Radar Analytics',
+        'Rank comparison heatmap',
+        'Topic-wise weakness drill',
+        'Performance trajectory graph',
+      ]
     },
     {
       id: 'super_batch',
-      name: 'All-Access Pass (20 Full Tests)',
+      name: '👑 Elite All-India (20 Tests)',
       price: 999,
-      origPrice: 4999,
+      origPrice: 5999,
       duration: 'Full Year',
-      perDay: '₹2.7/day (₹83/mo)',
-      tag: '🏆 All 20 Tests Unlocked',
+      perDay: '₹2.7/day',
+      tag: '🏆 TOPPER ANALYTICS',
       testsAllowed: 20,
       popular: false,
-      desc: 'All 20 Full Mock Tests (JEE, NEET & Boards) + MathonGo Analytics + Printable PDF Answer Sheets.'
+      analyticsTier: 'elite',
+      desc: 'All 20 Tests • Deep AIR Analytics • Rank Predictor • Weakness Radar',
+      features: [
+        'All 20 NTA CBT Mock Tests (JEE + NEET + Boards)',
+        '🧠 Cognitive Competency Radar (4 dimensions)',
+        '📊 AIR Percentile & Rank Predictor (NTA Normalization)',
+        '📈 Performance trajectory across all tests',
+        '🎯 Topic-wise weakness detection + auto recovery drill',
+        '🔥 Rank comparison heatmap vs 10 lakh+ students',
+        '🖨️ Printable PDF question papers + answer sheets',
+        '📱 WhatsApp performance reports for parents',
+      ],
+      locked: []
     }
   ]
 
@@ -681,19 +722,24 @@ function SubscriptionModal({
                 <div className="space-y-2.5">
                   {plans.map(p => {
                     const isSel = selectedPlan === p.id
+                    const isElite = p.id === 'super_batch'
                     return (
                       <div
                         key={p.id}
                         onClick={() => setSelectedPlan(p.id)}
-                        className={`cursor-pointer rounded-2xl p-3.5 border transition-all relative ${
-                          isSel 
-                            ? 'border-blue-600 bg-blue-50/60 shadow-md ring-2 ring-blue-600/20' 
-                            : 'border-slate-200 bg-white hover:border-slate-300'
+                        className={`cursor-pointer rounded-2xl p-3.5 border-2 transition-all relative ${
+                          isElite && isSel
+                            ? 'border-amber-500 bg-amber-50/40 shadow-lg ring-2 ring-amber-500/30'
+                            : isSel 
+                              ? 'border-blue-600 bg-blue-50/60 shadow-md ring-2 ring-blue-600/20' 
+                              : isElite
+                                ? 'border-amber-300 bg-amber-50/20 hover:border-amber-400'
+                                : 'border-slate-200 bg-white hover:border-slate-300'
                         }`}
                       >
                         {p.tag && (
-                          <span className={`absolute -top-2.5 right-3 text-[10px] font-black px-2 py-0.5 rounded-full ${
-                            p.popular ? 'bg-amber-500 text-white shadow-xs' : 'bg-blue-600 text-white'
+                          <span className={`absolute -top-2.5 right-3 text-[10px] font-black px-2.5 py-0.5 rounded-full shadow-xs ${
+                            isElite ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white' : p.popular ? 'bg-amber-500 text-white' : 'bg-blue-600 text-white'
                           }`}>
                             {p.tag}
                           </span>
@@ -702,28 +748,79 @@ function SubscriptionModal({
                         <div className="flex justify-between items-start">
                           <div>
                             <div className="flex items-center gap-2">
-                              <span className={`w-4 h-4 rounded-full border flex items-center justify-center ${
-                                isSel ? 'border-blue-600 bg-blue-600 text-white text-[10px]' : 'border-slate-300'
+                              <span className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                                isSel ? (isElite ? 'border-amber-500 bg-amber-500' : 'border-blue-600 bg-blue-600') + ' text-white text-[10px]' : 'border-slate-300'
                               }`}>
                                 {isSel ? '✓' : ''}
                               </span>
-                              <h4 className="text-sm font-extrabold text-slate-900">{p.name}</h4>
+                              <h4 className={`text-sm font-extrabold ${isElite ? 'text-amber-900' : 'text-slate-900'}`}>{p.name}</h4>
                             </div>
                             <p className="text-[11px] text-slate-500 mt-1 ml-6">{p.desc}</p>
-                            <p className="text-[10px] font-semibold text-emerald-700 mt-0.5 ml-6">
-                              Only {p.perDay}
-                            </p>
                           </div>
 
-                          <div className="text-right">
+                          <div className="text-right shrink-0">
                             <span className="text-xs text-slate-400 line-through mr-1">₹{p.origPrice}</span>
-                            <span className="text-base font-black text-slate-900">₹{p.price}</span>
+                            <span className={`text-base font-black ${isElite ? 'text-amber-800' : 'text-slate-900'}`}>₹{p.price}</span>
                             <p className="text-[10px] text-slate-500 font-medium">/{p.duration}</p>
+                            <p className="text-[10px] font-bold text-emerald-700 mt-0.5">
+                              {p.perDay}
+                            </p>
                           </div>
                         </div>
+
+                        {/* Feature list when selected */}
+                        {isSel && (
+                          <div className="mt-2.5 ml-6 pt-2 border-t border-slate-100 space-y-1">
+                            {(p.features || []).map((f, fi) => (
+                              <div key={fi} className="flex items-center gap-1.5 text-[10px]">
+                                <span className="text-emerald-600 font-bold">✓</span>
+                                <span className="text-slate-700 font-medium">{f}</span>
+                              </div>
+                            ))}
+                            {(p.locked || []).length > 0 && (
+                              <div className="mt-1.5 pt-1.5 border-t border-dashed border-slate-200">
+                                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                                  Not included — upgrade for:
+                                </p>
+                                {(p.locked || []).slice(0, 3).map((l, li) => (
+                                  <div key={li} className="flex items-center gap-1.5 text-[10px]">
+                                    <span className="text-rose-400 font-bold">✗</span>
+                                    <span className="text-slate-400 font-medium">{l}</span>
+                                  </div>
+                                ))}
+                                {(p.locked || []).length > 3 && (
+                                  <p className="text-[9px] text-amber-700 font-bold mt-1 ml-4">
+                                    + {(p.locked || []).length - 3} more exclusive features in Elite ↗
+                                  </p>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </div>
                     )
                   })}
+
+                  {/* Elite upsell nudge */}
+                  {selectedPlan !== 'super_batch' && (
+                    <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl p-2.5 flex items-center gap-2">
+                      <span className="text-lg">👑</span>
+                      <div className="flex-1">
+                        <p className="text-[10px] font-black text-amber-900">
+                          Students on Elite plan score 23% higher on average
+                        </p>
+                        <p className="text-[9px] text-amber-700">
+                          Advanced analytics show exactly where you lose marks — so you stop losing them.
+                        </p>
+                      </div>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setSelectedPlan('super_batch') }}
+                        className="text-[10px] font-black bg-amber-500 text-white px-2.5 py-1 rounded-lg shrink-0 btn-press"
+                      >
+                        Try Elite →
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -2982,6 +3079,173 @@ Report verified by Study Buddy AI.`
                     </div>
                   </div>
 
+                  {/* ── ELITE-EXCLUSIVE ADVANCED ANALYTICS ── */}
+                  {subscription?.plan === 'super_batch' || subscription?.plan === 'annual' ? (
+                    <div className="space-y-3">
+                      {/* Section-wise Performance Heatmap */}
+                      <div className="allen-card p-4 border-purple-200">
+                        <div className="flex items-center justify-between mb-2.5">
+                          <h4 className="text-xs font-black text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
+                            <span>📊</span> Section-Wise AIR Heatmap
+                          </h4>
+                          <span className="text-[9px] font-black bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full border border-amber-200">👑 ELITE ONLY</span>
+                        </div>
+                        <div className="space-y-2">
+                          {(activeMockTest?.sections || []).map(sec => {
+                            const secQs = testAnalytics.breakdown.filter(b => b.section === sec)
+                            const secCorrect = secQs.filter(b => b.isCorrect).length
+                            const secTotal = secQs.length
+                            const secPct = secTotal > 0 ? Math.round((secCorrect / secTotal) * 100) : 0
+                            const color = secPct >= 80 ? 'emerald' : secPct >= 60 ? 'amber' : 'rose'
+                            return (
+                              <div key={sec}>
+                                <div className="flex justify-between text-[11px] font-bold text-slate-700 mb-1">
+                                  <span>{sec}</span>
+                                  <span className={`text-${color}-600`}>
+                                    {secCorrect}/{secTotal} correct ({secPct}%)
+                                    {secPct >= 80 && ' 🔥 Topper Zone'}
+                                    {secPct < 50 && ' ⚠️ Critical Weakness'}
+                                  </span>
+                                </div>
+                                <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                                  <div className={`h-full rounded-full bg-${color}-500 transition-all duration-500`} style={{ width: `${secPct}%` }} />
+                                </div>
+                              </div>
+                            )
+                          })}
+                        </div>
+                      </div>
+
+                      {/* AIR Rank Comparison vs National Population */}
+                      <div className="allen-card p-4 border-indigo-200 bg-indigo-50/30">
+                        <h4 className="text-xs font-black text-slate-900 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                          <span>🏆</span> National Rank Distribution (NTA Normalization Model)
+                        </h4>
+                        <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                          <div className="p-2.5 bg-white rounded-xl border border-indigo-200">
+                            <p className="text-[10px] text-slate-500 font-medium">Your Score</p>
+                            <p className="text-lg font-black text-indigo-700">{testAnalytics.score}</p>
+                            <p className="text-[9px] text-indigo-500">/ {testAnalytics.totalPossibleMarks}</p>
+                          </div>
+                          <div className="p-2.5 bg-white rounded-xl border border-amber-200">
+                            <p className="text-[10px] text-slate-500 font-medium">NTA Percentile</p>
+                            <p className="text-lg font-black text-amber-700">{testAnalytics.predictedPercentile}</p>
+                            <p className="text-[9px] text-amber-500">%ile Score</p>
+                          </div>
+                          <div className="p-2.5 bg-white rounded-xl border border-emerald-200">
+                            <p className="text-[10px] text-slate-500 font-medium">Predicted AIR</p>
+                            <p className="text-lg font-black text-emerald-700">{testAnalytics.predictedRank.toLocaleString()}</p>
+                            <p className="text-[9px] text-emerald-500">All-India Rank</p>
+                          </div>
+                        </div>
+                        <div className="mt-2.5 p-2 bg-indigo-100/50 border border-indigo-200 rounded-lg text-[10px] text-indigo-900 font-medium">
+                          📈 At this pace, you're on track to clear the cutoff for <b>{testAnalytics.predictedPercentile > 95 ? 'Top NITs & IITs' : testAnalytics.predictedPercentile > 85 ? 'NITs & State Colleges' : 'State Government Colleges'}</b>.
+                          {testAnalytics.silly > 0 && ` Eliminating ${testAnalytics.silly} silly mistake(s) alone could improve your rank by ~${testAnalytics.silly * 2200} positions.`}
+                        </div>
+                      </div>
+
+                      {/* Topic-wise Weakness Detector */}
+                      <div className="allen-card p-4 border-rose-200">
+                        <h4 className="text-xs font-black text-slate-900 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                          <span>🎯</span> Topic-Wise Mark Leakage Detector
+                        </h4>
+                        <div className="space-y-1.5">
+                          {(() => {
+                            const topicMap = {}
+                            testAnalytics.breakdown.forEach(b => {
+                              const c = b.concept || 'General'
+                              if (!topicMap[c]) topicMap[c] = { total: 0, correct: 0, wrong: 0, marks: 0 }
+                              topicMap[c].total++
+                              if (b.isCorrect) { topicMap[c].correct++; topicMap[c].marks += 4 }
+                              else if (b.isAnswered) { topicMap[c].wrong++; topicMap[c].marks -= 1 }
+                            })
+                            return Object.entries(topicMap)
+                              .sort(([,a], [,b]) => a.marks - b.marks)
+                              .map(([topic, data]) => (
+                                <div key={topic} className="flex items-center justify-between text-[11px] p-1.5 rounded-lg hover:bg-slate-50">
+                                  <div className="flex items-center gap-1.5">
+                                    <span className={`w-2 h-2 rounded-full ${data.wrong > 0 ? 'bg-rose-500' : 'bg-emerald-500'}`} />
+                                    <span className="font-medium text-slate-700">{topic}</span>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-slate-400">{data.correct}/{data.total}</span>
+                                    <span className={`font-bold ${data.marks >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
+                                      {data.marks > 0 ? `+${data.marks}` : data.marks}
+                                    </span>
+                                  </div>
+                                </div>
+                              ))
+                          })()}
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    /* Locked Analytics Preview for non-Elite users */
+                    <div className="relative">
+                      <div className="allen-card p-4 border-amber-200 bg-amber-50/30 space-y-3">
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-xs font-black text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
+                            <span>🔒</span> Advanced Analytics (Elite Only)
+                          </h4>
+                          <span className="text-[9px] font-black bg-amber-500 text-white px-2 py-0.5 rounded-full">👑 UPGRADE</span>
+                        </div>
+
+                        {/* Blurred preview of locked analytics */}
+                        <div className="relative overflow-hidden rounded-xl">
+                          <div className="filter blur-sm pointer-events-none select-none opacity-60">
+                            <div className="grid grid-cols-3 gap-2 text-center text-xs mb-2">
+                              <div className="p-2 bg-white rounded-lg border">
+                                <p className="text-[10px] text-slate-400">Section Heatmap</p>
+                                <p className="text-lg font-black text-slate-300">Physics</p>
+                              </div>
+                              <div className="p-2 bg-white rounded-lg border">
+                                <p className="text-[10px] text-slate-400">NTA Percentile</p>
+                                <p className="text-lg font-black text-slate-300">98.2</p>
+                              </div>
+                              <div className="p-2 bg-white rounded-lg border">
+                                <p className="text-[10px] text-slate-400">Topic Weakness</p>
+                                <p className="text-lg font-black text-slate-300">−12</p>
+                              </div>
+                            </div>
+                            <div className="space-y-1.5">
+                              <div className="h-3 bg-indigo-200 rounded-full w-3/4" />
+                              <div className="h-3 bg-amber-200 rounded-full w-1/2" />
+                              <div className="h-3 bg-rose-200 rounded-full w-1/3" />
+                            </div>
+                          </div>
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="text-center">
+                              <p className="text-xs font-black text-amber-900 mb-1">
+                                🏆 Unlock Advanced Analytics
+                              </p>
+                              <p className="text-[10px] text-amber-700 mb-2 max-w-[200px]">
+                                Section heatmaps, AIR rank predictor, topic-wise mark leakage detector & more
+                              </p>
+                              <button
+                                onClick={() => { setSubReason('Upgrade to Elite All-India Pass (₹999/yr) to unlock deep analytics that show exactly where you lose marks and how to recover 30+ marks.'); setShowSubModal(true) }}
+                                className="px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-black rounded-xl shadow-md btn-press"
+                              >
+                                Upgrade to Elite — ₹999/year →
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-3 gap-1.5 text-center text-[9px]">
+                          <div className="bg-amber-100/70 p-1.5 rounded-lg text-amber-900 font-bold border border-amber-200">
+                            📊 Section Heatmap
+                          </div>
+                          <div className="bg-amber-100/70 p-1.5 rounded-lg text-amber-900 font-bold border border-amber-200">
+                            🏆 AIR Predictor
+                          </div>
+                          <div className="bg-amber-100/70 p-1.5 rounded-lg text-amber-900 font-bold border border-amber-200">
+                            🎯 Weakness Map
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Question-by-Question Solution Review */}
                   <div className="space-y-2">
                     <p className="text-xs font-black text-slate-600 uppercase tracking-wider">Detailed Solutions & Lost Marks</p>
@@ -3126,7 +3390,7 @@ Report verified by Study Buddy AI.`
                               <p className="text-[10px] text-slate-500">180 Mins • 300 Marks • +4 / -1 Marking • Official Shift Papers</p>
                             </div>
                             <span className="text-[10px] font-black bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-lg">
-                              {getTestsAllowedForUser()} of 20 Unlocked
+                              {getTestsAllowedForUser()} of {MOCK_TESTS_CATALOG.length} Unlocked
                             </span>
                           </div>
 
@@ -3449,7 +3713,7 @@ Report verified by Study Buddy AI.`
                               <p className="text-[10px] text-slate-500">180 Mins • 720 Marks • Biology, Physics, Chemistry • NTA Pattern</p>
                             </div>
                             <span className="text-[10px] font-black bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-lg">
-                              {getTestsAllowedForUser()} of 20 Unlocked
+                              {getTestsAllowedForUser()} of {MOCK_TESTS_CATALOG.length} Unlocked
                             </span>
                           </div>
 
@@ -3764,7 +4028,7 @@ Report verified by Study Buddy AI.`
                               <p className="text-[10px] text-slate-500">Official Board Marking Scheme • Physics, Chemistry, Maths & Biology</p>
                             </div>
                             <span className="text-[10px] font-black bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-lg">
-                              {getTestsAllowedForUser()} of 20 Unlocked
+                              {getTestsAllowedForUser()} of {MOCK_TESTS_CATALOG.length} Unlocked
                             </span>
                           </div>
 
@@ -4126,7 +4390,7 @@ Report verified by Study Buddy AI.`
                               <p className="text-[10px] text-slate-500">Official Board Marking Scheme • Science, Math, Social Science & English</p>
                             </div>
                             <span className="text-[10px] font-black bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-lg">
-                              {getTestsAllowedForUser()} of 20 Unlocked
+                              {getTestsAllowedForUser()} of {MOCK_TESTS_CATALOG.length} Unlocked
                             </span>
                           </div>
 
